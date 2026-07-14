@@ -31,7 +31,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </Link>
           ))}
         </nav>
-        <div className="p-4 border-t border-white/10">
+        <div className="p-4 border-t border-white/10 space-y-2">
+          <Link href="/staff" className="flex items-center gap-2 text-sm text-white/50 hover:text-white"><Settings size={16} /> Staff Panel</Link>
           <Link href="/" className="flex items-center gap-2 text-sm text-white/50 hover:text-white"><LogOut size={16} /> Back to Site</Link>
         </div>
       </aside>
