@@ -2,9 +2,7 @@ import type { Metadata } from "next";
 import { Outfit, Playfair_Display } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "react-hot-toast";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import Chatbot from "@/components/Chatbot";
+import { LayoutWrapper } from "@/components/LayoutWrapper";
 import "./globals.css";
 
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-body" });
@@ -12,7 +10,7 @@ const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-headin
 
 export const metadata: Metadata = {
   title: { default: "Vaidya Gogate Memorial Foundation", template: "%s - VGMF" },
-  description: "VGMF - Advancing Ayurveda Since 1972. Research fellowships, national seminars, community healthcare.",
+  description: "VGMF - Advancing Ayurveda Since 1972.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -20,10 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className={`${outfit.variable} ${playfair.variable} font-body bg-cream text-ink antialiased`}>
         <SessionProvider>
-          <Navbar />
-          <main>{children}</main>
-          <Footer />
-          <Chatbot />
+          <LayoutWrapper>{children}</LayoutWrapper>
           <Toaster position="top-right" />
         </SessionProvider>
       </body>

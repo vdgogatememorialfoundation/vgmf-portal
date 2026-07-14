@@ -1,43 +1,70 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 
+const redirectToLogin = (req: NextRequest) => {
+  const url = new URL("/login", req.url);
+  url.searchParams.set("callbackUrl", req.nextUrl.pathname);
+  return NextResponse.redirect(url);
+};
+
 export default async function middleware(req: NextRequest) {
   const session = await auth();
   const { pathname } = req.nextUrl;
-  const role = (session?.user as any)?.role;
+  const role = (session?.user as any)?.role as string | undefined;
 
+  // Admin routes → ADMIN only
   if (pathname.startsWith("/admin")) {
     if (!session || role !== "ADMIN") {
-      const url = new URL("/login", req.url);
-      url.searchParams.set("callbackUrl", pathname);
-      return NextResponse.redirect(url);
+      return redirectToLogin(req);
     }
   }
 
+  // Staff routes → ADMIN or STAFF
   if (pathname.startsWith("/staff")) {
     if (!session || (role !== "ADMIN" && role !== "STAFF")) {
-      const url = new URL("/login", req.url);
-      url.searchParams.set("callbackUrl", pathname);
-      return NextResponse.redirect(url);
+      return redirectToLogin(req);
     }
   }
 
+  // Reviewer dashboard → JUDGE or REVIEWER
+  if (pathname.startsWith("/dashboard/reviewer")) {
+    if (!session || (role !== "JUDGE" && role !== "REVIEWER")) {
+      return redirectToLogin(req);
+    }
+  }
+
+  // Trustee dashboard → TRUSTEE only
+  if (pathname.startsWith("/dashboard/trustee")) {
+    if (!session || role !== "TRUSTEE") {
+      return redirectToLogin(req);
+    }
+  }
+
+  // Dashboard → any authenticated user
   if (pathname.startsWith("/dashboard")) {
     if (!session) {
-      const url = new URL("/login", req.url);
-      url.searchParams.set("callbackUrl", pathname);
-      return NextResponse.redirect(url);
+      return redirectToLogin(req);
     }
   }
 
-  if (
-    pathname.startsWith("/fellowship/apply") ||
-    pathname.startsWith("/fellowship/track")
-  ) {
+  // Fellowship apply → any authenticated user
+  if (pathname.startsWith("/fellowship/apply")) {
     if (!session) {
-      const url = new URL("/login", req.url);
-      url.searchParams.set("callbackUrl", pathname);
-      return NextResponse.redirect(url);
+      return redirectToLogin(req);
+    }
+  }
+
+  // Fellowship track → any authenticated user
+  if (pathname.startsWith("/fellowship/track")) {
+    if (!session) {
+      return redirectToLogin(req);
+    }
+  }
+
+  // Seminar register → DOCTOR or any authenticated user
+  if (pathname.startsWith("/seminar/register")) {
+    if (!session) {
+      return redirectToLogin(req);
     }
   }
 
@@ -51,5 +78,6 @@ export const config = {
     "/dashboard/:path*",
     "/fellowship/apply/:path*",
     "/fellowship/track/:path*",
+    "/seminar/register/:path*",
   ],
 };
