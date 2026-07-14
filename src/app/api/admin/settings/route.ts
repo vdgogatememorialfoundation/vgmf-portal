@@ -8,46 +8,36 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   try {
-    let settings = await prisma.maintenanceSetting.findFirst({
-      orderBy: { createdAt: "desc" },
+    const items = await prisma.siteContent.findMany({
+      orderBy: { key: "asc" },
     });
-    if (!settings) {
-      settings = await prisma.maintenanceSetting.create({
-        data: { isEnabled: false },
-      });
-    }
-    return NextResponse.json(settings);
+    return NextResponse.json({ items });
   } catch (err) {
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }
 
-export async function PATCH(req: NextRequest) {
+export async function POST(req: NextRequest) {
   const session = await auth();
   if (!session || (session.user as any).role !== "ADMIN") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   try {
     const data = await req.json();
-    let settings = await prisma.maintenanceSetting.findFirst({
-      orderBy: { createdAt: "desc" },
-    });
-    if (!settings) {
-      settings = await prisma.maintenanceSetting.create({
-        data: { isEnabled: false },
+    
+    // Save each setting as a key-value pair
+    const entries = Object.entries(data);
+    for (const [key, value] of entries) {
+      await prisma.siteContent.upsert({
+        where: { key },
+        update: { value: String(value) },
+        create: { key, value: String(value) },
       });
     }
-    const updated = await prisma.maintenanceSetting.update({
-      where: { id: settings.id },
-      data: {
-        isEnabled: data.isEnabled !== undefined ? data.isEnabled : undefined,
-        message: data.message !== undefined ? data.message : undefined,
-        allowedIps: data.allowedIps !== undefined ? data.allowedIps : undefined,
-        endTime: data.endTime ? new Date(data.endTime) : undefined,
-      },
-    });
-    return NextResponse.json(updated);
+    
+    return NextResponse.json({ success: true });
   } catch (err) {
+    console.error("Settings save error:", err);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }

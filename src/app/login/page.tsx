@@ -16,25 +16,25 @@ export default function UserLogin() {
     e.preventDefault();
     setLoading(true);
     setError("");
-
+    
     const result = await signIn("credentials", { email, password, redirect: false });
-
+    
     if (result?.error) {
       setError("Invalid email or password");
       setLoading(false);
       return;
     }
-
+    
     const sessionRes = await fetch("/api/auth/session");
     const session = await sessionRes.json();
-
+    
     if (session?.user?.role && session.user.role !== "USER") {
       await signIn("credentials", { email: "", password: "", redirect: false });
-      setError("Access denied for this portal");
+      setError("This login is for registered users only. Please use the appropriate portal login.");
       setLoading(false);
       return;
     }
-
+    
     router.push("/dashboard");
     router.refresh();
   };
@@ -66,16 +66,6 @@ export default function UserLogin() {
             Don&apos;t have an account? <Link href="/signup" className="text-navy font-semibold hover:underline">Create one</Link>
           </p>
         </form>
-        <div className="mt-6 text-center space-y-2">
-          <p className="text-xs text-muted">Are you a staff member?</p>
-          <div className="flex gap-2 justify-center flex-wrap">
-            <Link href="/admin/login" className="text-xs px-3 py-1.5 border rounded-lg text-navy hover:bg-navy/5">Admin</Link>
-            <Link href="/staff/login" className="text-xs px-3 py-1.5 border rounded-lg text-navy hover:bg-navy/5">Staff</Link>
-            <Link href="/doctor/login" className="text-xs px-3 py-1.5 border rounded-lg text-navy hover:bg-navy/5">Doctor</Link>
-            <Link href="/judge/login" className="text-xs px-3 py-1.5 border rounded-lg text-navy hover:bg-navy/5">Judge</Link>
-            <Link href="/trustee/login" className="text-xs px-3 py-1.5 border rounded-lg text-navy hover:bg-navy/5">Trustee</Link>
-          </div>
-        </div>
       </div>
     </div>
   );

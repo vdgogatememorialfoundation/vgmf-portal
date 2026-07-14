@@ -32,7 +32,7 @@ export default function AdminOrders() {
     setLoading(true);
     const res = await fetch(`/api/admin/orders?search=${encodeURIComponent(search)}`);
     const data = await res.json();
-    setOrders(data.orders || []);
+    setOrders(data.items || []);
     setLoading(false);
   };
 

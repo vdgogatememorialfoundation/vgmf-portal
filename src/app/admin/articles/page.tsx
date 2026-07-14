@@ -24,7 +24,7 @@ export default function AdminArticles() {
     setLoading(true);
     const res = await fetch(`/api/admin/articles?search=${encodeURIComponent(search)}`);
     const data = await res.json();
-    setArticles(data.articles || []);
+    setArticles(data.items || []);
     setLoading(false);
   };
 

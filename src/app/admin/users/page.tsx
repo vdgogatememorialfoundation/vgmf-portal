@@ -23,7 +23,7 @@ export default function AdminUsers() {
     setLoading(true);
     const res = await fetch(`/api/admin/users?search=${encodeURIComponent(search)}`);
     const data = await res.json();
-    setUsers(data.users || []);
+    setUsers(data.items || []);
     setLoading(false);
   };
 

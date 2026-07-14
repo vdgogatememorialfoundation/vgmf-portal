@@ -74,7 +74,7 @@ export default function AdminEvents() {
     if (filterType) params.set("eventType", filterType);
     const res = await fetch(`/api/admin/events?${params.toString()}`);
     const data = await res.json();
-    setEvents(data.events || []);
+    setEvents(data.items || []);
     setLoading(false);
   };
 
