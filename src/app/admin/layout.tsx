@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { LayoutDashboard, ShoppingBag, Package, Users, UserCog, GraduationCap, FlaskConical, Heart, FileText, Settings, LogOut } from "lucide-react";
+import { LayoutDashboard, ShoppingBag, Package, Users, UserCog, GraduationCap, FlaskConical, Heart, FileText, Settings, LogOut, Calendar, BookOpen, Megaphone } from "lucide-react";
 
 const sidebarLinks = [
   { href: "/admin", icon: LayoutDashboard, label: "Dashboard" },
@@ -7,9 +7,12 @@ const sidebarLinks = [
   { href: "/admin/products", icon: Package, label: "Products" },
   { href: "/admin/users", icon: Users, label: "Users" },
   { href: "/admin/staff", icon: UserCog, label: "Staff" },
+  { href: "/admin/events", icon: Calendar, label: "Events" },
   { href: "/admin/seminars", icon: GraduationCap, label: "Seminars" },
   { href: "/admin/fellowships", icon: FlaskConical, label: "Fellowships" },
   { href: "/admin/autism", icon: Heart, label: "Autism" },
+  { href: "/admin/articles", icon: BookOpen, label: "Articles" },
+  { href: "/admin/announcements", icon: Megaphone, label: "Announcements" },
   { href: "/admin/content", icon: FileText, label: "Content" },
   { href: "/admin/settings", icon: Settings, label: "Settings" },
 ];
