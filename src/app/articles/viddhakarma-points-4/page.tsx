@@ -26,7 +26,15 @@ export default function ViddhakarmaPoints4Article() {
           </p>
 
           <p>
-            In Apachi (Cervical lymphadenitis), Viddha is done at the swollen lymph nodes. The procedure helps in draining the accumulated fluid and reduces the swelling. Multiple Viddha points may be required depending on the size and number of lymph nodes affected.
+            In Apachi (Cervical lymphadenitis) above wrist joint 3 lines are said to be drawn by heated Shalaka with distance of 1 anguli (2cm) between them. Agni karma is suggested to perform at the base of the thumb (anatomical snuff box). This Agni karma is specifically done in jaundice and for this Agni karma turmeric is used after heating it. In this Agni karma, dushtavrana is expected. This treatment is done on upadhatu of Rakta Dhatu i.e. sira (vessel) and kandara (tendons). Treatment on upadhatu is mentioned first time in this Agni karma.
+          </p>
+
+          <p>
+            Agni karma is done at painful points we can do it at any painful point. Only consider that this is not &lsquo;marma&rsquo; (vital) point. While performing Viddha or Agni karma, we need to fix the points. Many times anguli praman is described to fix the points. Sometimes marma points are also described to fix points of Agni karma and Viddha. Hence knowledge of marma points is very important before performing these procedures. Anguli praman is considered to be most important measure to fix points. In Chinese medicines acupressure and moxibustion also anguli praman is stated.
+          </p>
+
+          <p>
+            Description of anguli praman by Ayurveda and Chinese medicines is almost similar. Generally, distance at 1st interphalangeal joint of index finger is considered as &lsquo;anguli praman&rsquo; or distance between joined four fingers is said to be &lsquo;four angulis&rsquo;. This distance divided by four or two is considered to be 1 anguli or 2 anguli. This distance is to be measured according to patient&rsquo;s fingers. These distance criteria are now fixed for that patient. This distance is measured in centimetres and then used in Viddha or Agni karma for fixation of point. For example: 4 anguli above ankle joint, 2 anguli below Indrabasti marma, 2 anguli below Vidhur marma, Etc.
           </p>
         </div>
         <div className="bg-gray-50 border-l-4 border-navy p-4 mt-8">
