@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
       items: order.items.map(item => ({
         name: item.product.name,
         quantity: item.quantity,
-        price: item.price
+        price: item.unitPrice
       })),
       events
     });
