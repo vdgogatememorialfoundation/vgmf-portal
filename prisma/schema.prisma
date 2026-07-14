@@ -1,0 +1,363 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(uuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  password      String?
+  image         String?
+  role          String    @default("USER") // ADMIN, STAFF, USER
+  phone         String?
+  address       String?
+  city          String?
+  state         String?
+  pincode       String?
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  accounts      Account[]
+  sessions      Session[]
+  orders        Order[]
+  seminarRegs   SeminarRegistration[]
+  fellowshipApps FellowshipApplication[]
+  autismRegs    AutismRegistration[]
+}
+
+model Account {
+  id                String  @id @default(uuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(uuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+  @@unique([identifier, token])
+}
+
+model Product {
+  id              String           @id @default(uuid())
+  name            String
+  slug            String           @unique
+  description     String?
+  shortDesc       String?
+  sku             String?
+  price           Float
+  compareAtPrice  Float?
+  costPrice       Float?
+  stockQuantity   Int              @default(0)
+  lowStockThreshold Int            @default(10)
+  isPublished     Boolean          @default(false)
+  isFeatured      Boolean          @default(false)
+  weight          Float?
+  categoryId      String
+  category        ProductCategory  @relation(fields: [categoryId], references: [id])
+  thumbnailUrl    String?
+  hsnCode         String?
+  gstPercentage   Float            @default(0)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  images          ProductImage[]
+  orderItems      OrderItem[]
+}
+
+model ProductCategory {
+  id       String    @id @default(uuid())
+  name     String
+  slug     String    @unique
+  description String?
+  parentId String?
+  parent   ProductCategory? @relation("CategoryParent", fields: [parentId], references: [id])
+  children ProductCategory[] @relation("CategoryParent")
+  sortOrder Int      @default(0)
+  isActive Boolean   @default(true)
+  products Product[]
+}
+
+model ProductImage {
+  id        String  @id @default(uuid())
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  imageUrl  String
+  altText   String?
+  sortOrder Int     @default(0)
+  isPrimary Boolean @default(false)
+}
+
+model Order {
+  id                String      @id @default(uuid())
+  orderNumber       String      @unique
+  userId            String
+  user              User        @relation(fields: [userId], references: [id])
+  status            String      @default("PENDING") // PENDING, CONFIRMED, PROCESSING, SHIPPED, DELIVERED, CANCELLED
+  subTotal          Float
+  discount          Float       @default(0)
+  shippingCost      Float       @default(0)
+  tax               Float       @default(0)
+  totalAmount       Float
+  shippingName      String?
+  shippingAddress1  String?
+  shippingAddress2  String?
+  shippingCity      String?
+  shippingState     String?
+  shippingPinCode   String?
+  shippingPhone     String?
+  notes             String?
+  razorpayOrderId   String?
+  razorpayPaymentId String?
+  razorpaySignature String?
+  shiprocketOrderId String?
+  shiprocketShipmentId String?
+  trackingUrl       String?
+  estimatedDelivery DateTime?
+  actualDeliveryDate DateTime?
+  cancelledAt       DateTime?
+  orderDate         DateTime    @default(now())
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+  items             OrderItem[]
+}
+
+model OrderItem {
+  id        String  @id @default(uuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int
+  unitPrice Float
+  totalPrice Float
+}
+
+model Event {
+  id           String   @id @default(uuid())
+  title        String
+  slug         String   @unique
+  description  String?
+  shortDesc    String?
+  eventDate    DateTime
+  endDate      DateTime?
+  location     String?
+  city         String?
+  address      String?
+  eventType    String   // Seminar, Fellowship, Autism
+  isPublished  Boolean  @default(false)
+  isFeatured   Boolean  @default(false)
+  maxAttendees Int?
+  ticketPrice  Float?
+  bannerUrl    String?
+  imageUrl     String?
+  contactEmail String?
+  contactPhone String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model SeminarRegistration {
+  id             String   @id @default(uuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
+  ticketNumber   String   @unique
+  phoneNumber    String?
+  organization   String?
+  designation    String?
+  isVerified     Boolean  @default(false)
+  isCancelled    Boolean  @default(false)
+  paymentStatus  String?
+  registrationDate DateTime @default(now())
+  createdAt      DateTime @default(now())
+}
+
+model FellowshipApplication {
+  id              String   @id @default(uuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+  trackingNumber  String   @unique
+  status          String   @default("SUBMITTED") // DRAFT, SUBMITTED, UNDER_REVIEW, SHORTLISTED, INTERVIEW_SCHEDULED, SELECTED, REJECTED, FUNDED
+  fullName        String?
+  email           String?
+  phoneNumber     String?
+  areaOfInterest  String?
+  statementOfPurpose String?
+  education       String?
+  institution     String?
+  experienceYears Int?
+  experience      String?
+  researchProposal String?
+  preferredMentor String?
+  rejectionReason String?
+  adminNotes      String?
+  submittedAt     DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  createdAt       DateTime @default(now())
+  documents       FellowshipDocument[]
+}
+
+model FellowshipDocument {
+  id            String   @id @default(uuid())
+  applicationId String
+  application   FellowshipApplication @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  documentName  String
+  documentType  String?
+  documentUrl   String
+  fileSize      Int?
+  createdAt     DateTime @default(now())
+}
+
+model AutismRegistration {
+  id               String   @id @default(uuid())
+  userId           String?
+  user             User?    @relation(fields: [userId], references: [id])
+  childName        String
+  childAge         Int?
+  childGender      String?
+  parentName       String?
+  phoneNumber      String?
+  alternatePhone   String?
+  email            String?
+  address          String?
+  city             String?
+  state            String?
+  pinCode          String?
+  diagnosisDetails String?
+  therapyHistory   String?
+  specialRequirements String?
+  eTicketNumber    String   @unique
+  isPreRegistered  Boolean  @default(false)
+  isFullyRegistered Boolean @default(false)
+  isVerified       Boolean  @default(false)
+  competitionCategory String?
+  competitionEntryStatus String?
+  registrationDate DateTime @default(now())
+  completionDate   DateTime?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model Article {
+  id           String   @id @default(uuid())
+  title        String
+  slug         String   @unique
+  content      String?
+  excerpt      String?
+  coverImageUrl String?
+  authorId     String?
+  authorName   String?
+  category     String?
+  tags         String?
+  isPublished  Boolean  @default(false)
+  isFeatured   Boolean  @default(false)
+  viewCount    Int      @default(0)
+  publishedAt  DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Announcement {
+  id        String   @id @default(uuid())
+  title     String
+  content   String?
+  summary   String?
+  imageUrl  String?
+  linkUrl   String?
+  priority  Int      @default(0)
+  isActive  Boolean  @default(true)
+  isPinned  Boolean  @default(false)
+  startDate DateTime?
+  endDate   DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ContactMessage {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  phone     String?
+  subject   String?
+  message   String
+  isRead    Boolean  @default(false)
+  adminReply String?
+  repliedAt DateTime?
+  createdAt DateTime @default(now())
+}
+
+model SiteContent {
+  id          String   @id @default(uuid())
+  key         String   @unique
+  value       String
+  description String?
+  contentType String?  @default("text")
+  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now())
+}
+
+model ChatSession {
+  id           String       @id @default(uuid())
+  userId       String?
+  title        String       @default("New Chat")
+  isActive     Boolean      @default(true)
+  lastMessageAt DateTime?
+  createdAt    DateTime     @default(now())
+  messages     ChatMessage[]
+}
+
+model ChatMessage {
+  id        String      @id @default(uuid())
+  sessionId String
+  session   ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  content   String
+  isFromUser Boolean    @default(true)
+  messageType String?   @default("text")
+  timestamp DateTime    @default(now())
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  title     String
+  message   String?
+  type      String?
+  linkUrl   String?
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model MaintenanceSetting {
+  id         String    @id @default(uuid())
+  isEnabled  Boolean   @default(false)
+  message    String?
+  allowedIps String?
+  endTime    DateTime?
+  updatedAt  DateTime  @updatedAt
+  createdAt  DateTime  @default(now())
+}
