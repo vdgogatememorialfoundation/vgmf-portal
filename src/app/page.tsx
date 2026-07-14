@@ -132,7 +132,7 @@ export default function Home() {
           <div className="grid md:grid-cols-2 gap-8">
             <div className="bg-gradient-to-br from-gold/10 to-cream rounded-2xl p-8">
               <h3 className="font-heading text-2xl font-bold text-navy mb-3">About the Foundation</h3>
-              <p className="text-ink-soft mb-6">Advancing Ayurvedic Research & Viddhakarma Studies since 1972. The Shree Samarth Vagbhata Seva Mandal continues Vaidya Gogate's mission.</p>
+              <p className="text-ink-soft mb-6">Advancing Ayurvedic Research & Viddhakarma Studies since 1972. Carrying forward Vaidya R.B. Gogate's legacy through education, research, and community service.</p>
               <Link href="/about" className="inline-flex items-center gap-2 px-5 py-2.5 border-2 border-navy text-navy font-semibold rounded-xl hover:bg-navy hover:text-white transition-all">About Us <ArrowRight size={16} /></Link>
             </div>
             <div className="space-y-4">

@@ -16,7 +16,7 @@ export default function AboutPage() {
         <div className="card-hover bg-white rounded-2xl border p-8">
           <h2 className="font-heading text-2xl font-bold text-navy mb-4">Foundation & Mission</h2>
           <p className="text-ink-soft leading-relaxed">
-            The Shree Samarth Vagbhata Seva Mandal was established on 28th May 1972, providing a platform for Vaidya Gogate's mission. The trust organized community clinics serving thousands of patients, and its flagship Fellowship Programme has trained hundreds of aspiring vaidyas.
+            Vaidya Gogate served as Professor at Pune University, Director at Sane Guruji Arogya Kendra, and Principal of Tilak Ayurved Mahavidyalaya. He pioneered research in Agnikarma and Viddhakarma, conducted groundbreaking work at the AIDS Research Centre and Cancer Project, and authored several definitive texts on Ayurvedic surgery.
           </p>
         </div>
       </div>
