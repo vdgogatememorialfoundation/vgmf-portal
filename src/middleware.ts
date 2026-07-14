@@ -30,9 +30,26 @@ export default async function middleware(req: NextRequest) {
     }
   }
 
+  if (
+    pathname.startsWith("/fellowship/apply") ||
+    pathname.startsWith("/fellowship/track")
+  ) {
+    if (!session) {
+      const url = new URL("/login", req.url);
+      url.searchParams.set("callbackUrl", pathname);
+      return NextResponse.redirect(url);
+    }
+  }
+
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/staff/:path*", "/dashboard/:path*"],
+  matcher: [
+    "/admin/:path*",
+    "/staff/:path*",
+    "/dashboard/:path*",
+    "/fellowship/apply/:path*",
+    "/fellowship/track/:path*",
+  ],
 };
