@@ -1,15 +1,21 @@
 import Link from "next/link";
 import { ArrowRight, FlaskConical, FileCheck, Users, TrendingUp } from "lucide-react";
+import { prisma } from "@/lib/prisma";
 
-export default function FellowshipPage() {
+export default async function FellowshipPage() {
+  const event = await prisma.event.findFirst({
+    where: { eventType: "Fellowship", isPublished: true },
+    orderBy: { eventDate: "desc" },
+  });
+
   return (
     <div>
       {/* HERO */}
       <section className="bg-gradient-to-br from-navy to-navy-light py-20">
         <div className="max-w-7xl mx-auto px-4 text-center">
           <span className="inline-block px-3 py-1 bg-gold/20 text-gold-light text-xs font-semibold rounded-full mb-4 tracking-wider uppercase">Fellowship 2026</span>
-          <h1 className="font-heading text-4xl md:text-6xl font-extrabold text-white mb-4">Viddhakarma Research Fellowship</h1>
-          <p className="text-white/70 text-lg max-w-2xl mx-auto mb-8">Advance evidence-based Ayurvedic research with grants up to ₹75,000 under expert mentorship</p>
+          <h1 className="font-heading text-4xl md:text-6xl font-extrabold text-white mb-4">{event?.title || "Viddhakarma Research Fellowship"}</h1>
+          <p className="text-white/70 text-lg max-w-2xl mx-auto mb-8">{event?.shortDesc || "Advance evidence-based Ayurvedic research with grants up to ₹75,000 under expert mentorship"}</p>
           <Link href="/fellowship/apply" className="inline-flex items-center gap-2 px-8 py-4 bg-gold text-navy font-bold rounded-xl hover:bg-gold-light transition-all text-lg shadow-xl shadow-gold/20">Apply Now <ArrowRight size={20} /></Link>
         </div>
       </section>
@@ -24,6 +30,18 @@ export default function FellowshipPage() {
           </div>
         </div>
       </section>
+
+      {/* ABOUT */}
+      {event?.description && (
+        <section className="py-16">
+          <div className="max-w-3xl mx-auto px-4">
+            <div className="card-hover bg-white rounded-2xl border p-8">
+              <h3 className="font-heading text-xl font-bold text-navy mb-3">About this Fellowship</h3>
+              <p className="text-sm text-ink-soft leading-relaxed whitespace-pre-line">{event.description}</p>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* HIGHLIGHTS */}
       <section className="py-16">

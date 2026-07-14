@@ -1,7 +1,25 @@
 import Link from "next/link";
 import { ArrowRight, FlaskConical, Presentation, Heart, BookOpen, MapPin, Phone, Mail } from "lucide-react";
+import { prisma } from "@/lib/prisma";
 
-export default function Home() {
+export default async function Home() {
+  const [events, articles] = await Promise.all([
+    prisma.event.findMany({ where: { isPublished: true }, orderBy: { eventDate: "desc" }, take: 3 }),
+    prisma.article.findMany({ where: { isPublished: true }, orderBy: { createdAt: "desc" }, take: 3 }),
+  ]);
+
+  const programmeIcons: Record<string, any> = {
+    Seminar: Presentation,
+    Fellowship: FlaskConical,
+    Autism: Heart,
+  };
+
+  const programmeHrefs: Record<string, string> = {
+    Seminar: "/seminar",
+    Fellowship: "/fellowship",
+    Autism: "/autism",
+  };
+
   return (
     <>
       {/* HERO */}
@@ -73,18 +91,19 @@ export default function Home() {
             <p className="text-muted mt-3 max-w-2xl mx-auto">Comprehensive programmes advancing Ayurvedic knowledge and community wellbeing</p>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
-            {[
-              { icon: FlaskConical, title: "Research Fellowship", desc: "Viddhakarma research grants up to ₹75,000 with expert mentorship and milestone-based funding.", href: "/fellowship", featured: true },
-              { icon: Presentation, title: "National Seminar", desc: "Annual conference bringing together practitioners, researchers, and students from across India.", href: "/seminar" },
-              { icon: Heart, title: "Autism Programme", desc: "Free awareness and therapy integrating Ayurvedic approaches with community support.", href: "/autism" },
-            ].map((p, i) => (
-              <Link key={i} href={p.href} className={`card-hover group rounded-2xl border p-6 ${p.featured ? "bg-gradient-to-br from-navy to-navy-light text-white border-navy" : "bg-white border-gray-100"}`}>
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${p.featured ? "bg-white/15 text-gold" : "bg-navy/5 text-navy"}`}><p.icon size={24} /></div>
-                <h3 className={`font-heading text-xl font-bold mb-2 ${p.featured ? "text-white" : "text-navy"}`}>{p.title}</h3>
-                <p className={`text-sm leading-relaxed mb-4 ${p.featured ? "text-white/70" : "text-ink-soft"}`}>{p.desc}</p>
-                <span className={`inline-flex items-center gap-1 text-sm font-semibold ${p.featured ? "text-gold" : "text-navy"}`}>Learn More <ArrowRight size={16} /></span>
-              </Link>
-            ))}
+            {events.map((evt, i) => {
+              const Icon = programmeIcons[evt.eventType] || BookOpen;
+              const href = programmeHrefs[evt.eventType] || "#";
+              const featured = i === 0;
+              return (
+                <Link key={evt.id} href={href} className={`card-hover group rounded-2xl border p-6 ${featured ? "bg-gradient-to-br from-navy to-navy-light text-white border-navy" : "bg-white border-gray-100"}`}>
+                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${featured ? "bg-white/15 text-gold" : "bg-navy/5 text-navy"}`}><Icon size={24} /></div>
+                  <h3 className={`font-heading text-xl font-bold mb-2 ${featured ? "text-white" : "text-navy"}`}>{evt.title}</h3>
+                  <p className={`text-sm leading-relaxed mb-4 ${featured ? "text-white/70" : "text-ink-soft"}`}>{evt.shortDesc || evt.description}</p>
+                  <span className={`inline-flex items-center gap-1 text-sm font-semibold ${featured ? "text-gold" : "text-navy"}`}>Learn More <ArrowRight size={16} /></span>
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -97,13 +116,9 @@ export default function Home() {
             <h2 className="font-heading text-3xl md:text-4xl font-extrabold text-navy">Articles & Research</h2>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
-            {[
-              { title: "HIV in Ayurveda", category: "Kayachikitsa", excerpt: "Exploring Ayurvedic perspectives on HIV/AIDS through the lens of Karma, Dravya, and Upadwipa.", href: "/articles" },
-              { title: "Agnikarma Chikitsa", category: "Shalya Tantra", excerpt: "Understanding thermal cauterization techniques and their clinical applications in modern practice.", href: "/articles" },
-              { title: "Viddhakarma Research", category: "Research", excerpt: "Evidence-based approaches to therapeutic needling and its role in musculoskeletal disorders.", href: "/articles" },
-            ].map((a, i) => (
-              <Link key={i} href={a.href} className="card-hover bg-white rounded-2xl border border-gray-100 p-6">
-                <span className="text-xs font-semibold text-gold uppercase tracking-wider">{a.category}</span>
+            {articles.map((a) => (
+              <Link key={a.id} href={`/articles/${a.slug}`} className="card-hover bg-white rounded-2xl border border-gray-100 p-6">
+                <span className="text-xs font-semibold text-gold uppercase tracking-wider">{a.category || "General"}</span>
                 <h3 className="font-heading text-lg font-bold text-navy mt-2 mb-2">{a.title}</h3>
                 <p className="text-sm text-ink-soft leading-relaxed">{a.excerpt}</p>
                 <span className="inline-flex items-center gap-1 text-sm font-semibold text-navy mt-4">Read Article <ArrowRight size={16} /></span>
@@ -132,7 +147,7 @@ export default function Home() {
           <div className="grid md:grid-cols-2 gap-8">
             <div className="bg-gradient-to-br from-gold/10 to-cream rounded-2xl p-8">
               <h3 className="font-heading text-2xl font-bold text-navy mb-3">About the Foundation</h3>
-              <p className="text-ink-soft mb-6">Advancing Ayurvedic Research & Viddhakarma Studies since 1972. Carrying forward Vaidya R.B. Gogate's legacy through education, research, and community service.</p>
+              <p className="text-ink-soft mb-6">Advancing Ayurvedic Research & Viddhakarma Studies since 1972. Carrying forward Vaidya R.B. Gogate&apos;s legacy through education, research, and community service.</p>
               <Link href="/about" className="inline-flex items-center gap-2 px-5 py-2.5 border-2 border-navy text-navy font-semibold rounded-xl hover:bg-navy hover:text-white transition-all">About Us <ArrowRight size={16} /></Link>
             </div>
             <div className="space-y-4">

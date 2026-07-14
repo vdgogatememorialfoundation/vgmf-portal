@@ -1,19 +1,31 @@
 import Link from "next/link";
 import { ArrowRight, Calendar, MapPin, Users, Video, Award, Mic } from "lucide-react";
+import { prisma } from "@/lib/prisma";
 
-export default function SeminarPage() {
+export default async function SeminarPage() {
+  const event = await prisma.event.findFirst({
+    where: { eventType: "Seminar", isPublished: true },
+    orderBy: { eventDate: "desc" },
+  });
+
+  const eventDate = event?.eventDate
+    ? new Date(event.eventDate).toLocaleDateString("en-IN", { month: "long", year: "numeric" })
+    : "December 2026";
+
+  const location = event?.city || "Pune, Maharashtra";
+
   return (
     <div>
       {/* HERO */}
       <section className="bg-gradient-to-br from-navy to-navy-light py-20">
         <div className="max-w-7xl mx-auto px-4 text-center">
           <span className="inline-block px-3 py-1 bg-gold/20 text-gold-light text-xs font-semibold rounded-full mb-4 tracking-wider uppercase">Annual Event</span>
-          <h1 className="font-heading text-4xl md:text-6xl font-extrabold text-white mb-4">National Seminar on Agnikarma & Viddhakarma</h1>
-          <p className="text-white/70 text-lg max-w-2xl mx-auto mb-8">Bringing together Ayurvedic practitioners, researchers, and students from across India</p>
+          <h1 className="font-heading text-4xl md:text-6xl font-extrabold text-white mb-4">{event?.title || "National Seminar on Agnikarma & Viddhakarma"}</h1>
+          <p className="text-white/70 text-lg max-w-2xl mx-auto mb-8">{event?.shortDesc || "Bringing together Ayurvedic practitioners, researchers, and students from across India"}</p>
           <div className="flex flex-wrap justify-center gap-3 mb-8">
-            <span className="flex items-center gap-1 text-white/80 text-sm"><Calendar size={16} /> December 2026</span>
+            <span className="flex items-center gap-1 text-white/80 text-sm"><Calendar size={16} /> {eventDate}</span>
             <span className="text-white/40">|</span>
-            <span className="flex items-center gap-1 text-white/80 text-sm"><MapPin size={16} /> Pune, Maharashtra</span>
+            <span className="flex items-center gap-1 text-white/80 text-sm"><MapPin size={16} /> {location}</span>
           </div>
           <Link href="/seminar/register" className="inline-flex items-center gap-2 px-8 py-4 bg-gold text-navy font-bold rounded-xl hover:bg-gold-light transition-all text-lg shadow-xl shadow-gold/20">Register Now <ArrowRight size={20} /></Link>
         </div>
@@ -37,7 +49,7 @@ export default function SeminarPage() {
           <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             <div className="card-hover bg-white rounded-2xl border p-8">
               <h3 className="font-heading text-xl font-bold text-navy mb-3">Our Legacy</h3>
-              <p className="text-sm text-ink-soft leading-relaxed">Since its inception, the National Seminar on Agnikarma and Viddhakarma has been a cornerstone event for Ayurvedic professionals. Founded to honour Vaidya R.B. Gogate's pioneering work, the seminar has grown into a premier platform for knowledge exchange, live demonstrations, and research presentations.</p>
+              <p className="text-sm text-ink-soft leading-relaxed">{event?.description || "Since its inception, the National Seminar on Agnikarma and Viddhakarma has been a cornerstone event for Ayurvedic professionals. Founded to honour Vaidya R.B. Gogate's pioneering work, the seminar has grown into a premier platform for knowledge exchange, live demonstrations, and research presentations."}</p>
             </div>
             <div className="card-hover bg-white rounded-2xl border p-8">
               <h3 className="font-heading text-xl font-bold text-navy mb-3">Who Should Attend</h3>
