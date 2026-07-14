@@ -12,6 +12,11 @@ export default async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const role = (session?.user as any)?.role as string | undefined;
 
+  // Admin / Staff login pages → public (anyone can view)
+  if (pathname === "/admin/login" || pathname === "/staff/login") {
+    return NextResponse.next();
+  }
+
   // Admin routes → ADMIN only
   if (pathname.startsWith("/admin")) {
     if (!session || role !== "ADMIN") {
