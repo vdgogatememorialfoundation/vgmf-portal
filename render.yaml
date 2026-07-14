@@ -25,4 +25,8 @@ services:
         sync: false
       - key: NODE_ENV
         value: production
+      - key: NPM_CONFIG_PRODUCTION
+        value: "false"
     healthCheckPath: /
+    buildCommand: npm install && npx prisma generate && npx prisma db push && npx prisma db seed && npm run build
+    startCommand: npm start
