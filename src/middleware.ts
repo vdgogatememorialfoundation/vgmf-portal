@@ -22,9 +22,17 @@ export default async function middleware(req: NextRequest) {
     }
   }
 
+  if (pathname.startsWith("/dashboard")) {
+    if (!session) {
+      const url = new URL("/login", req.url);
+      url.searchParams.set("callbackUrl", pathname);
+      return NextResponse.redirect(url);
+    }
+  }
+
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/staff/:path*"],
+  matcher: ["/admin/:path*", "/staff/:path*", "/dashboard/:path*"],
 };

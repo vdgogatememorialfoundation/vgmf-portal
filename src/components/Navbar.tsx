@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
-import { Menu, X, Phone, Mail, ChevronDown, User, LogOut, Settings, Shield } from "lucide-react";
+import { Menu, X, Phone, Mail, ChevronDown, User, LogOut, Settings, Shield, Truck, LayoutDashboard } from "lucide-react";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -54,6 +54,10 @@ export default function Navbar() {
                   {link.label}
                 </Link>
               ))}
+              <Link href="/shop/track"
+                className="px-3 py-2 text-sm font-medium text-ink-soft hover:text-navy hover:bg-navy/5 rounded-lg transition-colors flex items-center gap-1">
+                <Truck size={14} /> Track Order
+              </Link>
             </div>
 
             {/* Auth */}
@@ -73,6 +77,7 @@ export default function Navbar() {
                         <p className="text-sm font-medium">{session.user?.name}</p>
                         <p className="text-xs text-muted">{session.user?.email}</p>
                       </div>
+                      <Link href="/dashboard" className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-50"><LayoutDashboard size={16} /> Dashboard</Link>
                       <Link href="/profile" className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-50"><User size={16} /> Profile</Link>
                       {role === "ADMIN" && <Link href="/admin" className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-50"><Shield size={16} /> Admin Panel</Link>}
                       {role === "STAFF" && <Link href="/staff" className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-50"><Settings size={16} /> Staff Panel</Link>}
