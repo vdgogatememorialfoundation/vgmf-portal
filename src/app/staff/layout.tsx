@@ -1,3 +1,5 @@
+"use client";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { LayoutDashboard, ShoppingBag, Users, Bell, LogOut } from "lucide-react";
 
@@ -8,6 +10,13 @@ const links = [
 ];
 
 export default function StaffLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const isLogin = pathname === "/staff/login";
+
+  if (isLogin) {
+    return <>{children}</>;
+  }
+
   return (
     <div className="min-h-screen bg-cream flex">
       <aside className="w-56 bg-navy text-white hidden lg:flex flex-col fixed h-screen z-40">
