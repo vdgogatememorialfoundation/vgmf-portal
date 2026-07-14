@@ -1,12 +1,55 @@
 import Link from "next/link";
 import { ArrowRight, FlaskConical, FileCheck, Users, TrendingUp } from "lucide-react";
 import { prisma } from "@/lib/prisma";
+import { auth } from "@/lib/auth";
 
 export default async function FellowshipPage() {
+  const session = await auth();
   const event = await prisma.event.findFirst({
-    where: { eventType: "Fellowship", isPublished: true },
+    where: { eventType: "Fellowship" },
     orderBy: { eventDate: "desc" },
   });
+
+  if (!event) {
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <div className="text-center px-4">
+          <FlaskConical size={48} className="mx-auto text-muted mb-4" />
+          <h2 className="font-heading text-2xl font-bold text-navy mb-2">Coming Soon</h2>
+          <p className="text-muted">The Research Fellowship programme is not available at this moment.</p>
+          <Link href="/" className="inline-flex items-center gap-1 text-sm font-semibold text-navy mt-4 hover:underline">Back to Home <ArrowRight size={14} /></Link>
+        </div>
+      </div>
+    );
+  }
+
+  if (!event.isPublished) {
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <div className="text-center px-4">
+          <FlaskConical size={48} className="mx-auto text-muted mb-4" />
+          <h2 className="font-heading text-2xl font-bold text-navy mb-2">Currently Unavailable</h2>
+          <p className="text-muted">The Research Fellowship programme is currently not accepting applications. Please check back later.</p>
+          <Link href="/" className="inline-flex items-center gap-1 text-sm font-semibold text-navy mt-4 hover:underline">Back to Home <ArrowRight size={14} /></Link>
+        </div>
+      </div>
+    );
+  }
+
+  if (event.restrictToDoctors && !session) {
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <div className="text-center px-4 max-w-md">
+          <FlaskConical size={48} className="mx-auto text-maroon mb-4" />
+          <h2 className="font-heading text-2xl font-bold text-navy mb-2">Medical Practitioners Only</h2>
+          <p className="text-muted mb-4">This event is for registered medical practitioners only.</p>
+          <Link href="/login" className="inline-flex items-center gap-2 px-6 py-3 bg-navy text-white font-semibold rounded-xl hover:bg-navy-light">
+            Log In to Continue <ArrowRight size={16} />
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -14,8 +57,8 @@ export default async function FellowshipPage() {
       <section className="bg-gradient-to-br from-navy to-navy-light py-20">
         <div className="max-w-7xl mx-auto px-4 text-center">
           <span className="inline-block px-3 py-1 bg-gold/20 text-gold-light text-xs font-semibold rounded-full mb-4 tracking-wider uppercase">Fellowship 2026</span>
-          <h1 className="font-heading text-4xl md:text-6xl font-extrabold text-white mb-4">{event?.title || "Viddhakarma Research Fellowship"}</h1>
-          <p className="text-white/70 text-lg max-w-2xl mx-auto mb-8">{event?.shortDesc || "Advance evidence-based Ayurvedic research with grants up to ₹75,000 under expert mentorship"}</p>
+          <h1 className="font-heading text-4xl md:text-6xl font-extrabold text-white mb-4">{event.title}</h1>
+          <p className="text-white/70 text-lg max-w-2xl mx-auto mb-8">{event.shortDesc || "Advance evidence-based Ayurvedic research with grants up to ₹75,000 under expert mentorship"}</p>
           <Link href="/fellowship/apply" className="inline-flex items-center gap-2 px-8 py-4 bg-gold text-navy font-bold rounded-xl hover:bg-gold-light transition-all text-lg shadow-xl shadow-gold/20">Apply Now <ArrowRight size={20} /></Link>
         </div>
       </section>
@@ -32,7 +75,7 @@ export default async function FellowshipPage() {
       </section>
 
       {/* ABOUT */}
-      {event?.description && (
+      {event.description && (
         <section className="py-16">
           <div className="max-w-3xl mx-auto px-4">
             <div className="card-hover bg-white rounded-2xl border p-8">

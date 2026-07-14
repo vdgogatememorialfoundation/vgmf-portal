@@ -43,6 +43,7 @@ export async function GET(req: NextRequest) {
     ]);
 
     return NextResponse.json({
+      events: items,
       items,
       total,
       page,
@@ -71,7 +72,30 @@ export async function POST(req: NextRequest) {
     if (existing) {
       slug = `${slug}-${Date.now().toString(36)}`;
     }
-    const item = await prisma.event.create({ data: { ...data, slug } });
+
+    const item = await prisma.event.create({
+      data: {
+        title: data.title,
+        slug,
+        description: data.description || null,
+        shortDesc: data.shortDesc || null,
+        eventDate: data.eventDate,
+        endDate: data.endDate || null,
+        location: data.location || null,
+        city: data.city || null,
+        address: data.address || null,
+        eventType: data.eventType || "Seminar",
+        isPublished: data.isPublished ?? true,
+        isFeatured: data.isFeatured ?? false,
+        maxAttendees: data.maxAttendees || null,
+        ticketPrice: data.ticketPrice || null,
+        bannerUrl: data.bannerUrl || null,
+        imageUrl: data.imageUrl || null,
+        contactEmail: data.contactEmail || null,
+        contactPhone: data.contactPhone || null,
+        restrictToDoctors: data.restrictToDoctors ?? false,
+      },
+    });
     return NextResponse.json(item, { status: 201 });
   } catch (err) {
     return NextResponse.json({ error: "Server error" }, { status: 500 });

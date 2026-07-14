@@ -176,10 +176,11 @@ model Event {
   ticketPrice  Float?
   bannerUrl    String?
   imageUrl     String?
-  contactEmail String?
-  contactPhone String?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  contactEmail      String?
+  contactPhone      String?
+  restrictToDoctors Boolean  @default(false)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 }
 
 model SeminarRegistration {

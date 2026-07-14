@@ -3,9 +3,14 @@ import { ArrowRight, FlaskConical, Presentation, Heart, BookOpen, MapPin, Phone,
 import { prisma } from "@/lib/prisma";
 
 export default async function Home() {
-  const [events, articles] = await Promise.all([
+  const [events, articles, announcements] = await Promise.all([
     prisma.event.findMany({ where: { isPublished: true }, orderBy: { eventDate: "desc" }, take: 3 }),
     prisma.article.findMany({ where: { isPublished: true }, orderBy: { createdAt: "desc" }, take: 3 }),
+    prisma.announcement.findMany({
+      where: { isActive: true },
+      orderBy: [{ isPinned: "desc" }, { createdAt: "desc" }],
+      take: 5,
+    }),
   ]);
 
   const programmeIcons: Record<string, any> = {
@@ -20,8 +25,25 @@ export default async function Home() {
     Autism: "/autism",
   };
 
+  const pinnedAnnouncements = announcements.filter(a => a.isPinned);
+
   return (
     <>
+      {/* PINNED BANNER */}
+      {pinnedAnnouncements.length > 0 && (
+        <div className="bg-gold/10 border-b border-gold/20">
+          <div className="max-w-7xl mx-auto px-4 py-2">
+            {pinnedAnnouncements.map(a => (
+              <div key={a.id} className="flex items-center gap-2 text-sm text-navy">
+                <span className="text-gold">📢</span>
+                <span className="font-semibold">{a.title}</span>
+                {a.summary && <span className="text-muted">- {a.summary}</span>}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* HERO */}
       <section className="relative bg-gradient-to-br from-navy via-navy-light to-navy min-h-[90vh] flex items-center overflow-hidden">
         <div className="absolute inset-0 opacity-10">
@@ -104,6 +126,32 @@ export default async function Home() {
                 </Link>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      {/* ANNOUNCEMENTS & NOTICES */}
+      <section className="py-16 bg-cream">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-10">
+            <span className="inline-block px-3 py-1 bg-navy/5 text-navy text-xs font-semibold rounded-full mb-4 tracking-wider uppercase">Notices</span>
+            <h2 className="font-heading text-3xl font-extrabold text-navy">Announcements & Notices</h2>
+          </div>
+          <div className="grid md:grid-cols-2 gap-4 max-w-4xl mx-auto">
+            {announcements.length === 0 ? (
+              <div className="col-span-2 text-center py-8 text-muted">No active announcements</div>
+            ) : (
+              announcements.map(a => (
+                <div key={a.id} className={`card-hover bg-white rounded-2xl border p-5 ${a.isPinned ? "border-l-4 border-l-gold" : ""}`}>
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="font-heading font-bold text-navy">{a.title}</h3>
+                    {a.isPinned && <span className="text-xs bg-gold/10 text-gold px-2 py-0.5 rounded-full font-semibold">Pinned</span>}
+                  </div>
+                  {a.summary && <p className="text-sm text-ink-soft">{a.summary}</p>}
+                  <p className="text-xs text-muted mt-3">{new Date(a.createdAt).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}</p>
+                </div>
+              ))
+            )}
           </div>
         </div>
       </section>

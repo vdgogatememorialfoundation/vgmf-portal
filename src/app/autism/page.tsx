@@ -1,15 +1,47 @@
 import Link from "next/link";
 import { ArrowRight, Heart, Brain, Users, ClipboardCheck, Calendar, MessageCircle } from "lucide-react";
+import { prisma } from "@/lib/prisma";
 
-export default function AutismPage() {
+export default async function AutismPage() {
+  const event = await prisma.event.findFirst({
+    where: { eventType: "Autism" },
+    orderBy: { eventDate: "desc" },
+  });
+
+  if (!event) {
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <div className="text-center px-4">
+          <Heart size={48} className="mx-auto text-muted mb-4" />
+          <h2 className="font-heading text-2xl font-bold text-navy mb-2">Coming Soon</h2>
+          <p className="text-muted">The Autism Awareness Programme is not available at this moment.</p>
+          <Link href="/" className="inline-flex items-center gap-1 text-sm font-semibold text-navy mt-4 hover:underline">Back to Home <ArrowRight size={14} /></Link>
+        </div>
+      </div>
+    );
+  }
+
+  if (!event.isPublished) {
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <div className="text-center px-4">
+          <Heart size={48} className="mx-auto text-muted mb-4" />
+          <h2 className="font-heading text-2xl font-bold text-navy mb-2">Currently Unavailable</h2>
+          <p className="text-muted">The Autism Awareness Programme is currently unavailable. Please check back later.</p>
+          <Link href="/" className="inline-flex items-center gap-1 text-sm font-semibold text-navy mt-4 hover:underline">Back to Home <ArrowRight size={14} /></Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div>
       {/* HERO */}
       <section className="bg-gradient-to-br from-navy to-navy-light py-20">
         <div className="max-w-7xl mx-auto px-4 text-center">
           <span className="inline-block px-3 py-1 bg-gold/20 text-gold-light text-xs font-semibold rounded-full mb-4 tracking-wider uppercase">Community Initiative</span>
-          <h1 className="font-heading text-4xl md:text-6xl font-extrabold text-white mb-4">Autism Awareness Programme</h1>
-          <p className="text-white/70 text-lg max-w-2xl mx-auto mb-8">Free awareness, therapy, and support integrating Ayurvedic approaches with community care</p>
+          <h1 className="font-heading text-4xl md:text-6xl font-extrabold text-white mb-4">{event.title || "Autism Awareness Programme"}</h1>
+          <p className="text-white/70 text-lg max-w-2xl mx-auto mb-8">{event.shortDesc || "Free awareness, therapy, and support integrating Ayurvedic approaches with community care"}</p>
           <Link href="/autism/register" className="inline-flex items-center gap-2 px-8 py-4 bg-gold text-navy font-bold rounded-xl hover:bg-gold-light transition-all text-lg shadow-xl shadow-gold/20">Pre-Register Now <ArrowRight size={20} /></Link>
         </div>
       </section>
@@ -32,7 +64,7 @@ export default function AutismPage() {
           <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             <div className="card-hover bg-white rounded-2xl border p-8">
               <h3 className="font-heading text-xl font-bold text-navy mb-3">Our Mission</h3>
-              <p className="text-sm text-ink-soft leading-relaxed">VGMF's Autism Awareness Programme is a community-driven initiative providing free consultation, therapy, and support to families affected by Autism Spectrum Disorder. We integrate Ayurvedic Panchakarma therapies with modern supportive care to improve quality of life.</p>
+              <p className="text-sm text-ink-soft leading-relaxed">{event.description || "VGMF's Autism Awareness Programme is a community-driven initiative providing free consultation, therapy, and support to families affected by Autism Spectrum Disorder. We integrate Ayurvedic Panchakarma therapies with modern supportive care to improve quality of life."}</p>
             </div>
             <div className="card-hover bg-white rounded-2xl border p-8">
               <h3 className="font-heading text-xl font-bold text-navy mb-3">Who Can Join</h3>
