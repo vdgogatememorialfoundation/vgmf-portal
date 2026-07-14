@@ -12,61 +12,58 @@ export default async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const role = (session?.user as any)?.role as string | undefined;
 
-  // Admin / Staff login pages → public (anyone can view)
-  if (pathname === "/admin/login" || pathname === "/staff/login") {
+  if (
+    pathname === "/admin/login" ||
+    pathname === "/staff/login" ||
+    pathname === "/doctor/login" ||
+    pathname === "/judge/login" ||
+    pathname === "/trustee/login"
+  ) {
     return NextResponse.next();
   }
 
-  // Admin routes → ADMIN only
   if (pathname.startsWith("/admin")) {
     if (!session || role !== "ADMIN") {
       return redirectToLogin(req);
     }
   }
 
-  // Staff routes → ADMIN or STAFF
   if (pathname.startsWith("/staff")) {
     if (!session || (role !== "ADMIN" && role !== "STAFF")) {
       return redirectToLogin(req);
     }
   }
 
-  // Reviewer dashboard → JUDGE or REVIEWER
   if (pathname.startsWith("/dashboard/reviewer")) {
     if (!session || (role !== "JUDGE" && role !== "REVIEWER")) {
       return redirectToLogin(req);
     }
   }
 
-  // Trustee dashboard → TRUSTEE only
   if (pathname.startsWith("/dashboard/trustee")) {
     if (!session || role !== "TRUSTEE") {
       return redirectToLogin(req);
     }
   }
 
-  // Dashboard → any authenticated user
   if (pathname.startsWith("/dashboard")) {
     if (!session) {
       return redirectToLogin(req);
     }
   }
 
-  // Fellowship apply → any authenticated user
   if (pathname.startsWith("/fellowship/apply")) {
     if (!session) {
       return redirectToLogin(req);
     }
   }
 
-  // Fellowship track → any authenticated user
   if (pathname.startsWith("/fellowship/track")) {
     if (!session) {
       return redirectToLogin(req);
     }
   }
 
-  // Seminar register → DOCTOR or any authenticated user
   if (pathname.startsWith("/seminar/register")) {
     if (!session) {
       return redirectToLogin(req);
@@ -80,6 +77,9 @@ export const config = {
   matcher: [
     "/admin/:path*",
     "/staff/:path*",
+    "/doctor/:path*",
+    "/judge/:path*",
+    "/trustee/:path*",
     "/dashboard/:path*",
     "/fellowship/apply/:path*",
     "/fellowship/track/:path*",
