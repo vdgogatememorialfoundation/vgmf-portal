@@ -24,7 +24,7 @@ export default function AdminAnnouncements() {
     setLoading(true);
     const res = await fetch(`/api/admin/announcements?search=${encodeURIComponent(search)}`);
     const data = await res.json();
-    setAnnouncements(data.announcements || []);
+    setAnnouncements(data.items || []);
     setLoading(false);
   };
 

@@ -139,7 +139,10 @@ export default function TrackingPage() {
                     </p>
                     {getDaysUntilDelivery() !== null && (
                       <p className="text-sm text-white/80">
-                        {getDaysUntilDelivery() === 0 ? "Today" : `In ${getDaysUntilDelivery()} day${getDaysUntilDelivery() > 1 ? "s" : ""}`}
+                        {(() => {
+                          const days = getDaysUntilDelivery();
+                          return days === 0 ? "Today" : `In ${days} day${days! > 1 ? "s" : ""}`;
+                        })()}
                       </p>
                     )}
                   </div>
