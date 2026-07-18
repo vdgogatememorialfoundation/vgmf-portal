@@ -196,7 +196,7 @@ export default function StaffRegistrations() {
   const typeConfig = {
     Seminar: { icon: GraduationCap, color: "text-gold bg-gold/10" },
     Fellowship: { icon: FlaskConical, color: "text-teal bg-teal/10" },
-    Autism: { icon: Brain, typeKey: "text-maroon bg-maroon/10" },
+    Autism: { icon: Brain, color: "text-maroon bg-maroon/10" },
   };
 
   return (
@@ -218,7 +218,7 @@ export default function StaffRegistrations() {
         {(["Seminar", "Fellowship", "Autism"] as const).map(type => {
           const cfg = typeConfig[type];
           const Icon = type === "Autism" ? Brain : type === "Fellowship" ? FlaskConical : GraduationCap;
-          const colorClass = type === "Seminar" ? cfg.color : type === "Fellowship" ? cfg.color : (cfg as { typeKey: string }).typeKey;
+          const colorClass = cfg.color;
           return (
             <button
               key={type}
