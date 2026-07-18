@@ -33,6 +33,7 @@ interface Event {
   hasRegistrationForm?: boolean;
   allowMultipleRegistrations?: boolean;
   requiresPayment?: boolean;
+  requiresIdentityVerification?: boolean;
 }
 
 const EVENT_TYPES = ["Seminar", "Fellowship", "Autism", "Competition", "Workshop", "Guest Lecture"];
@@ -52,13 +53,14 @@ interface EventForm {
   address: string; eventType: string; isPublished: boolean; isFeatured: boolean;
   maxAttendees: string; ticketPrice: string; bannerUrl: string; imageUrl: string;
   contactEmail: string; contactPhone: string; restrictToDoctors: boolean;
+  requiresIdentityVerification: boolean;
 }
 
 const EMPTY_FORM: EventForm = {
   title: "", slug: "", description: "", shortDesc: "", eventDate: "", endDate: "",
   location: "", city: "", address: "", eventType: "Seminar", isPublished: true,
   isFeatured: false, maxAttendees: "", ticketPrice: "", bannerUrl: "", imageUrl: "",
-  contactEmail: "", contactPhone: "", restrictToDoctors: false,
+  contactEmail: "", contactPhone: "", restrictToDoctors: false, requiresIdentityVerification: false,
 };
 
 const FIELD_TYPES = [
@@ -234,6 +236,7 @@ export default function AdminEvents() {
         ...form,
         maxAttendees: form.maxAttendees ? parseInt(form.maxAttendees) : null,
         ticketPrice: form.ticketPrice ? parseFloat(form.ticketPrice) : null,
+        requiresIdentityVerification: form.requiresIdentityVerification,
       };
       const url = editing ? `/api/admin/events/${editing.id}` : "/api/admin/events";
       const method = editing ? "PUT" : "POST";
@@ -279,6 +282,7 @@ export default function AdminEvents() {
       bannerUrl: event.bannerUrl || "", imageUrl: event.imageUrl || "",
       contactEmail: event.contactEmail || "", contactPhone: event.contactPhone || "",
       restrictToDoctors: event.restrictToDoctors,
+      requiresIdentityVerification: event.requiresIdentityVerification || false,
     });
     setShowForm(true);
   };
@@ -584,6 +588,13 @@ export default function AdminEvents() {
                   <button type="button" onClick={() => setField("isFeatured", !form.isFeatured)}
                     className={`relative w-12 h-6 rounded-full transition-colors ${form.isFeatured ? "bg-gold" : "bg-slate-300"}`}>
                     <span className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${form.isFeatured ? "left-6" : "left-0.5"}`} />
+                  </button>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div><label className="text-sm font-semibold text-ink">Require Identity Verification</label><p className="text-xs text-muted">Users must verify identity before registering</p></div>
+                  <button type="button" onClick={() => setField("requiresIdentityVerification", !form.requiresIdentityVerification)}
+                    className={`relative w-12 h-6 rounded-full transition-colors ${form.requiresIdentityVerification ? "bg-teal" : "bg-slate-300"}`}>
+                    <span className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${form.requiresIdentityVerification ? "left-6" : "left-0.5"}`} />
                   </button>
                 </div>
               </div>

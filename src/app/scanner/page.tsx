@@ -15,6 +15,7 @@ import {
   LogOut,
   Clock,
   ChevronDown,
+  AlertCircle,
 } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -66,6 +67,14 @@ export default function ScannerPage() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [eventsLoading, setEventsLoading] = useState(true);
   const [historyLoading, setHistoryLoading] = useState(false);
+  const [portalEnabled, setPortalEnabled] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    fetch("/api/portals/scanner/status")
+      .then(r => r.ok ? r.json() : { enabled: true })
+      .then(data => setPortalEnabled(data.enabled))
+      .catch(() => setPortalEnabled(true));
+  }, []);
 
   useEffect(() => {
     if (authStatus === "unauthenticated") {
@@ -180,7 +189,7 @@ export default function ScannerPage() {
     }
   };
 
-  if (authStatus === "loading") {
+  if (authStatus === "loading" || portalEnabled === null) {
     return (
       <div className="min-h-screen bg-[#1a1a2e] flex items-center justify-center">
         <RefreshCw size={32} className="text-teal animate-spin" />
@@ -189,6 +198,23 @@ export default function ScannerPage() {
   }
 
   if (authStatus === "unauthenticated") return null;
+
+  if (portalEnabled === false) {
+    return (
+      <div className="min-h-screen bg-[#1a1a2e] flex items-center justify-center">
+        <div className="text-center max-w-md px-6">
+          <div className="w-16 h-16 bg-maroon/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <AlertCircle size={32} className="text-red-400" />
+          </div>
+          <h1 className="font-heading text-2xl font-extrabold text-white mb-3">Portal Unavailable</h1>
+          <p className="text-white/60 mb-6">This portal is currently unavailable. Please contact the administrator.</p>
+          <button onClick={() => router.push("/")} className="px-4 py-2 bg-white/10 text-white rounded-xl text-sm font-semibold hover:bg-white/20 transition-colors">
+            Back to Home
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   const selectedEvent = events.find((e) => e.id === selectedEventId);
   const totalReg = stats?.totalRegistrations || 0;

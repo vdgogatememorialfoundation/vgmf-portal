@@ -75,8 +75,26 @@ export default function SignupPage() {
     finally { setLoading(false); }
   };
 
-  const handleVerify = async () => {
+  const handleVerifyOtp = async () => {
     if (otp.length !== 6) { toast.error("Please enter a valid 6-digit code"); return; }
+    setLoading(true);
+    try {
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "verify-otp", email: form.email, otp }),
+      });
+      const data = await res.json();
+      if (!res.ok) { toast.error(data.error || "Verification failed"); }
+      else {
+        toast.success("Email verified! Now set your password.");
+        setStep(3);
+      }
+    } catch { toast.error("Something went wrong. Please try again."); }
+    finally { setLoading(false); }
+  };
+
+  const handleCreateAccount = async () => {
     if (!password || password.length < 6) { toast.error("Password must be at least 6 characters"); return; }
     if (password !== confirm) { toast.error("Passwords do not match"); return; }
     setLoading(true);
@@ -85,16 +103,15 @@ export default function SignupPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          action: "verify",
+          action: "create-account",
           email: form.email,
           name: form.name,
           phone: form.phone || undefined,
           password,
-          otp,
         }),
       });
       const data = await res.json();
-      if (!res.ok) { toast.error(data.error || "Verification failed"); }
+      if (!res.ok) { toast.error(data.error || "Account creation failed"); }
       else {
         toast.success("Account created! Please sign in.");
         router.push("/login?registered=true");
@@ -236,8 +253,8 @@ export default function SignupPage() {
                 <label className="block text-xs font-semibold text-ink/50 uppercase tracking-wider mb-1.5">Verification Code</label>
                 <input type="text" value={otp} onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))} required maxLength={6} className="input-field text-center tracking-[10px] font-bold text-xl" placeholder="000000" />
               </div>
-              <button type="button" onClick={() => { setStep(3); }} disabled={otp.length !== 6} className="btn-primary w-full justify-center py-3 text-base disabled:opacity-50 disabled:cursor-not-allowed">
-                Verify & Set Password <ArrowRight size={18} />
+              <button type="button" onClick={handleVerifyOtp} disabled={loading || otp.length !== 6} className="btn-primary w-full justify-center py-3 text-base disabled:opacity-50 disabled:cursor-not-allowed">
+                {loading ? "Verifying..." : "Verify OTP"} <ArrowRight size={18} />
               </button>
               <div className="flex items-center justify-center gap-4">
                 <button

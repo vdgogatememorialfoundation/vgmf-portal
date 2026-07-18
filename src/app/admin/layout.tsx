@@ -20,6 +20,11 @@ import {
   ChevronLeft,
   ChevronRight,
   ExternalLink,
+  BarChart3,
+  ClipboardList,
+  Link2,
+  Shield,
+  FileCode,
 } from "lucide-react";
 
 const sidebarLinks = [
@@ -32,6 +37,11 @@ const sidebarLinks = [
   { href: "/admin/articles", icon: BookOpen, label: "Articles" },
   { href: "/admin/announcements", icon: Megaphone, label: "Announcements" },
   { href: "/admin/content", icon: FileText, label: "Content" },
+  { href: "/admin/portals", icon: Link2, label: "Portal Links" },
+  { href: "/admin/roles", icon: Shield, label: "Roles" },
+  { href: "/admin/pages", icon: FileCode, label: "Pages" },
+  { href: "/admin/analytics", icon: BarChart3, label: "Analytics" },
+  { href: "/admin/reports", icon: ClipboardList, label: "Reports" },
   { href: "/admin/settings", icon: Settings, label: "Settings" },
 ];
 
@@ -45,6 +55,11 @@ const pageTitles: Record<string, string> = {
   "/admin/articles": "Articles",
   "/admin/announcements": "Announcements",
   "/admin/content": "Content",
+  "/admin/portals": "Portal Links",
+  "/admin/roles": "Roles",
+  "/admin/pages": "Pages",
+  "/admin/analytics": "Analytics",
+  "/admin/reports": "Reports",
   "/admin/settings": "Settings",
 };
 

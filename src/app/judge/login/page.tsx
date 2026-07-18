@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Scale, ArrowLeft, Eye, EyeOff, Loader2, Lock } from "lucide-react";
+import { Scale, ArrowLeft, Eye, EyeOff, Loader2, Lock, AlertCircle } from "lucide-react";
 import toast from "react-hot-toast";
 
 export default function JudgeLogin() {
@@ -12,7 +12,15 @@ export default function JudgeLogin() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [portalEnabled, setPortalEnabled] = useState<boolean | null>(null);
   const router = useRouter();
+
+  useEffect(() => {
+    fetch("/api/portals/judge/status")
+      .then(r => r.ok ? r.json() : { enabled: true })
+      .then(data => setPortalEnabled(data.enabled))
+      .catch(() => setPortalEnabled(true));
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,6 +62,31 @@ export default function JudgeLogin() {
       setLoading(false);
     }
   };
+
+  if (portalEnabled === false) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#faf9f6]">
+        <div className="text-center max-w-md px-6">
+          <div className="w-16 h-16 bg-maroon/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <AlertCircle size={32} className="text-maroon" />
+          </div>
+          <h1 className="font-heading text-2xl font-extrabold text-ink mb-3">Portal Unavailable</h1>
+          <p className="text-muted mb-6">This portal is currently unavailable. Please contact the administrator.</p>
+          <Link href="/" className="btn-outline inline-flex items-center gap-2">
+            <ArrowLeft size={16} /> Back to Home
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  if (portalEnabled === null) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#faf9f6]">
+        <Loader2 size={32} className="text-teal animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex">

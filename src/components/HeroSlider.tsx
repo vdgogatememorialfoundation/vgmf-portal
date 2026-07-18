@@ -61,32 +61,31 @@ export default function HeroSlider() {
   const slide = slides[current];
 
   return (
-    <section className="relative overflow-hidden">
+    <section className="relative overflow-hidden max-h-[320px] md:max-h-[340px]">
       <div className={`bg-gradient-to-br ${slide.bg} transition-all duration-700`}>
-        {/* Decorative circles */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute top-10 right-[15%] w-72 h-72 bg-white/5 rounded-full blur-2xl" />
           <div className="absolute bottom-10 left-[10%] w-56 h-56 bg-white/5 rounded-full blur-2xl" />
           <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "radial-gradient(circle, white 1px, transparent 1px)", backgroundSize: "24px 24px" }} />
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 py-16 md:py-24 relative z-10">
+        <div className="max-w-7xl mx-auto px-4 py-12 md:py-16 relative z-10">
           <div className="max-w-2xl animate-fade-up" key={current}>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/15 backdrop-blur rounded-full mb-5">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/15 backdrop-blur rounded-full mb-4">
               <div className="w-1.5 h-1.5 bg-[#c2761c] rounded-full animate-pulse" />
               <span className="text-white/90 text-[11px] font-bold tracking-wider uppercase font-heading">{slide.subtitle}</span>
             </div>
-            <h1 className="font-heading text-4xl md:text-6xl font-extrabold text-white leading-tight mb-5">
+            <h1 className="font-heading text-3xl md:text-5xl font-extrabold text-white leading-tight mb-4">
               {slide.title}
             </h1>
-            <p className="text-white/75 text-base md:text-lg leading-relaxed mb-8 max-w-lg font-body">
+            <p className="text-white/75 text-sm md:text-base leading-relaxed mb-6 max-w-lg font-body">
               {slide.description}
             </p>
             <div className="flex flex-wrap gap-3">
-              <Link href={slide.cta.href} className="btn-gold !py-3 !px-6">
-                {slide.cta.label} <ArrowRight size={16} />
+              <Link href={slide.cta.href} className="btn-gold !py-2.5 !px-5 !text-sm">
+                {slide.cta.label} <ArrowRight size={14} />
               </Link>
-              <Link href={slide.cta2.href} className="inline-flex items-center gap-2 px-5 py-3 border-2 border-white/30 text-white font-semibold rounded-xl hover:bg-white/10 transition-all text-sm font-heading">
+              <Link href={slide.cta2.href} className="inline-flex items-center gap-2 px-4 py-2.5 border-2 border-white/30 text-white font-semibold rounded-xl hover:bg-white/10 transition-all text-sm font-heading">
                 {slide.cta2.label}
               </Link>
             </div>
@@ -94,19 +93,17 @@ export default function HeroSlider() {
         </div>
       </div>
 
-      {/* Navigation Arrows */}
-      <button onClick={prev} className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors z-20">
-        <ChevronLeft size={20} />
+      <button onClick={prev} className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors z-20">
+        <ChevronLeft size={18} />
       </button>
-      <button onClick={next} className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors z-20">
-        <ChevronRight size={20} />
+      <button onClick={next} className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors z-20">
+        <ChevronRight size={18} />
       </button>
 
-      {/* Dots */}
-      <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-20">
         {slides.map((_, i) => (
           <button key={i} onClick={() => goTo(i)}
-            className={`h-2 rounded-full transition-all duration-300 ${i === current ? "w-8 bg-[#c2761c]" : "w-2 bg-white/40 hover:bg-white/60"}`}
+            className={`h-1.5 rounded-full transition-all duration-300 ${i === current ? "w-7 bg-[#c2761c]" : "w-1.5 bg-white/40 hover:bg-white/60"}`}
           />
         ))}
       </div>

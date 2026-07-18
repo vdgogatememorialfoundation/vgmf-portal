@@ -94,6 +94,7 @@ export async function POST(req: NextRequest) {
         contactEmail: data.contactEmail || null,
         contactPhone: data.contactPhone || null,
         restrictToDoctors: data.restrictToDoctors ?? false,
+        requiresIdentityVerification: data.requiresIdentityVerification ?? false,
       },
     });
 

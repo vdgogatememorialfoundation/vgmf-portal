@@ -4,6 +4,8 @@ import { useEffect, useState, useCallback, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
+import RazorpayButton from "@/components/RazorpayButton";
+import DashboardChatbot from "@/components/DashboardChatbot";
 import {
   LayoutDashboard, User, Calendar, ClipboardList, Award, Trophy,
   ShoppingBag, Truck, MapPin, CreditCard, FileBadge, Ticket,
@@ -61,39 +63,21 @@ const navGroups: NavGroup[] = [
     items: [
       { id: "events", label: "Events & Programmes", icon: Calendar },
       { id: "my-registrations", label: "My Registrations", icon: ClipboardList },
-      { id: "my-fellowships", label: "My Fellowships", icon: Award },
-      { id: "my-competitions", label: "My Competitions", icon: Trophy },
+      { id: "my-fellowships", label: "Fellowships", icon: Award },
     ],
   },
   {
-    title: "Shop & Orders",
+    title: "Orders & Payments",
     items: [
       { id: "my-orders", label: "My Orders", icon: ShoppingBag },
-      { id: "track-orders", label: "Track Orders", icon: Truck },
-      { id: "my-address", label: "My Address", icon: MapPin },
-    ],
-  },
-  {
-    title: "Payments & Certificates",
-    items: [
-      { id: "payments", label: "Payments", icon: CreditCard },
-      { id: "my-certificates", label: "My Certificates", icon: FileBadge },
-      { id: "my-e-tickets", label: "My E-Tickets", icon: Ticket },
+      { id: "my-certificates", label: "Certificates", icon: FileBadge },
+      { id: "my-e-tickets", label: "E-Tickets", icon: Ticket },
     ],
   },
   {
     title: "Support",
     items: [
-      { id: "support", label: "Support", icon: Headphones },
-      { id: "live-chat", label: "Live Chat", icon: MessageCircle },
-    ],
-  },
-  {
-    title: "Account",
-    items: [
-      { id: "identity-verification", label: "Identity Verification", icon: ShieldCheck },
-      { id: "returns-refunds", label: "Returns & Refunds", icon: RotateCcw },
-      { id: "payment-methods", label: "Payment Methods", icon: Wallet },
+      { id: "support", label: "Support Tickets", icon: Headphones },
     ],
   },
 ];
@@ -103,7 +87,6 @@ const categoryLabels: Record<string, string> = {
   STUDENT: "Ayurveda Student",
   RESEARCHER: "Research Scholar",
   PATIENT: "Patient",
-  GENERAL: "General Public",
   INSTITUTION: "Organization",
 };
 
@@ -112,7 +95,6 @@ const categoryColors: Record<string, string> = {
   STUDENT: "bg-[#c2761c]/10 text-[#c2761c] border-[#c2761c]/20",
   RESEARCHER: "bg-[#7c1d1d]/10 text-[#7c1d1d] border-[#7c1d1d]/20",
   PATIENT: "bg-[#7c1d1d]/10 text-[#7c1d1d] border-[#7c1d1d]/20",
-  GENERAL: "bg-[#1a1a2e]/10 text-[#1a1a2e] border-[#1a1a2e]/20",
   INSTITUTION: "bg-[#c2761c]/10 text-[#c2761c] border-[#c2761c]/20",
 };
 
@@ -255,7 +237,7 @@ function DashboardPageInner() {
   if (!session) return null;
 
   const user = session.user as any;
-  const category = data?.category || user.category || "GENERAL";
+  const category = data?.category || user.category || "";
   const orderCount = data?.orders?.length || 0;
   const seminarCount = data?.seminars?.length || 0;
   const fellowshipCount = data?.fellowships?.length || 0;
@@ -452,6 +434,8 @@ function DashboardPageInner() {
           </div>
         </main>
       </div>
+
+      <DashboardChatbot />
     </>
   );
 }
@@ -676,6 +660,37 @@ function OverviewTab({ user, category, data, orderCount, totalRegistrations, nav
                 )}
               </div>
             ))}
+          </div>
+        </Card>
+      )}
+
+      {data?.eventRegistrations && data.eventRegistrations.length > 0 && (
+        <Card className="p-6">
+          <h3 className="font-heading text-lg font-extrabold text-ink mb-4 flex items-center gap-2">
+            <Clock size={18} className="text-teal" /> Upcoming Events Countdown
+          </h3>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {data.eventRegistrations
+              .filter((r: any) => r.event?.eventDate && new Date(r.event.eventDate) > new Date())
+              .slice(0, 4)
+              .map((r: any) => {
+                const eventDate = new Date(r.event.eventDate);
+                const diff = eventDate.getTime() - Date.now();
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                return (
+                  <div key={r.id} className="bg-gradient-to-br from-teal/5 to-teal/10 rounded-xl p-4 border border-teal/10">
+                    <p className="text-xs font-bold text-teal uppercase tracking-wider mb-1">{r.event?.title || "Event"}</p>
+                    <div className="flex items-baseline gap-1">
+                      <span className="font-heading text-2xl font-extrabold text-ink">{days}</span>
+                      <span className="text-xs text-muted font-semibold">days {hours}h</span>
+                    </div>
+                    <p className="text-[10px] text-muted mt-1">
+                      {eventDate.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
+                    </p>
+                  </div>
+                );
+              })}
           </div>
         </Card>
       )}
@@ -1044,8 +1059,13 @@ function EventRegisterTab({ eventId, user, events, navigateTab }: {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Registration failed");
-      toast.success(data.message || "Registration successful!");
-      navigateTab("my-registrations");
+      if (data.requiresPayment && data.paymentAmount) {
+        setRegistrationResult(data);
+        toast.success("Registration saved! Complete payment to confirm.");
+      } else {
+        toast.success(data.message || "Registration successful!");
+        navigateTab("my-registrations");
+      }
     } catch (err: any) {
       setError(err.message || "Registration failed. Please try again.");
       toast.error(err.message || "Registration failed.");
@@ -1053,6 +1073,8 @@ function EventRegisterTab({ eventId, user, events, navigateTab }: {
       setSubmitting(false);
     }
   };
+
+  const [registrationResult, setRegistrationResult] = useState<any>(null);
 
   if (loading) return <LoadingSpinner />;
 
@@ -1091,6 +1113,12 @@ function EventRegisterTab({ eventId, user, events, navigateTab }: {
               </div>
             </div>
           </div>
+          {event.registrationDeadline && (
+            <div className="mt-3 pt-3 border-t border-ink/5 flex items-center gap-2 text-xs text-muted">
+              <Clock size={12} className="text-gold shrink-0" />
+              Registration closes {new Date(event.registrationDeadline).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" })}
+            </div>
+          )}
         </Card>
       )}
 
@@ -1157,6 +1185,38 @@ function EventRegisterTab({ eventId, user, events, navigateTab }: {
           </div>
         </form>
       </Card>
+
+      {registrationResult && registrationResult.requiresPayment && registrationResult.paymentAmount && (
+        <Card className="p-6 animate-fade-up">
+          <div className="flex items-start gap-4 mb-5">
+            <div className="w-12 h-12 bg-gold/10 rounded-xl flex items-center justify-center shrink-0">
+              <CreditCard size={20} className="text-gold" />
+            </div>
+            <div className="flex-1">
+              <h3 className="font-heading text-lg font-extrabold text-ink">Complete Payment</h3>
+              <p className="text-sm text-muted mt-0.5">
+                Registration saved. Pay ₹{registrationResult.paymentAmount.toLocaleString("en-IN")} to confirm your spot.
+              </p>
+              <p className="text-xs text-muted mt-1">
+                Application ID: <span className="font-bold text-ink">{registrationResult.applicationId}</span>
+              </p>
+            </div>
+          </div>
+          <RazorpayButton
+            amount={registrationResult.paymentAmount}
+            eventId={eventId}
+            registrationId={registrationResult.registrationId}
+            description={`Registration: ${event?.title || "Event"}`}
+            onSuccess={(data) => {
+              toast.success("Payment successful! Registration confirmed.");
+              navigateTab("my-registrations");
+            }}
+            onError={(err) => {
+              toast.error(err);
+            }}
+          />
+        </Card>
+      )}
     </div>
   );
 }
@@ -1167,7 +1227,61 @@ function EventRegisterTab({ eventId, user, events, navigateTab }: {
 function MyRegistrationsTab({ data }: { data: any }) {
   const seminars = data?.seminars || [];
   const autism = data?.autism || [];
-  const total = seminars.length + autism.length;
+  const eventRegistrations = data?.eventRegistrations || [];
+  const total = seminars.length + autism.length + eventRegistrations.length;
+
+  const [cancellingId, setCancellingId] = useState<string | null>(null);
+  const [cancelReason, setCancelReason] = useState("");
+  const [cancelModalOpen, setCancelModalOpen] = useState(false);
+  const [cancelTarget, setCancelTarget] = useState<any>(null);
+  const [cancelling, setCancelling] = useState(false);
+
+  const openCancelModal = (reg: any) => {
+    setCancelTarget(reg);
+    setCancelReason("");
+    setCancelModalOpen(true);
+  };
+
+  const handleCancel = async () => {
+    if (!cancelTarget || !cancelReason.trim()) return;
+    setCancelling(true);
+    try {
+      const res = await fetch(`/api/dashboard/events/${cancelTarget.eventId}/cancel`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ registrationId: cancelTarget.id, reason: cancelReason }),
+      });
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.error || "Cancellation failed");
+      toast.success(
+        result.refundAmount > 0
+          ? `Registration cancelled. Refund of ₹${result.refundAmount.toLocaleString("en-IN")} will be processed.`
+          : "Registration cancelled successfully."
+      );
+      setCancelModalOpen(false);
+      setCancelTarget(null);
+    } catch (err: any) {
+      toast.error(err.message || "Cancellation failed.");
+    } finally {
+      setCancelling(false);
+    }
+  };
+
+  const canCancel = (reg: any) => {
+    if (reg.isCancelled || reg.status === "CANCELLED") return false;
+    if (!reg.event?.isCancellationEnabled) return false;
+    if (reg.event?.cancellationDeadline && new Date(reg.event.cancellationDeadline) < new Date()) return false;
+    return true;
+  };
+
+  const estimateRefund = (reg: any) => {
+    const paid = reg.paymentAmount || reg.event?.ticketPrice || 0;
+    const pct = reg.event?.refundPercentage ?? 100;
+    const fee = reg.event?.cancellationFee ?? 0;
+    return Math.max(0, (paid * pct) / 100 - fee);
+  };
+
+  const formatDeadline = (d: string) => new Date(d).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
 
   return (
     <div className="space-y-6">
@@ -1175,6 +1289,54 @@ function MyRegistrationsTab({ data }: { data: any }) {
         title="My Registrations"
         subtitle={total > 0 ? `${total} registration${total !== 1 ? "s" : ""} found.` : "View all your event registrations."}
       />
+
+      {cancelModalOpen && cancelTarget && (
+        <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl border border-ink/5 shadow-2xl w-full max-w-md p-6 space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="font-heading text-lg font-extrabold text-ink">Cancel Registration</h3>
+              <button onClick={() => setCancelModalOpen(false)} className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-cream">
+                <X size={16} className="text-muted" />
+              </button>
+            </div>
+            <p className="text-sm text-muted">
+              Are you sure you want to cancel your registration for <strong className="text-ink">{cancelTarget.event?.title || "this event"}</strong>?
+            </p>
+            {cancelTarget.event?.cancellationFee > 0 && (
+              <div className="bg-maroon/5 border border-maroon/15 rounded-xl p-3 text-xs text-maroon">
+                Cancellation fee: ₹{cancelTarget.event.cancellationFee.toLocaleString("en-IN")}. Estimated refund: ₹{estimateRefund(cancelTarget).toLocaleString("en-IN")}
+              </div>
+            )}
+            {cancelTarget.event?.cancellationDeadline && (
+              <p className="text-xs text-muted flex items-center gap-1.5">
+                <Clock size={12} /> Cancellation deadline: {formatDeadline(cancelTarget.event.cancellationDeadline)}
+              </p>
+            )}
+            <div>
+              <label className="text-xs font-bold text-muted uppercase tracking-wider block mb-1.5">Reason *</label>
+              <textarea
+                value={cancelReason}
+                onChange={(e) => setCancelReason(e.target.value)}
+                className="input-field w-full min-h-[80px] resize-y"
+                placeholder="Please provide a reason for cancellation..."
+              />
+            </div>
+            <div className="flex justify-end gap-3 pt-1">
+              <button onClick={() => setCancelModalOpen(false)} className="btn-outline !py-2 !px-4 text-sm">
+                Keep Registration
+              </button>
+              <button
+                onClick={handleCancel}
+                disabled={cancelling || !cancelReason.trim()}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold bg-maroon text-white hover:bg-maroon/90 transition-all disabled:opacity-50"
+              >
+                {cancelling ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
+                {cancelling ? "Cancelling..." : "Confirm Cancellation"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {total === 0 ? (
         <EmptyState
@@ -1187,6 +1349,62 @@ function MyRegistrationsTab({ data }: { data: any }) {
         />
       ) : (
         <>
+          {eventRegistrations.length > 0 && (
+            <Card className="overflow-hidden">
+              <div className="px-6 py-4 border-b border-ink/5 flex items-center gap-2">
+                <Calendar size={18} className="text-gold" />
+                <h3 className="font-heading text-lg font-extrabold text-ink">Event Registrations</h3>
+                <span className="ml-auto text-xs bg-gold/5 text-gold px-2 py-0.5 rounded-full font-bold">{eventRegistrations.length}</span>
+              </div>
+              <div className="divide-y divide-ink/5">
+                {eventRegistrations.map((r: any) => (
+                  <div key={r.id} className="px-6 py-4 flex items-center gap-4">
+                    <div className="w-10 h-10 bg-gold/10 rounded-xl flex items-center justify-center shrink-0">
+                      <Calendar size={16} className="text-gold" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap mb-0.5">
+                        <p className="text-sm font-bold text-ink">{r.event?.title || "Event"}</p>
+                        {r.applicationId && (
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-ink/5 text-muted border border-ink/10">
+                            {r.applicationId}
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-xs text-muted">
+                        {r.ticketNumber} · Registered {new Date(r.registrationDate || r.createdAt).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
+                      </p>
+                      {r.paymentAmount != null && (
+                        <p className="text-xs text-muted mt-0.5">
+                          ₹{r.paymentAmount.toLocaleString("en-IN")} · {r.paymentStatus === "COMPLETED" ? "Paid" : r.paymentStatus === "PENDING" ? "Payment Pending" : r.paymentStatus}
+                        </p>
+                      )}
+                      {r.event?.cancellationDeadline && !r.isCancelled && r.status !== "CANCELLED" && (
+                        <p className="text-[10px] text-muted mt-0.5 flex items-center gap-1">
+                          <Clock size={10} />
+                          Cancellation deadline: {formatDeadline(r.event.cancellationDeadline)}
+                        </p>
+                      )}
+                    </div>
+                    <div className="flex flex-col items-end gap-1.5 shrink-0">
+                      <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full border ${statusColor(r.isCancelled ? "CANCELLED" : r.status === "APPROVED" ? "COMPLETED" : "PENDING")}`}>
+                        {r.isCancelled ? "Cancelled" : r.status?.replace(/_/g, " ") || "Submitted"}
+                      </span>
+                      {canCancel(r) && (
+                        <button
+                          onClick={() => openCancelModal(r)}
+                          className="text-[10px] font-bold text-maroon hover:text-maroon/80 flex items-center gap-1 transition-colors"
+                        >
+                          <Trash2 size={10} /> Cancel
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Card>
+          )}
+
           {seminars.length > 0 && (
             <Card className="overflow-hidden">
               <div className="px-6 py-4 border-b border-ink/5 flex items-center gap-2">
@@ -1329,6 +1547,29 @@ function MyFellowshipsTab({ data }: { data: any }) {
    ================================================================ */
 function MyCompetitionsTab({ data }: { data: any }) {
   const competitions = data?.competitions || [];
+  const eventRegistrations = data?.eventRegistrations || [];
+
+  const registrationsWithDeadlines = eventRegistrations.filter(
+    (r: any) => r.event?.judgeDeadline || r.event?.reviewerDeadline || r.event?.trusteeDeadline
+  );
+
+  const formatDeadline = (d: string) =>
+    new Date(d).toLocaleDateString("en-IN", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+  const timeRemaining = (d: string) => {
+    const diff = new Date(d).getTime() - Date.now();
+    if (diff <= 0) return "Passed";
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    if (days > 0) return `${days}d ${hours}h remaining`;
+    return `${hours}h remaining`;
+  };
 
   return (
     <div className="space-y-6">
@@ -1336,6 +1577,48 @@ function MyCompetitionsTab({ data }: { data: any }) {
         title="My Competitions"
         subtitle={competitions.length > 0 ? `${competitions.length} submission${competitions.length !== 1 ? "s" : ""} found.` : "View your competition submissions."}
       />
+
+      {registrationsWithDeadlines.length > 0 && (
+        <Card className="overflow-hidden">
+          <div className="px-6 py-4 border-b border-ink/5 flex items-center gap-2">
+            <Clock size={18} className="text-maroon" />
+            <h3 className="font-heading text-lg font-extrabold text-ink">Upcoming Deadlines</h3>
+          </div>
+          <div className="divide-y divide-ink/5">
+            {registrationsWithDeadlines.map((r: any) => (
+              <div key={r.id} className="px-6 py-4">
+                <p className="text-sm font-bold text-ink mb-2">{r.event?.title || "Event"}</p>
+                <div className="flex flex-wrap gap-3">
+                  {r.event?.judgeDeadline && (
+                    <div className={`text-xs px-3 py-1.5 rounded-lg border ${new Date(r.event.judgeDeadline) < new Date() ? "bg-gray-50 text-muted border-gray-200" : "bg-maroon/5 text-maroon border-maroon/15"}`}>
+                      <span className="font-bold">Judge Deadline:</span> {formatDeadline(r.event.judgeDeadline)}
+                      {new Date(r.event.judgeDeadline) > new Date() && (
+                        <span className="ml-1.5 text-[10px] font-semibold">({timeRemaining(r.event.judgeDeadline)})</span>
+                      )}
+                    </div>
+                  )}
+                  {r.event?.reviewerDeadline && (
+                    <div className={`text-xs px-3 py-1.5 rounded-lg border ${new Date(r.event.reviewerDeadline) < new Date() ? "bg-gray-50 text-muted border-gray-200" : "bg-gold/5 text-gold border-gold/15"}`}>
+                      <span className="font-bold">Reviewer Deadline:</span> {formatDeadline(r.event.reviewerDeadline)}
+                      {new Date(r.event.reviewerDeadline) > new Date() && (
+                        <span className="ml-1.5 text-[10px] font-semibold">({timeRemaining(r.event.reviewerDeadline)})</span>
+                      )}
+                    </div>
+                  )}
+                  {r.event?.trusteeDeadline && (
+                    <div className={`text-xs px-3 py-1.5 rounded-lg border ${new Date(r.event.trusteeDeadline) < new Date() ? "bg-gray-50 text-muted border-gray-200" : "bg-teal/5 text-teal border-teal/15"}`}>
+                      <span className="font-bold">Trustee Deadline:</span> {formatDeadline(r.event.trusteeDeadline)}
+                      {new Date(r.event.trusteeDeadline) > new Date() && (
+                        <span className="ml-1.5 text-[10px] font-semibold">({timeRemaining(r.event.trusteeDeadline)})</span>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </Card>
+      )}
 
       {competitions.length === 0 ? (
         <EmptyState
@@ -2187,50 +2470,73 @@ function LiveChatTab() {
    ================================================================ */
 function IdentityVerificationTab({ user }: { user: any }) {
   const [uploading, setUploading] = useState(false);
-  const [verifications, setVerifications] = useState<any[]>(user.verifications || []);
+  const [verifications, setVerifications] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [form, setForm] = useState({
-    documentType: "Aadhaar Card",
+    documentType: "Aadhaar",
     documentNumber: "",
   });
   const [file, setFile] = useState<File | null>(null);
 
+  useEffect(() => {
+    fetch("/api/dashboard/identity-verification")
+      .then(r => r.ok ? r.json() : [])
+      .then(data => { setVerifications(data); setLoading(false); })
+      .catch(() => setLoading(false));
+  }, []);
+
   const handleUpload = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!file) {
-      toast.error("Please select a document to upload.");
-      return;
-    }
     setUploading(true);
     try {
-      const formData = new FormData();
-      formData.append("documentType", form.documentType);
-      formData.append("documentNumber", form.documentNumber);
-      formData.append("file", file);
-
-      const res = await fetch("/api/dashboard/verification", {
+      const res = await fetch("/api/dashboard/identity-verification", {
         method: "POST",
-        body: formData,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
       });
-      if (!res.ok) throw new Error("Upload failed");
+      if (!res.ok) throw new Error("Failed to submit");
       const data = await res.json();
-      setVerifications((prev) => [data.verification || data, ...prev]);
+      setVerifications((prev) => [data, ...prev]);
       toast.success("Document submitted for verification!");
-      setForm({ documentType: "Aadhaar Card", documentNumber: "" });
+      setForm({ documentType: "Aadhaar", documentNumber: "" });
       setFile(null);
     } catch {
-      toast.error("Failed to upload document. Please try again.");
+      toast.error("Failed to submit document. Please try again.");
     } finally {
       setUploading(false);
     }
   };
 
+  const verifiedCount = verifications.filter(v => v.status === "VERIFIED").length;
+  const pendingCount = verifications.filter(v => v.status === "PENDING").length;
+
   return (
     <div className="space-y-6">
       <SectionHeader title="Identity Verification" subtitle="Upload your identity documents for account verification." />
 
+      {verifiedCount > 0 && (
+        <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 flex items-center gap-3">
+          <CheckCircle size={20} className="text-emerald-600 shrink-0" />
+          <div>
+            <p className="text-sm font-bold text-emerald-800">Identity Verified</p>
+            <p className="text-xs text-emerald-600">Your identity has been verified.</p>
+          </div>
+        </div>
+      )}
+
+      {pendingCount > 0 && (
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-center gap-3">
+          <Clock size={20} className="text-amber-600 shrink-0" />
+          <div>
+            <p className="text-sm font-bold text-amber-800">Verification Pending</p>
+            <p className="text-xs text-amber-600">Your documents are under review.</p>
+          </div>
+        </div>
+      )}
+
       <Card className="p-6">
         <h3 className="font-heading text-lg font-extrabold text-ink mb-4 flex items-center gap-2">
-          <ShieldCheck size={18} className="text-teal" /> Upload Document
+          <ShieldCheck size={18} className="text-teal" /> Submit Document
         </h3>
         <form onSubmit={handleUpload} className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -2241,18 +2547,17 @@ function IdentityVerificationTab({ user }: { user: any }) {
                 onChange={(e) => setForm({ ...form, documentType: e.target.value })}
                 className="input-field w-full"
               >
-                <option>Aadhaar Card</option>
-                <option>PAN Card</option>
-                <option>Passport</option>
-                <option>Voter ID</option>
-                <option>Driving License</option>
+                <option value="Aadhaar">Aadhaar Card</option>
+                <option value="PAN">PAN Card</option>
+                <option value="Passport">Passport</option>
+                <option value="VoterID">Voter ID</option>
+                <option value="DrivingLicense">Driving License</option>
               </select>
             </div>
             <div>
               <label className="text-xs font-bold text-muted uppercase tracking-wider block mb-1.5">Document Number</label>
               <input
                 type="text"
-                required
                 value={form.documentNumber}
                 onChange={(e) => setForm({ ...form, documentNumber: e.target.value })}
                 className="input-field w-full"
@@ -2260,50 +2565,50 @@ function IdentityVerificationTab({ user }: { user: any }) {
               />
             </div>
           </div>
-          <div>
-            <label className="text-xs font-bold text-muted uppercase tracking-wider block mb-1.5">Upload File</label>
-            <div className="relative">
-              <input
-                type="file"
-                accept="image/*,.pdf"
-                onChange={(e) => setFile(e.target.files?.[0] || null)}
-                className="input-field w-full file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-teal/10 file:text-teal hover:file:bg-teal/20 file:cursor-pointer"
-                required
-              />
-            </div>
-            {file && (
-              <p className="text-xs text-muted mt-1.5 flex items-center gap-1">
-                <FileText size={12} /> {file.name} ({(file.size / 1024).toFixed(1)} KB)
-              </p>
-            )}
-          </div>
           <div className="flex justify-end">
             <button type="submit" disabled={uploading} className="btn-primary disabled:opacity-50">
-              {uploading ? <><Loader2 size={14} className="animate-spin" /> Uploading...</> : <><Upload size={14} /> Submit for Verification</>}
+              {uploading ? <><Loader2 size={14} className="animate-spin" /> Submitting...</> : <><Upload size={14} /> Submit for Verification</>}
             </button>
           </div>
         </form>
       </Card>
 
-      {verifications.length > 0 && (
+      {loading ? (
+        <LoadingSpinner />
+      ) : verifications.length > 0 ? (
         <div className="space-y-3">
-          <h3 className="font-heading text-sm font-extrabold text-ink">Previous Submissions</h3>
+          <h3 className="font-heading text-sm font-extrabold text-ink">Verification History</h3>
           {verifications.map((v: any) => (
             <Card key={v.id} className="p-5 flex items-center gap-4">
-              <div className="w-10 h-10 bg-teal/10 rounded-xl flex items-center justify-center shrink-0">
-                <ShieldCheck size={16} className="text-teal" />
+              <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
+                v.status === "VERIFIED" ? "bg-emerald-100 text-emerald-600" :
+                v.status === "REJECTED" ? "bg-red-100 text-red-600" :
+                "bg-amber-100 text-amber-600"
+              }`}>
+                <ShieldCheck size={16} />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-bold text-ink">{v.documentType} · ••••{v.documentNumber?.slice(-4) || "****"}</p>
-                <p className="text-xs text-muted">
+                <p className="text-sm font-bold text-ink">{v.documentType}</p>
+                {v.documentNumber && (
+                  <p className="text-xs text-muted font-mono">••••{v.documentNumber.slice(-4)}</p>
+                )}
+                <p className="text-xs text-muted mt-0.5">
                   Submitted {new Date(v.createdAt).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
                 </p>
+                {v.event && (
+                  <p className="text-xs text-teal mt-0.5">For: {v.event.title}</p>
+                )}
               </div>
               <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full border ${statusColor(v.status || "PENDING")}`}>
                 {(v.status || "PENDING").replace(/_/g, " ")}
               </span>
             </Card>
           ))}
+        </div>
+      ) : (
+        <div className="text-center py-12 bg-white rounded-2xl border border-ink/5">
+          <ShieldCheck size={40} className="text-muted/30 mx-auto mb-3" />
+          <p className="text-sm text-muted">No verification submissions yet.</p>
         </div>
       )}
     </div>

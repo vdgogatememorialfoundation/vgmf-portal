@@ -15,13 +15,6 @@ const navLinks = [
   { href: "/contact", label: "Contact" },
 ];
 
-const announcements = [
-  "Applications Open for VGMF Research Fellowship 2026",
-  "National Seminar on Agnikarma & Viddhakarma",
-  "Free Autism Awareness Programme for Families",
-  "Contact: +91 93737 92952",
-];
-
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [userMenu, setUserMenu] = useState(false);
@@ -30,15 +23,6 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-50">
-      {/* Announcement Ticker */}
-      <div className="bg-[#0d6662] text-white text-xs overflow-hidden" style={{ height: "28px" }}>
-        <div className="flex items-center h-7 whitespace-nowrap" style={{ animation: "marquee 25s linear infinite" }}>
-          {[...announcements, ...announcements].map((text, i) => (
-            <span key={i} className="mx-8 font-semibold">{text}</span>
-          ))}
-        </div>
-      </div>
-
       {/* Main Nav */}
       <nav className="bg-white border-b border-gray-100 shadow-sm">
         <div className="max-w-7xl mx-auto px-4">

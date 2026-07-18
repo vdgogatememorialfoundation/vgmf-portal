@@ -3,8 +3,6 @@ import { prisma } from "@/lib/prisma";
 import { sendEmail, generateOTP } from "@/lib/email";
 import bcrypt from "bcryptjs";
 
-const otpStore = new Map<string, { otp: string; expires: number; sentAt: number }>();
-
 const RESEND_COOLDOWN = 60 * 1000;
 
 export async function POST(req: NextRequest) {
@@ -15,10 +13,16 @@ export async function POST(req: NextRequest) {
       if (!email) return NextResponse.json({ error: "Email required" }, { status: 400 });
 
       if (action === "resend-otp") {
-        const existing = otpStore.get(email);
-        if (existing && Date.now() - existing.sentAt < RESEND_COOLDOWN) {
-          const waitSeconds = Math.ceil((RESEND_COOLDOWN - (Date.now() - existing.sentAt)) / 1000);
-          return NextResponse.json({ error: `Please wait ${waitSeconds} seconds before resending` }, { status: 429 });
+        const lastSent = await prisma.otpRecord.findFirst({
+          where: { email, action: "signup" },
+          orderBy: { sentAt: "desc" },
+        });
+        if (lastSent) {
+          const elapsed = Date.now() - lastSent.sentAt.getTime();
+          if (elapsed < RESEND_COOLDOWN) {
+            const waitSeconds = Math.ceil((RESEND_COOLDOWN - elapsed) / 1000);
+            return NextResponse.json({ error: `Please wait ${waitSeconds} seconds before resending` }, { status: 429 });
+          }
         }
       }
 
@@ -26,8 +30,13 @@ export async function POST(req: NextRequest) {
       if (existingUser) return NextResponse.json({ error: "Email already registered" }, { status: 400 });
 
       const code = generateOTP();
-      const now = Date.now();
-      otpStore.set(email, { otp: code, expires: now + 10 * 60 * 1000, sentAt: now });
+      const now = new Date();
+      const expires = new Date(now.getTime() + 10 * 60 * 1000);
+
+      await prisma.otpRecord.deleteMany({ where: { email, action: "signup" } });
+      await prisma.otpRecord.create({
+        data: { email, code, action: "signup", expires, sentAt: now },
+      });
 
       await sendEmail({
         to: [{ email, name: name || email }],
@@ -41,17 +50,43 @@ export async function POST(req: NextRequest) {
         </div>`,
       });
 
-      return NextResponse.json({ success: true, message: "OTP sent to your email", resendAfter: now + RESEND_COOLDOWN });
+      return NextResponse.json({ success: true, message: "OTP sent to your email", resendAfter: now.getTime() + RESEND_COOLDOWN });
     }
 
-    if (action === "verify") {
+    if (action === "verify-otp") {
+      if (!email || !otp) {
+        return NextResponse.json({ error: "Email and OTP required" }, { status: 400 });
+      }
+
+      const record = await prisma.otpRecord.findFirst({
+        where: { email, action: "signup", verified: false },
+        orderBy: { sentAt: "desc" },
+      });
+
+      if (!record || record.code !== otp || new Date() > record.expires) {
+        return NextResponse.json({ error: "Invalid or expired verification code" }, { status: 400 });
+      }
+
+      await prisma.otpRecord.update({
+        where: { id: record.id },
+        data: { verified: true },
+      });
+
+      return NextResponse.json({ success: true, message: "Email verified successfully" });
+    }
+
+    if (action === "create-account") {
       if (!email || !password || password.length < 6) {
         return NextResponse.json({ error: "Invalid input" }, { status: 400 });
       }
 
-      const stored = otpStore.get(email);
-      if (!stored || stored.otp !== otp || Date.now() > stored.expires) {
-        return NextResponse.json({ error: "Invalid or expired verification code" }, { status: 400 });
+      const verifiedRecord = await prisma.otpRecord.findFirst({
+        where: { email, action: "signup", verified: true },
+        orderBy: { sentAt: "desc" },
+      });
+
+      if (!verifiedRecord) {
+        return NextResponse.json({ error: "Email not verified. Please verify your OTP first." }, { status: 400 });
       }
 
       const existing = await prisma.user.findUnique({ where: { email } });
@@ -65,7 +100,7 @@ export async function POST(req: NextRequest) {
           phone,
           password: hashed,
           role: "USER",
-          category: "GENERAL",
+          category: null,
           emailVerified: new Date(),
         },
       });
@@ -81,7 +116,7 @@ export async function POST(req: NextRequest) {
         </div>`,
       });
 
-      otpStore.delete(email);
+      await prisma.otpRecord.deleteMany({ where: { email, action: "signup" } });
       return NextResponse.json({ success: true, userId: user.id });
     }
 

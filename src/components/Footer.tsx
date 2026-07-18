@@ -59,9 +59,6 @@ export default function Footer() {
         {/* Bottom */}
         <div className="border-t border-gray-200 pt-5 flex flex-col sm:flex-row justify-between items-center gap-2">
           <p className="text-[11px] text-[#7c7c8a]">&copy; {new Date().getFullYear()} Vaidya Gogate Memorial Foundation. All rights reserved.</p>
-          <p className="text-[11px] text-[#7c7c8a] flex items-center gap-1">
-            Made with <Heart size={10} className="text-[#7c1d1d] fill-[#7c1d1d]" /> by Capture Visual Studios
-          </p>
         </div>
       </div>
     </footer>

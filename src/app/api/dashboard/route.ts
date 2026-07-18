@@ -122,13 +122,32 @@ export async function GET(req: NextRequest) {
       }),
       prisma.eventRegistration.findMany({
         where: { userId },
-        include: { event: { select: { id: true, title: true, eventDate: true, location: true, slug: true } } },
+        include: {
+          event: {
+            select: {
+              id: true,
+              title: true,
+              eventDate: true,
+              location: true,
+              slug: true,
+              cancellationDeadline: true,
+              cancellationFee: true,
+              refundPercentage: true,
+              isCancellationEnabled: true,
+              showCountdown: true,
+              judgeDeadline: true,
+              reviewerDeadline: true,
+              trusteeDeadline: true,
+              ticketPrice: true,
+            },
+          },
+        },
         orderBy: { registrationDate: "desc" },
         take: 10,
       }),
     ]);
 
-    const category = user.category || "GENERAL";
+    const category = user.category || "";
 
     return NextResponse.json({
       user,

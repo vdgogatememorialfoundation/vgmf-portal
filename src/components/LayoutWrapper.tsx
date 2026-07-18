@@ -4,12 +4,13 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 import Chatbot from "./Chatbot";
 
+const HIDE_NAV_FOOTER = ["/admin", "/staff", "/dashboard", "/judge", "/scanner", "/doctor", "/trustee", "/reviewer"];
+
 export function LayoutWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const isAdmin = pathname.startsWith("/admin");
-  const isStaff = pathname.startsWith("/staff");
+  const hideNavFooter = HIDE_NAV_FOOTER.some(p => pathname.startsWith(p));
 
-  if (isAdmin || isStaff) {
+  if (hideNavFooter) {
     return <>{children}</>;
   }
 

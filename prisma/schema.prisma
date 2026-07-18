@@ -23,6 +23,7 @@ model User {
   pincode       String?
   dob           DateTime?
   gender        String?
+  loginMethod   String   @default("password") // password, otp
   isActive      Boolean   @default(true)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
@@ -47,6 +48,7 @@ model User {
   judgeScores       JudgeScore[]
   competitionEntries CompetitionEntry[]
   scanLogs          ScanLog[]
+  chatSessions      ChatSession[]
 }
 
 model Account {
@@ -195,6 +197,7 @@ model FellowshipApplication {
   userId          String
   user            User     @relation(fields: [userId], references: [id])
   trackingNumber  String   @unique
+  applicationId   String?  @unique  // 12-digit
   status          String   @default("SUBMITTED") // DRAFT, SUBMITTED, UNDER_REVIEW, SHORTLISTED, INTERVIEW_SCHEDULED, SELECTED, REJECTED, FUNDED
   fullName        String?
   email           String?
@@ -317,8 +320,10 @@ model SiteContent {
 model ChatSession {
   id           String       @id @default(uuid())
   userId       String?
+  user         User?        @relation(fields: [userId], references: [id])
   title        String       @default("New Chat")
   isActive     Boolean      @default(true)
+  isResolved   Boolean      @default(false)
   lastMessageAt DateTime?
   createdAt    DateTime     @default(now())
   messages     ChatMessage[]
@@ -353,6 +358,67 @@ model MaintenanceSetting {
   endTime    DateTime?
   updatedAt  DateTime  @updatedAt
   createdAt  DateTime  @default(now())
+}
+
+model OtpRecord {
+  id        String   @id @default(uuid())
+  email     String
+  code      String
+  action    String   @default("signup") // signup, login, reset
+  expires   DateTime
+  verified  Boolean  @default(false)
+  sentAt    DateTime @default(now())
+  attempts  Int      @default(0)
+  @@index([email, action])
+}
+
+model SiteSetting {
+  id          String   @id @default(uuid())
+  key         String   @unique
+  value       String
+  description String?
+  group       String   @default("general") // general, auth, payment, email, appearance
+  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now())
+}
+
+model SiteReview {
+  id           String   @id @default(uuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
+  rating       Int
+  title        String?
+  content      String?
+  category     String?  // GENERAL, SEMINAR, FELLOWSHIP, AUTISM
+  isApproved   Boolean  @default(false)
+  isFeatured   Boolean  @default(false)
+  sortOrder    Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model EmailLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  toEmail   String
+  subject   String
+  type      String   // OTP, WELCOME, REGISTRATION, PAYMENT, CERTIFICATE, TICKET, STATUS_CHANGE, CANCELLATION
+  status    String   @default("SENT") // SENT, FAILED, BOUNCED
+  relatedId String?
+  relatedType String?
+  error     String?
+  sentAt    DateTime @default(now())
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  action    String   // LOGIN, LOGOUT, CREATE_ACCOUNT, UPDATE_PROFILE, REGISTER_EVENT, CANCEL_REGISTRATION, PAYMENT, ADMIN_ACTION
+  details   String?
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
 }
 
 model EventFormField {
@@ -391,6 +457,21 @@ model EventFormSubmission {
   createdAt      DateTime @default(now())
 }
 
+model SiteNotice {
+  id          String    @id @default(uuid())
+  title       String
+  content     String?
+  noticeType  String    @default("info") // info, warning, urgent, promo
+  position    String    @default("below-header") // below-header, above-hero, popup
+  isActive    Boolean   @default(true)
+  startDate   DateTime?
+  endDate     DateTime?
+  sortOrder   Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  eventNotices EventNotice[]
+}
+
 model Event {
   id           String   @id @default(uuid())
   title        String
@@ -412,11 +493,26 @@ model Event {
   contactEmail      String?
   contactPhone      String?
   restrictToDoctors Boolean  @default(false)
-  hasForm           Boolean  @default(false) // Whether this event has a custom registration form
-  formTitle         String?  // Title shown on the registration form
-  formDescription   String?  // Description shown on the registration form
+  hasForm           Boolean  @default(false)
+  formTitle         String?
+  formDescription   String?
   requiresPayment   Boolean  @default(false)
   allowMultipleRegistrations Boolean @default(false)
+  registrationStartDate DateTime?
+  registrationDeadline    DateTime?
+  cancellationDeadline    DateTime?
+  cancellationFee         Float?
+  refundPercentage        Int?
+  showCountdown           Boolean  @default(false)
+  isRegistrationOpen      Boolean  @default(true)
+  isCancellationEnabled   Boolean  @default(false)
+  isPastEvent             Boolean  @default(false)
+  displayedList           Boolean  @default(false) // candidate list displayed
+  judgeDeadline           DateTime?
+  reviewerDeadline        DateTime?
+  trusteeDeadline         DateTime?
+  formPreviewUrl          String?
+  requiresIdentityVerification Boolean @default(false)
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
   formFields        EventFormField[]
@@ -427,6 +523,19 @@ model Event {
   judgeScores       JudgeScore[]
   competitionEntries CompetitionEntry[]
   scanLogs          ScanLog[]
+  eventProducts     EventProduct[]
+  eventSales        EventSale[]
+  eventNotices      EventNotice[]
+}
+
+model EventNotice {
+  id        String     @id @default(uuid())
+  eventId   String
+  event     Event      @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  noticeId  String
+  notice    SiteNotice @relation(fields: [noticeId], references: [id], onDelete: Cascade)
+  createdAt DateTime   @default(now())
+  @@unique([eventId, noticeId])
 }
 
 model EventRegistration {
@@ -436,13 +545,22 @@ model EventRegistration {
   userId         String
   user           User     @relation(fields: [userId], references: [id])
   ticketNumber   String   @unique
-  formData       Json?    // Legacy: stores extra form data
+  applicationId  String?  @unique  // 12-digit e.g. VGF2026000001
+  formData       Json?
   status         String   @default("SUBMITTED") // SUBMITTED, APPROVED, REJECTED, CANCELLED
   paymentStatus  String?  // NONE, PENDING, COMPLETED, REFUNDED
   paymentAmount  Float?
   isVerified     Boolean  @default(false)
   eTicketNumber  String?
   eTicketUrl     String?
+  isCancelled    Boolean  @default(false)
+  cancelledAt    DateTime?
+  cancellationReason String?
+  refundAmount   Float?
+  refundStatus   String?  // NONE, PENDING, PROCESSED, REJECTED
+  razorpayOrderId   String?
+  razorpayPaymentId String?
+  razorpaySignature String?
   registrationDate DateTime @default(now())
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
@@ -478,6 +596,7 @@ model Certificate {
   expiryDate     DateTime?
   certificateUrl String?
   certificateNumber String @unique
+  verificationCode  String @unique  // For public verification
   status         String   @default("ACTIVE") // ACTIVE, EXPIRED, REVOKED
   createdAt      DateTime @default(now())
 }
@@ -499,19 +618,57 @@ model Competition {
   createdAt      DateTime @default(now())
 }
 
+model PortalLink {
+  id          String   @id @default(uuid())
+  portalName  String   @unique
+  urlPath     String
+  description String?
+  isActive    Boolean  @default(true)
+  requiredRole String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model UserRole {
+  id          String   @id @default(uuid())
+  roleName    String   @unique
+  description String?
+  permissions Json     @default("[]")
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model PageConfig {
+  id           String   @id @default(uuid())
+  path         String   @unique
+  title        String
+  description  String?
+  isEnabled    Boolean  @default(true)
+  requiredRoles String[] @default([])
+  showInMenu   Boolean  @default(true)
+  menuLabel    String?
+  menuIcon     String?
+  sortOrder    Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
 model IdentityVerification {
-  id             String   @id @default(uuid())
-  userId         String
-  user           User     @relation(fields: [userId], references: [id])
-  documentType   String   // Aadhaar, PAN, Passport, VoterID, DrivingLicense
-  documentNumber String?
-  documentUrl    String?
-  selfieUrl      String?
-  status         String   @default("PENDING") // PENDING, VERIFIED, REJECTED
+  id              String   @id @default(uuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+  eventId         String?
+  event           Event?   @relation(fields: [eventId], references: [id])
+  documentType    String
+  documentNumber  String?
+  documentUrl     String?
+  selfieUrl       String?
+  status          String   @default("PENDING")
   rejectionReason String?
-  verifiedAt     DateTime?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  verifiedAt      DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
 
 model UserAddress {
@@ -663,4 +820,32 @@ model ScanLog {
   scanner        User     @relation(fields: [scannedBy], references: [id])
   status         String   @default("VALID") // VALID, ALREADY_SCANNED, INVALID, CANCELLED
   scannedAt      DateTime @default(now())
+}
+
+model EventProduct {
+  id          String   @id @default(uuid())
+  eventId     String
+  event       Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  name        String
+  description String?
+  price       Float
+  stockQty   Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+}
+
+model EventSale {
+  id           String   @id @default(uuid())
+  eventId      String
+  event        Event   @relation(fields: [eventId], references: [id])
+  sellerId     String
+  buyerName    String
+  buyerPhone   String?
+  buyerEmail   String?
+  totalAmount  Float
+  itemsJson    Json
+  paymentMethod String  @default("CASH")
+  receiptNumber String @unique
+  soldAt       DateTime @default(now())
+  createdAt    DateTime @default(now())
 }
