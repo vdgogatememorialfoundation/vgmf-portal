@@ -1916,6 +1916,24 @@ function MyCertificatesTab({ data }: { data: any }) {
 function MyETicketsTab({ data }: { data: any }) {
   const tickets = data?.eTickets || data?.seminars?.filter((s: any) => s.ticketNumber) || [];
 
+  const ticketStatusColor = (s: string) => {
+    const map: Record<string, string> = {
+      VALID: "bg-emerald-50 text-emerald-700 border-emerald-200",
+      SCANNED: "bg-yellow-50 text-yellow-700 border-yellow-200",
+      CANCELLED: "bg-red-50 text-red-700 border-red-200",
+    };
+    return map[s] || "bg-gray-50 text-gray-600 border-gray-200";
+  };
+
+  const ticketStatusLabel = (s: string) => {
+    const map: Record<string, string> = {
+      VALID: "Valid",
+      SCANNED: "Scanned",
+      CANCELLED: "Cancelled",
+    };
+    return map[s] || (s === "PENDING" ? "Pending" : s === "VERIFIED" ? "Verified" : s);
+  };
+
   return (
     <div className="space-y-6">
       <SectionHeader title="My E-Tickets" subtitle="View and manage your event e-tickets." />
@@ -1928,27 +1946,48 @@ function MyETicketsTab({ data }: { data: any }) {
         />
       ) : (
         <div className="grid gap-4">
-          {tickets.map((ticket: any) => (
-            <Card key={ticket.id} className="p-6">
-              <div className="flex items-start gap-4">
-                <div className="w-16 h-16 bg-teal/10 rounded-2xl flex items-center justify-center shrink-0">
-                  <Ticket size={24} className="text-teal" />
+          {tickets.map((ticket: any) => {
+            const displayStatus = ticket.status || (ticket.isVerified ? "SCANNED" : "VALID");
+            const eventTitle = ticket.event?.title || ticket.eventTitle || "Event";
+            const eventDate = ticket.event?.eventDate;
+            const eventLocation = ticket.event?.location || ticket.event?.city;
+            return (
+              <Link
+                key={ticket.id}
+                href={`/dashboard/e-ticket/${ticket.id}`}
+                className="block bg-white rounded-2xl border border-ink/5 p-6 card-hover group"
+              >
+                <div className="flex items-start gap-4">
+                  <div className="w-16 h-16 bg-teal/10 rounded-2xl flex items-center justify-center shrink-0 group-hover:bg-teal/20 transition-colors">
+                    <Ticket size={24} className="text-teal" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap mb-1">
+                      <p className="font-heading text-lg font-extrabold text-ink">{ticket.ticketNumber}</p>
+                      <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full border ${ticketStatusColor(displayStatus)}`}>
+                        {ticketStatusLabel(displayStatus)}
+                      </span>
+                    </div>
+                    <p className="text-sm text-muted">
+                      {eventTitle}
+                      {eventDate && ` · ${new Date(eventDate).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}`}
+                      {eventLocation && ` · ${eventLocation}`}
+                    </p>
+                    {ticket.attendeeName && ticket.attendeeName !== "Attendee" && (
+                      <p className="text-xs text-muted mt-1">
+                        Attendee: {ticket.attendeeName}
+                      </p>
+                    )}
+                  </div>
+                  <div className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span className="text-xs font-bold text-teal flex items-center gap-1">
+                      View Ticket
+                    </span>
+                  </div>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-heading text-lg font-extrabold text-ink">{ticket.ticketNumber}</p>
-                  <p className="text-sm text-muted mt-0.5">
-                    {ticket.eventTitle || "Event"} · {ticket.registrationDate ? new Date(ticket.registrationDate).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }) : ""}
-                  </p>
-                  <span className={`mt-2 inline-block text-[10px] font-bold px-2.5 py-1 rounded-full border ${statusColor(ticket.isVerified ? "VERIFIED" : "PENDING")}`}>
-                    {ticket.isVerified ? "Verified" : "Pending"}
-                  </span>
-                </div>
-                <div className="w-20 h-20 bg-ink/5 rounded-xl flex items-center justify-center shrink-0">
-                  <QrCode size={32} className="text-ink/30" />
-                </div>
-              </div>
-            </Card>
-          ))}
+              </Link>
+            );
+          })}
         </div>
       )}
     </div>

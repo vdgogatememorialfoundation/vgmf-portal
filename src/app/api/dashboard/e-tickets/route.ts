@@ -32,22 +32,39 @@ export async function GET(req: NextRequest) {
             bannerUrl: true,
           },
         },
+        user: {
+          select: {
+            name: true,
+            email: true,
+          },
+        },
       },
       orderBy: { registrationDate: "desc" },
     });
 
-    const eTickets = registrations.map((reg) => ({
-      id: reg.id,
-      ticketNumber: reg.ticketNumber,
-      eTicketNumber: reg.eTicketNumber,
-      eTicketUrl: reg.eTicketUrl,
-      status: reg.status,
-      paymentStatus: reg.paymentStatus,
-      paymentAmount: reg.paymentAmount,
-      isVerified: reg.isVerified,
-      registrationDate: reg.registrationDate,
-      event: reg.event,
-    }));
+    const eTickets = registrations.map((reg) => {
+      const ticketStatus =
+        reg.status === "CANCELLED"
+          ? "CANCELLED"
+          : reg.isVerified
+          ? "SCANNED"
+          : "VALID";
+
+      return {
+        id: reg.id,
+        ticketNumber: reg.ticketNumber,
+        eTicketNumber: reg.eTicketNumber,
+        eTicketUrl: reg.eTicketUrl,
+        status: ticketStatus,
+        rawStatus: reg.status,
+        paymentStatus: reg.paymentStatus,
+        paymentAmount: reg.paymentAmount,
+        isVerified: reg.isVerified,
+        registrationDate: reg.registrationDate,
+        attendeeName: reg.user?.name || "Attendee",
+        event: reg.event,
+      };
+    });
 
     return NextResponse.json({ eTickets });
   } catch (error) {

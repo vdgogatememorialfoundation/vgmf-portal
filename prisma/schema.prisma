@@ -14,7 +14,7 @@ model User {
   emailVerified DateTime?
   password      String?
   image         String?
-  role          String    @default("USER") // ADMIN, STAFF, DOCTOR, JUDGE, REVIEWER, TRUSTEE, APPLICANT, USER
+  role          String    @default("USER") // ADMIN, STAFF, DOCTOR, JUDGE, REVIEWER, TRUSTEE, APPLICANT, USER, SCANNER
   category      String?   // DOCTOR, STUDENT, RESEARCHER, PATIENT, GENERAL, INSTITUTION
   phone         String?
   address       String?
@@ -43,6 +43,10 @@ model User {
   formSubmissions   EventFormSubmission[]
   paymentReceipts   PaymentReceipt[]
   refunds           Refund[]
+  casePresentations CasePresentation[]
+  judgeScores       JudgeScore[]
+  competitionEntries CompetitionEntry[]
+  scanLogs          ScanLog[]
 }
 
 model Account {
@@ -418,6 +422,11 @@ model Event {
   formFields        EventFormField[]
   formSubmissions   EventFormSubmission[]
   registrations     EventRegistration[]
+  schedules         EventSchedule[]
+  casePresentations CasePresentation[]
+  judgeScores       JudgeScore[]
+  competitionEntries CompetitionEntry[]
+  scanLogs          ScanLog[]
 }
 
 model EventRegistration {
@@ -564,4 +573,93 @@ model Refund {
   processedAt    DateTime?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+}
+
+model EventSchedule {
+  id          String   @id @default(uuid())
+  eventId     String
+  event       Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  title       String
+  description String?
+  startTime   DateTime
+  endTime     DateTime?
+  speaker     String?
+  location    String?
+  track       String?  // Main Hall, Room A, Virtual, etc.
+  sortOrder   Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+}
+
+model CasePresentation {
+  id             String   @id @default(uuid())
+  eventId        String
+  event          Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
+  topic          String
+  description    String?
+  videoUrl       String?
+  pptUrl         String?
+  pdfUrl         String?
+  status         String   @default("SUBMITTED") // SUBMITTED, UNDER_REVIEW, SCORED, SHORTLISTED
+  totalScore     Float?
+  submittedAt    DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  createdAt      DateTime @default(now())
+  scores         JudgeScore[]
+}
+
+model JudgeScore {
+  id               String   @id @default(uuid())
+  casePresentationId String?
+  casePresentation CasePresentation? @relation(fields: [casePresentationId], references: [id], onDelete: Cascade)
+  competitionEntryId String?
+  competitionEntry CompetitionEntry? @relation(fields: [competitionEntryId], references: [id], onDelete: Cascade)
+  judgeId          String
+  judge            User     @relation(fields: [judgeId], references: [id])
+  eventId          String
+  event            Event    @relation(fields: [eventId], references: [id])
+  scientificMerit  Float?
+  innovation       Float?
+  feasibility      Float?
+  presentation     Float?
+  relevance        Float?
+  totalScore       Float?
+  feedback         String?
+  scoredAt         DateTime?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model CompetitionEntry {
+  id             String   @id @default(uuid())
+  eventId        String
+  event          Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
+  title          String
+  category       String   // ART, ESSAY, VIDEO, PRESENTATION, OTHER
+  description    String?
+  fileUrls       String?  // JSON array of file URLs
+  status         String   @default("SUBMITTED") // SUBMITTED, UNDER_REVIEW, SHORTLISTED, WINNER, RUNNER_UP, PARTICIPANT
+  totalScore     Float?
+  feedback       String?
+  submittedAt    DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  createdAt      DateTime @default(now())
+  scores         JudgeScore[]
+}
+
+model ScanLog {
+  id             String   @id @default(uuid())
+  eventId        String
+  event          Event    @relation(fields: [eventId], references: [id])
+  registrationId String?
+  registration   EventRegistration? @relation(fields: [registrationId], references: [id])
+  ticketNumber   String
+  scannedBy      String
+  scanner        User     @relation(fields: [scannedBy], references: [id])
+  status         String   @default("VALID") // VALID, ALREADY_SCANNED, INVALID, CANCELLED
+  scannedAt      DateTime @default(now())
 }

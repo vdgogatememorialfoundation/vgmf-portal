@@ -5,6 +5,7 @@ import {
   FileText, GripVertical, ChevronUp, ChevronDown, Eye, EyeOff,
   CreditCard, Copy, List, Type, Mail, Phone, CalendarDays, AlignLeft,
   Upload, Hash, CheckSquare, ChevronRight, Settings, Layout,
+  Clock, Trophy, Scale, Ticket, UserPlus,
 } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -34,12 +35,15 @@ interface Event {
   requiresPayment?: boolean;
 }
 
-const EVENT_TYPES = ["Seminar", "Fellowship", "Autism"];
+const EVENT_TYPES = ["Seminar", "Fellowship", "Autism", "Competition", "Workshop", "Guest Lecture"];
 
 const TYPE_STYLES: Record<string, string> = {
   Seminar: "bg-blue-50 text-blue-700 border border-blue-200",
   Fellowship: "bg-violet-50 text-violet-700 border border-violet-200",
   Autism: "bg-pink-50 text-pink-700 border border-pink-200",
+  Competition: "bg-amber-50 text-amber-700 border border-amber-200",
+  Workshop: "bg-emerald-50 text-emerald-700 border border-emerald-200",
+  "Guest Lecture": "bg-cyan-50 text-cyan-700 border border-cyan-200",
 };
 
 interface EventForm {
@@ -188,6 +192,16 @@ export default function AdminEvents() {
   // Form builder state
   const [showFormBuilder, setShowFormBuilder] = useState(false);
   const [formBuilderEvent, setFormBuilderEvent] = useState<Event | null>(null);
+  const [showSchedule, setShowSchedule] = useState(false);
+  const [scheduleEvent, setScheduleEvent] = useState<Event | null>(null);
+  const [schedules, setSchedules] = useState<any[]>([]);
+  const [showJudges, setShowJudges] = useState(false);
+  const [judgeEvent, setJudgeEvent] = useState<Event | null>(null);
+  const [allJudges, setAllJudges] = useState<any[]>([]);
+  const [assignedJudges, setAssignedJudges] = useState<string[]>([]);
+  const [showETickets, setShowETickets] = useState(false);
+  const [eticketEvent, setEticketEvent] = useState<Event | null>(null);
+  const [eticketRegs, setEticketRegs] = useState<any[]>([]);
   const [regForm, setRegForm] = useState<RegistrationFormConfig>(EMPTY_REG_FORM);
   const [formSaving, setFormSaving] = useState(false);
   const [previewMode, setPreviewMode] = useState(false);
@@ -375,6 +389,80 @@ export default function AdminEvents() {
 
   const sectionsWithFields = SECTIONS.filter(sec => groupedFields[sec]?.length > 0);
 
+  // ─── Schedule Handlers ────────────────────────────────────────────────
+  const openSchedule = async (event: Event) => {
+    setScheduleEvent(event);
+    setShowSchedule(true);
+    try {
+      const res = await fetch(`/api/admin/events/${event.id}/schedule`);
+      if (res.ok) { const data = await res.json(); setSchedules(data.schedules || []); }
+    } catch {}
+  };
+
+  const saveSchedule = async () => {
+    if (!scheduleEvent) return;
+    try {
+      const res = await fetch(`/api/admin/events/${scheduleEvent.id}/schedule`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ schedules }),
+      });
+      if (!res.ok) throw new Error("Failed");
+      toast.success("Schedule saved");
+      setShowSchedule(false);
+    } catch { toast.error("Failed to save schedule"); }
+  };
+
+  const addScheduleItem = () => {
+    setSchedules(prev => [...prev, { id: crypto.randomUUID(), title: "", description: "", startTime: "", endTime: "", speaker: "", location: "", track: "Main Hall", sortOrder: prev.length }]);
+  };
+
+  const updateScheduleItem = (idx: number, updates: any) => {
+    setSchedules(prev => prev.map((s, i) => i === idx ? { ...s, ...updates } : s));
+  };
+
+  const removeScheduleItem = (idx: number) => {
+    setSchedules(prev => prev.filter((_, i) => i !== idx));
+  };
+
+  // ─── Judge Handlers ───────────────────────────────────────────────────
+  const openJudges = async (event: Event) => {
+    setJudgeEvent(event);
+    setShowJudges(true);
+    try {
+      const res = await fetch(`/api/admin/events/${event.id}/judges`);
+      if (res.ok) { const data = await res.json(); setAllJudges(data.allJudges || []); setAssignedJudges(data.assignedJudges || []); }
+    } catch {}
+  };
+
+  const saveJudges = async () => {
+    if (!judgeEvent) return;
+    try {
+      const res = await fetch(`/api/admin/events/${judgeEvent.id}/judges`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ judgeIds: assignedJudges }),
+      });
+      if (!res.ok) throw new Error("Failed");
+      toast.success("Judge assignments saved");
+      setShowJudges(false);
+    } catch { toast.error("Failed to save judge assignments"); }
+  };
+
+  const toggleJudge = (judgeId: string) => {
+    setAssignedJudges(prev => prev.includes(judgeId) ? prev.filter(id => id !== judgeId) : [...prev, judgeId]);
+  };
+
+  // ─── E-Ticket Handlers ────────────────────────────────────────────────
+  const openETickets = async (event: Event) => {
+    setEticketEvent(event);
+    setShowETickets(true);
+    try {
+      const res = await fetch(`/api/admin/events/${event.id}/etickets`);
+      if (res.ok) { const data = await res.json(); setEticketRegs(data.registrations || []); }
+    } catch {}
+  };
+
   // ─── Render ───────────────────────────────────────────────────────────
 
   return (
@@ -561,11 +649,22 @@ export default function AdminEvents() {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-right">
-                      <button onClick={() => openFormBuilder(event)} className="p-2 hover:bg-[#0d6662]/10 rounded-lg text-[#0d6662] transition-colors" title="Configure Registration Form">
-                        <FileText size={16} />
-                      </button>
-                      <button onClick={() => openEditor(event)} className="p-2 hover:bg-slate-100 rounded-lg text-muted transition-colors" title="Edit"><Edit size={16} /></button>
-                      <button onClick={() => setDeleteId(event.id)} className="p-2 hover:bg-red-50 rounded-lg text-danger ml-1 transition-colors" title="Delete"><Trash2 size={16} /></button>
+                      <div className="flex items-center gap-1 justify-end flex-wrap">
+                        <button onClick={() => openFormBuilder(event)} className="p-2 hover:bg-[#0d6662]/10 rounded-lg text-[#0d6662] transition-colors" title="Registration Form">
+                          <FileText size={16} />
+                        </button>
+                        <button onClick={() => openSchedule(event)} className="p-2 hover:bg-gold/10 rounded-lg text-gold transition-colors" title="Event Schedule">
+                          <Clock size={16} />
+                        </button>
+                        <button onClick={() => openJudges(event)} className="p-2 hover:bg-purple-50 rounded-lg text-purple-600 transition-colors" title="Assign Judges">
+                          <Scale size={16} />
+                        </button>
+                        <button onClick={() => openETickets(event)} className="p-2 hover:bg-emerald-50 rounded-lg text-emerald-600 transition-colors" title="E-Tickets">
+                          <Ticket size={16} />
+                        </button>
+                        <button onClick={() => openEditor(event)} className="p-2 hover:bg-slate-100 rounded-lg text-muted transition-colors" title="Edit"><Edit size={16} /></button>
+                        <button onClick={() => setDeleteId(event.id)} className="p-2 hover:bg-red-50 rounded-lg text-danger transition-colors" title="Delete"><Trash2 size={16} /></button>
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -861,6 +960,123 @@ export default function AdminEvents() {
                 </div>
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* ─── Schedule Builder Modal ─── */}
+      {showSchedule && scheduleEvent && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[60] flex items-start justify-center p-4 overflow-y-auto" onClick={() => setShowSchedule(false)}>
+          <div className="bg-white rounded-2xl w-full max-w-3xl shadow-2xl border border-slate-200 my-4" onClick={e => e.stopPropagation()}>
+            <div className="flex justify-between items-center p-6 border-b border-slate-100">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-gold/10 flex items-center justify-center"><Clock size={20} className="text-gold" /></div>
+                <div><h2 className="font-heading text-xl font-bold text-ink">Event Schedule</h2><p className="text-sm text-muted">{scheduleEvent.title}</p></div>
+              </div>
+              <button onClick={() => setShowSchedule(false)} className="p-2 hover:bg-slate-100 rounded-lg"><X size={20} /></button>
+            </div>
+            <div className="p-6 space-y-4">
+              {schedules.map((item, idx) => (
+                <div key={item.id} className="bg-slate-50 rounded-xl p-4 border border-slate-200 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-semibold text-muted uppercase">Session {idx + 1}</span>
+                    <button onClick={() => removeScheduleItem(idx)} className="text-red-400 hover:text-red-600"><Trash2 size={14} /></button>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <input value={item.title} onChange={e => updateScheduleItem(idx, { title: e.target.value })} className="input-field" placeholder="Session title" />
+                    <input value={item.speaker || ""} onChange={e => updateScheduleItem(idx, { speaker: e.target.value })} className="input-field" placeholder="Speaker name" />
+                    <input type="datetime-local" value={item.startTime || ""} onChange={e => updateScheduleItem(idx, { startTime: e.target.value })} className="input-field" />
+                    <input type="datetime-local" value={item.endTime || ""} onChange={e => updateScheduleItem(idx, { endTime: e.target.value })} className="input-field" />
+                    <input value={item.location || ""} onChange={e => updateScheduleItem(idx, { location: e.target.value })} className="input-field" placeholder="Location/Room" />
+                    <input value={item.track || ""} onChange={e => updateScheduleItem(idx, { track: e.target.value })} className="input-field" placeholder="Track (Main Hall, etc.)" />
+                  </div>
+                  <textarea value={item.description || ""} onChange={e => updateScheduleItem(idx, { description: e.target.value })} className="input-field" placeholder="Description (optional)" rows={2} />
+                </div>
+              ))}
+              <button onClick={addScheduleItem} className="w-full py-3 border-2 border-dashed border-slate-300 rounded-xl text-sm font-medium text-muted hover:border-gold hover:text-gold transition-colors"><Plus size={16} className="inline mr-1" /> Add Session</button>
+            </div>
+            <div className="p-6 border-t border-slate-100 flex justify-end gap-3">
+              <button onClick={() => setShowSchedule(false)} className="btn-outline">Cancel</button>
+              <button onClick={saveSchedule} className="btn-primary"><Save size={16} /> Save Schedule</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ─── Judge Assignment Modal ─── */}
+      {showJudges && judgeEvent && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[60] flex items-start justify-center p-4 overflow-y-auto" onClick={() => setShowJudges(false)}>
+          <div className="bg-white rounded-2xl w-full max-w-2xl shadow-2xl border border-slate-200 my-4" onClick={e => e.stopPropagation()}>
+            <div className="flex justify-between items-center p-6 border-b border-slate-100">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center"><Scale size={20} className="text-purple-600" /></div>
+                <div><h2 className="font-heading text-xl font-bold text-ink">Assign Judges</h2><p className="text-sm text-muted">{judgeEvent.title}</p></div>
+              </div>
+              <button onClick={() => setShowJudges(false)} className="p-2 hover:bg-slate-100 rounded-lg"><X size={20} /></button>
+            </div>
+            <div className="p-6">
+              {allJudges.length === 0 ? (
+                <p className="text-center text-muted py-8">No judges/reviewers found. Create users with JUDGE or REVIEWER role first.</p>
+              ) : (
+                <div className="space-y-2">
+                  {allJudges.map((judge: any) => (
+                    <label key={judge.id} className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${assignedJudges.includes(judge.id) ? "border-purple-400 bg-purple-50" : "border-slate-200 hover:border-slate-300"}`}>
+                      <input type="checkbox" checked={assignedJudges.includes(judge.id)} onChange={() => toggleJudge(judge.id)} className="w-4 h-4 rounded text-purple-600" />
+                      <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-xs font-bold text-purple-700">{(judge.name || "J")[0]}</div>
+                      <div><p className="text-sm font-semibold text-ink">{judge.name}</p><p className="text-xs text-muted">{judge.email} · {judge.role}</p></div>
+                    </label>
+                  ))}
+                </div>
+              )}
+            </div>
+            <div className="p-6 border-t border-slate-100 flex justify-end gap-3">
+              <button onClick={() => setShowJudges(false)} className="btn-outline">Cancel</button>
+              <button onClick={saveJudges} className="btn-primary"><UserPlus size={16} /> Save Assignments</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ─── E-Tickets Modal ─── */}
+      {showETickets && eticketEvent && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[60] flex items-start justify-center p-4 overflow-y-auto" onClick={() => setShowETickets(false)}>
+          <div className="bg-white rounded-2xl w-full max-w-4xl shadow-2xl border border-slate-200 my-4" onClick={e => e.stopPropagation()}>
+            <div className="flex justify-between items-center p-6 border-b border-slate-100">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center"><Ticket size={20} className="text-emerald-600" /></div>
+                <div><h2 className="font-heading text-xl font-bold text-ink">E-Tickets</h2><p className="text-sm text-muted">{eticketEvent.title} · {eticketRegs.length} registrations</p></div>
+              </div>
+              <button onClick={() => setShowETickets(false)} className="p-2 hover:bg-slate-100 rounded-lg"><X size={20} /></button>
+            </div>
+            <div className="p-6">
+              {eticketRegs.length === 0 ? (
+                <p className="text-center text-muted py-8">No registrations yet.</p>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead><tr className="border-b border-slate-200">
+                      <th className="text-left py-2 px-3 text-xs font-semibold text-muted uppercase">Attendee</th>
+                      <th className="text-left py-2 px-3 text-xs font-semibold text-muted uppercase">Ticket #</th>
+                      <th className="text-left py-2 px-3 text-xs font-semibold text-muted uppercase">Status</th>
+                      <th className="text-left py-2 px-3 text-xs font-semibold text-muted uppercase">Payment</th>
+                    </tr></thead>
+                    <tbody>
+                      {eticketRegs.map((reg: any) => (
+                        <tr key={reg.id} className="border-b border-slate-100">
+                          <td className="py-3 px-3"><p className="font-medium text-ink">{reg.user?.name || "—"}</p><p className="text-xs text-muted">{reg.user?.email}</p></td>
+                          <td className="py-3 px-3 font-mono text-xs font-bold text-teal">{reg.ticketNumber}</td>
+                          <td className="py-3 px-3"><span className={`px-2 py-0.5 rounded text-xs font-semibold ${reg.isVerified ? "bg-emerald-50 text-emerald-700" : "bg-slate-100 text-muted"}`}>{reg.isVerified ? "Verified" : "Pending"}</span></td>
+                          <td className="py-3 px-3"><span className={`px-2 py-0.5 rounded text-xs font-semibold ${reg.paymentStatus === "COMPLETED" ? "bg-emerald-50 text-emerald-700" : reg.paymentStatus === "PENDING" ? "bg-amber-50 text-amber-700" : "bg-slate-100 text-muted"}`}>{reg.paymentStatus || "N/A"}</span></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+            <div className="p-6 border-t border-slate-100 flex justify-end">
+              <button onClick={() => setShowETickets(false)} className="btn-outline">Close</button>
+            </div>
           </div>
         </div>
       )}
