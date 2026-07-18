@@ -46,6 +46,7 @@ export async function GET(req: NextRequest) {
       refunds,
       formSubmissions,
       eventRegistrations,
+      siteReviews,
     ] = await Promise.all([
       prisma.order.findMany({
         where: { userId },
@@ -145,6 +146,11 @@ export async function GET(req: NextRequest) {
         orderBy: { registrationDate: "desc" },
         take: 10,
       }),
+      prisma.siteReview.findMany({
+        where: { userId },
+        orderBy: { createdAt: "desc" },
+        take: 10,
+      }),
     ]);
 
     const category = user.category || "";
@@ -168,6 +174,7 @@ export async function GET(req: NextRequest) {
       refunds,
       formSubmissions,
       eventRegistrations,
+      siteReviews,
     });
   } catch (error) {
     console.error("Dashboard API error:", error);

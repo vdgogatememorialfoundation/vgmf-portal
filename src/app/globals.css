@@ -211,3 +211,8 @@ h1, h2, h3, h4, h5, h6 {
   border-left-color: #991b1b;
   background: rgba(153, 27, 27, 0.02);
 }
+
+@keyframes ticker {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
