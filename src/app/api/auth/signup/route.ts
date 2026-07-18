@@ -7,7 +7,7 @@ const otpStore = new Map<string, { otp: string; expires: number }>();
 
 export async function POST(req: NextRequest) {
   try {
-    const { action, email, name, phone, password, otp } = await req.json();
+    const { action, email, name, phone, password, otp, category } = await req.json();
 
     if (action === "send-otp") {
       if (!email) return NextResponse.json({ error: "Email required" }, { status: 400 });
@@ -21,9 +21,9 @@ export async function POST(req: NextRequest) {
         to: [{ email, name: name || email }],
         subject: "Your VGMF Verification Code",
         htmlBody: `<div style="font-family:Arial,sans-serif;max-width:500px;margin:0 auto;padding:20px">
-          <h2 style="color:#0f1f4a">VGMF Account Verification</h2>
+          <h2 style="color:#0891b2">VGMF Account Verification</h2>
           <p>Your verification code is:</p>
-          <div style="font-size:32px;font-weight:bold;letter-spacing:4px;color:#0f1f4a;background:#f0f7ff;padding:15px;text-align:center;border-radius:8px;margin:20px 0">${code}</div>
+          <div style="font-size:32px;font-weight:bold;letter-spacing:4px;color:#0891b2;background:#f0fdfa;padding:15px;text-align:center;border-radius:8px;margin:20px 0">${code}</div>
           <p style="color:#666;font-size:14px">This code expires in 10 minutes.</p>
           <p style="color:#666;font-size:14px">If you didn't request this, please ignore this email.</p>
         </div>`,
@@ -47,17 +47,25 @@ export async function POST(req: NextRequest) {
 
       const hashed = await bcrypt.hash(password, 12);
       const user = await prisma.user.create({
-        data: { name, email, phone, password: hashed, role: "USER", emailVerified: new Date() },
+        data: {
+          name,
+          email,
+          phone,
+          password: hashed,
+          role: "USER",
+          category: category || "GENERAL",
+          emailVerified: new Date(),
+        },
       });
 
       await sendEmail({
         to: [{ email, name: name || email }],
         subject: "Welcome to VGMF Portal",
         htmlBody: `<div style="font-family:Arial,sans-serif;max-width:500px;margin:0 auto;padding:20px">
-          <h2 style="color:#0f1f4a">Welcome to VGMF, ${name || "User"}!</h2>
-          <p>Your account has been created successfully.</p>
+          <h2 style="color:#0891b2">Welcome to VGMF, ${name || "User"}!</h2>
+          <p>Your account has been created successfully as a <strong>${category || "General"}</strong> member.</p>
           <p>You can now register for seminars, apply for fellowships, and access our programmes.</p>
-          <a href="${process.env.NEXTAUTH_URL || "https://staging.vaidyagogate.org"}/login" style="display:inline-block;padding:12px 24px;background:#0f1f4a;color:white;border-radius:8px;text-decoration:none;margin-top:16px">Sign In</a>
+          <a href="${process.env.NEXTAUTH_URL || "https://staging.vaidyagogate.org"}/login" style="display:inline-block;padding:12px 24px;background:#0891b2;color:white;border-radius:8px;text-decoration:none;margin-top:16px">Sign In</a>
         </div>`,
       });
 

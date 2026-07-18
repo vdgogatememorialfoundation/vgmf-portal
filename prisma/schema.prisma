@@ -15,6 +15,7 @@ model User {
   password      String?
   image         String?
   role          String    @default("USER") // ADMIN, STAFF, DOCTOR, JUDGE, REVIEWER, TRUSTEE, APPLICANT, USER
+  category      String?   // DOCTOR, STUDENT, RESEARCHER, PATIENT, GENERAL, INSTITUTION
   phone         String?
   address       String?
   city          String?

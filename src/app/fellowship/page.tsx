@@ -231,9 +231,10 @@ export default async function FellowshipPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-24 bg-gradient-to-br from-rose-500 to-[#f472b6] relative overflow-hidden">
+      <section className="py-24 bg-gradient-to-br from-[#0891b2] via-[#06b6d4] to-[#22d3ee] relative overflow-hidden">
         <div className="absolute inset-0">
           <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-[120px]" />
+          <div className="absolute bottom-0 left-0 w-72 h-72 bg-gold/10 rounded-full blur-[100px]" />
         </div>
         <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
           <h2 className="font-heading text-4xl md:text-5xl font-extrabold text-white mb-5 leading-tight">

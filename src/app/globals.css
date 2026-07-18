@@ -146,3 +146,42 @@ h1, h2, h3, h4, h5, h6 {
 @media (min-width: 768px) {
   .section-heading h2 { font-size: 2.75rem; }
 }
+
+.category-card {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+.category-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 12px 40px rgba(8, 145, 178, 0.12);
+}
+.category-card.selected {
+  border-color: #0891b2;
+  background: rgba(8, 145, 178, 0.05);
+  box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.15);
+}
+
+.step-indicator {
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.step-dot {
+  width: 2.5rem; height: 2.5rem; border-radius: 9999px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.75rem; font-weight: 700;
+  transition: all 0.3s ease;
+}
+.step-dot.active {
+  background: #0891b2; color: #fff;
+}
+.step-dot.completed {
+  background: #059669; color: #fff;
+}
+.step-dot.pending {
+  background: #e2e8f0; color: #94a3b8;
+}
+.step-line {
+  height: 2px; flex: 1; border-radius: 1px;
+  transition: background 0.3s ease;
+}
+.step-line.active { background: #0891b2; }
+.step-line.pending { background: #e2e8f0; }
