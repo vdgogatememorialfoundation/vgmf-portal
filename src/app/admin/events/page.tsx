@@ -1,6 +1,11 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
-import { Plus, Edit, Trash2, X, Save, Search, Calendar, MapPin, Users } from "lucide-react";
+import {
+  Plus, Edit, Trash2, X, Save, Search, Calendar, MapPin, Users,
+  FileText, GripVertical, ChevronUp, ChevronDown, Eye, EyeOff,
+  CreditCard, Copy, List, Type, Mail, Phone, CalendarDays, AlignLeft,
+  Upload, Hash, CheckSquare, ChevronRight, Settings, Layout,
+} from "lucide-react";
 import toast from "react-hot-toast";
 
 interface Event {
@@ -24,6 +29,9 @@ interface Event {
   contactEmail?: string;
   contactPhone?: string;
   restrictToDoctors: boolean;
+  hasRegistrationForm?: boolean;
+  allowMultipleRegistrations?: boolean;
+  requiresPayment?: boolean;
 }
 
 const EVENT_TYPES = ["Seminar", "Fellowship", "Autism"];
@@ -49,6 +57,123 @@ const EMPTY_FORM: EventForm = {
   contactEmail: "", contactPhone: "", restrictToDoctors: false,
 };
 
+const FIELD_TYPES = [
+  { value: "text", label: "Text", icon: Type },
+  { value: "email", label: "Email", icon: Mail },
+  { value: "tel", label: "Phone", icon: Phone },
+  { value: "date", label: "Date", icon: CalendarDays },
+  { value: "select", label: "Select", icon: List },
+  { value: "textarea", label: "Textarea", icon: AlignLeft },
+  { value: "file", label: "File Upload", icon: Upload },
+  { value: "number", label: "Number", icon: Hash },
+  { value: "checkbox", label: "Checkbox", icon: CheckSquare },
+] as const;
+
+const SECTIONS = ["Personal Information", "Professional Details", "Address", "Documents", "Other"];
+
+type FieldId = string;
+
+interface FormField {
+  id: FieldId;
+  fieldName: string;
+  fieldType: string;
+  label: string;
+  placeholder: string;
+  required: boolean;
+  options: string[];
+  section: string;
+}
+
+interface RegistrationFormConfig {
+  enabled: boolean;
+  title: string;
+  description: string;
+  fields: FormField[];
+  requiresPayment: boolean;
+  ticketPrice: string;
+  allowMultipleRegistrations: boolean;
+}
+
+const EMPTY_FIELD: () => FormField = () => ({
+  id: crypto.randomUUID(),
+  fieldName: "",
+  fieldType: "text",
+  label: "",
+  placeholder: "",
+  required: false,
+  options: [],
+  section: "Personal Information",
+});
+
+const EMPTY_REG_FORM: RegistrationFormConfig = {
+  enabled: true,
+  title: "",
+  description: "",
+  fields: [],
+  requiresPayment: false,
+  ticketPrice: "",
+  allowMultipleRegistrations: false,
+};
+
+function getDefaultFields(eventType: string): FormField[] {
+  const make = (fieldName: string, fieldType: string, label: string, opts: string[] = [], section = "Personal Information", required = true): FormField => ({
+    id: crypto.randomUUID(), fieldName, fieldType, label, placeholder: "", required, options: opts, section,
+  });
+
+  switch (eventType) {
+    case "Seminar":
+      return [
+        make("fname", "text", "First Name"),
+        make("lname", "text", "Last Name"),
+        make("email", "email", "Email Address"),
+        make("phone", "tel", "Phone Number"),
+        make("dob", "date", "Date of Birth"),
+        make("address", "textarea", "Address", [], "Address"),
+        make("qualification", "select", "Qualification", ["Practicing Vaidya", "Practitioner", "PG"], "Professional Details"),
+        make("ncism_number", "text", "NCISM Registration Number", [], "Professional Details"),
+        make("certificate", "file", "Certificate Upload", [], "Documents"),
+      ];
+    case "Fellowship":
+      return [
+        make("fname", "text", "First Name"),
+        make("lname", "text", "Last Name"),
+        make("email", "email", "Email Address"),
+        make("phone", "tel", "Phone Number"),
+        make("dob", "date", "Date of Birth"),
+        make("gender", "select", "Gender", ["Male", "Female", "Other"]),
+        make("address", "textarea", "Address", [], "Address"),
+        make("bams_college", "text", "BAMS College", [], "Professional Details"),
+        make("year_of_passing", "number", "Year of Passing", [], "Professional Details"),
+        make("designation", "text", "Designation", [], "Professional Details"),
+        make("institution", "text", "Institution", [], "Professional Details"),
+        make("research_area", "text", "Research Area", [], "Professional Details"),
+        make("proposal", "file", "Research Proposal Upload", [], "Documents"),
+      ];
+    case "Autism":
+      return [
+        make("parent_name", "text", "Parent / Guardian Name"),
+        make("parent_gender", "select", "Parent Gender", ["Male", "Female", "Other"]),
+        make("parent_dob", "date", "Parent Date of Birth"),
+        make("child_name", "text", "Child Name", [], "Other"),
+        make("child_gender", "select", "Child Gender", ["Male", "Female", "Other"], "Other"),
+        make("child_dob", "date", "Child Date of Birth", [], "Other"),
+        make("address", "textarea", "Address", [], "Address"),
+        make("health_notes", "textarea", "Health Notes / Special Needs", [], "Other"),
+      ];
+    default:
+      return [
+        make("fname", "text", "First Name"),
+        make("lname", "text", "Last Name"),
+        make("email", "email", "Email Address"),
+        make("phone", "tel", "Phone Number"),
+      ];
+  }
+}
+
+function slugify(text: string) {
+  return text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+}
+
 export default function AdminEvents() {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
@@ -59,6 +184,14 @@ export default function AdminEvents() {
   const [filterType, setFilterType] = useState("");
   const [saving, setSaving] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
+
+  // Form builder state
+  const [showFormBuilder, setShowFormBuilder] = useState(false);
+  const [formBuilderEvent, setFormBuilderEvent] = useState<Event | null>(null);
+  const [regForm, setRegForm] = useState<RegistrationFormConfig>(EMPTY_REG_FORM);
+  const [formSaving, setFormSaving] = useState(false);
+  const [previewMode, setPreviewMode] = useState(false);
+  const [activeSection, setActiveSection] = useState<string | null>(null);
 
   const fetchEvents = useCallback(async () => {
     setLoading(true);
@@ -139,6 +272,111 @@ export default function AdminEvents() {
   const closeForm = () => { setShowForm(false); setEditing(null); setForm(EMPTY_FORM); };
   const setField = (field: keyof EventForm, value: any) => setForm(prev => ({ ...prev, [field]: value }));
 
+  // ─── Form Builder Handlers ────────────────────────────────────────────
+
+  const openFormBuilder = (event: Event) => {
+    setFormBuilderEvent(event);
+    setPreviewMode(false);
+    setActiveSection(null);
+    if (event.hasRegistrationForm) {
+      setRegForm({
+        enabled: true,
+        title: `${event.title} Registration`,
+        description: `Register for ${event.title}`,
+        fields: getDefaultFields(event.eventType),
+        requiresPayment: event.requiresPayment || false,
+        ticketPrice: event.ticketPrice ? String(event.ticketPrice) : "",
+        allowMultipleRegistrations: event.allowMultipleRegistrations || false,
+      });
+    } else {
+      const defaults = getDefaultFields(event.eventType);
+      setRegForm({
+        ...EMPTY_REG_FORM,
+        enabled: true,
+        title: `${event.title} Registration`,
+        description: `Register for ${event.title}`,
+        fields: defaults,
+        ticketPrice: event.ticketPrice ? String(event.ticketPrice) : "",
+      });
+    }
+    setShowFormBuilder(true);
+  };
+
+  const closeFormBuilder = () => { setShowFormBuilder(false); setFormBuilderEvent(null); setPreviewMode(false); };
+
+  const addField = (afterIndex?: number) => {
+    const newField = EMPTY_FIELD();
+    setRegForm(prev => {
+      const fields = [...prev.fields];
+      if (afterIndex !== undefined) {
+        fields.splice(afterIndex + 1, 0, newField);
+      } else {
+        fields.push(newField);
+      }
+      return { ...prev, fields };
+    });
+  };
+
+  const updateField = (id: FieldId, updates: Partial<FormField>) => {
+    setRegForm(prev => ({
+      ...prev,
+      fields: prev.fields.map(f => f.id === id ? { ...f, ...updates } : f),
+    }));
+  };
+
+  const removeField = (id: FieldId) => {
+    setRegForm(prev => ({ ...prev, fields: prev.fields.filter(f => f.id !== id) }));
+  };
+
+  const moveField = (id: FieldId, direction: "up" | "down") => {
+    setRegForm(prev => {
+      const fields = [...prev.fields];
+      const idx = fields.findIndex(f => f.id === id);
+      if (idx === -1) return prev;
+      const target = direction === "up" ? idx - 1 : idx + 1;
+      if (target < 0 || target >= fields.length) return prev;
+      [fields[idx], fields[target]] = [fields[target], fields[idx]];
+      return { ...prev, fields };
+    });
+  };
+
+  const saveFormConfig = async () => {
+    if (!formBuilderEvent) return;
+    setFormSaving(true);
+    try {
+      const res = await fetch(`/api/admin/events/${formBuilderEvent.id}/form`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          hasRegistrationForm: regForm.enabled,
+          formTitle: regForm.title,
+          formDescription: regForm.description,
+          fields: regForm.fields,
+          requiresPayment: regForm.requiresPayment,
+          ticketPrice: regForm.ticketPrice ? parseFloat(regForm.ticketPrice) : null,
+          allowMultipleRegistrations: regForm.allowMultipleRegistrations,
+        }),
+      });
+      if (!res.ok) throw new Error("Failed");
+      toast.success("Registration form saved");
+      closeFormBuilder();
+      fetchEvents();
+    } catch {
+      toast.error("Failed to save registration form");
+    } finally {
+      setFormSaving(false);
+    }
+  };
+
+  const groupedFields = SECTIONS.reduce<Record<string, FormField[]>>((acc, sec) => {
+    acc[sec] = regForm.fields.filter(f => f.section === sec);
+    return acc;
+  }, {});
+
+  const sectionsWithFields = SECTIONS.filter(sec => groupedFields[sec]?.length > 0);
+
+  // ─── Render ───────────────────────────────────────────────────────────
+
   return (
     <div>
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
@@ -163,6 +401,7 @@ export default function AdminEvents() {
         </select>
       </div>
 
+      {/* ─── Event Create/Edit Modal ─── */}
       {showForm && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-start justify-center p-4 overflow-y-auto" onClick={closeForm}>
           <div className="bg-white rounded-2xl w-full max-w-2xl shadow-2xl border border-slate-200 my-4" onClick={e => e.stopPropagation()}>
@@ -269,6 +508,7 @@ export default function AdminEvents() {
         </div>
       )}
 
+      {/* ─── Events Table ─── */}
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
@@ -301,6 +541,7 @@ export default function AdminEvents() {
                       <div className="flex gap-1.5 mt-1">
                         {event.isFeatured && <span className="px-1.5 py-0.5 bg-gold/10 text-gold text-[10px] font-bold rounded uppercase">Featured</span>}
                         {event.restrictToDoctors && <span className="px-1.5 py-0.5 bg-maroon/10 text-maroon text-[10px] font-bold rounded uppercase">Doctors</span>}
+                        {event.hasRegistrationForm && <span className="px-1.5 py-0.5 bg-teal-50 text-[#0d6662] text-[10px] font-bold rounded uppercase border border-teal-200">Form</span>}
                       </div>
                     </td>
                     <td className="px-6 py-4">
@@ -320,6 +561,9 @@ export default function AdminEvents() {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-right">
+                      <button onClick={() => openFormBuilder(event)} className="p-2 hover:bg-[#0d6662]/10 rounded-lg text-[#0d6662] transition-colors" title="Configure Registration Form">
+                        <FileText size={16} />
+                      </button>
                       <button onClick={() => openEditor(event)} className="p-2 hover:bg-slate-100 rounded-lg text-muted transition-colors" title="Edit"><Edit size={16} /></button>
                       <button onClick={() => setDeleteId(event.id)} className="p-2 hover:bg-red-50 rounded-lg text-danger ml-1 transition-colors" title="Delete"><Trash2 size={16} /></button>
                     </td>
@@ -331,6 +575,7 @@ export default function AdminEvents() {
         </div>
       </div>
 
+      {/* ─── Delete Confirmation Modal ─── */}
       {deleteId && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setDeleteId(null)}>
           <div className="bg-white rounded-2xl w-full max-w-sm shadow-2xl border border-slate-200 p-6" onClick={e => e.stopPropagation()}>
@@ -341,6 +586,281 @@ export default function AdminEvents() {
               <button onClick={() => setDeleteId(null)} className="btn-outline flex-1">Cancel</button>
               <button onClick={handleDelete} className="flex-1 py-2.5 bg-danger text-white rounded-xl text-sm font-semibold hover:bg-red-700 transition-colors">Delete</button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* ─── Form Builder Modal ─── */}
+      {showFormBuilder && formBuilderEvent && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[60] flex items-start justify-center p-4 overflow-y-auto" onClick={closeFormBuilder}>
+          <div className="bg-white rounded-2xl w-full max-w-4xl shadow-2xl border border-slate-200 my-4" onClick={e => e.stopPropagation()}>
+
+            {/* Header */}
+            <div className="flex justify-between items-center p-6 border-b border-slate-100">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-[#0d6662]/10 flex items-center justify-center">
+                  <FileText size={20} className="text-[#0d6662]" />
+                </div>
+                <div>
+                  <h2 className="font-heading text-xl font-bold text-ink">Registration Form Builder</h2>
+                  <p className="text-xs text-muted mt-0.5">{formBuilderEvent.title}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <button onClick={() => setPreviewMode(!previewMode)}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border border-slate-200 hover:bg-slate-50 transition-colors text-ink">
+                  {previewMode ? <><EyeOff size={14} /> Edit</> : <><Eye size={14} /> Preview</>}
+                </button>
+                <button onClick={closeFormBuilder} className="p-2 hover:bg-slate-100 rounded-xl transition-colors"><X size={20} /></button>
+              </div>
+            </div>
+
+            {previewMode ? (
+              /* ─── Preview Mode ─── */
+              <div className="p-8 max-w-2xl mx-auto">
+                <div className="text-center mb-8">
+                  {regForm.enabled ? (
+                    <>
+                      <div className="w-14 h-14 rounded-2xl bg-[#0d6662]/10 flex items-center justify-center mx-auto mb-4">
+                        <FileText size={28} className="text-[#0d6662]" />
+                      </div>
+                      <h3 className="font-heading text-2xl font-extrabold text-ink">{regForm.title || "Registration Form"}</h3>
+                      <p className="text-muted mt-2">{regForm.description || "Please fill out the form below."}</p>
+                      {regForm.requiresPayment && (
+                        <div className="inline-flex items-center gap-1.5 mt-3 px-3 py-1 bg-[#c2761c]/10 rounded-lg text-[#c2761c] text-xs font-semibold">
+                          <CreditCard size={14} /> Payment Required: ₹{regForm.ticketPrice || "0"}
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <p className="text-muted text-lg">Registration is disabled for this event.</p>
+                  )}
+                </div>
+                {regForm.enabled && sectionsWithFields.map(sec => (
+                  <div key={sec} className="mb-6">
+                    <h4 className="text-sm font-bold text-[#0d6662] uppercase tracking-wider mb-3 pb-2 border-b border-slate-100">{sec}</h4>
+                    <div className="grid grid-cols-2 gap-4">
+                      {groupedFields[sec].map(field => (
+                        <div key={field.id} className={field.fieldType === "textarea" || field.fieldType === "checkbox" ? "col-span-2" : ""}>
+                          <label className="block text-sm font-semibold text-ink mb-1.5">
+                            {field.label || field.fieldName || "Untitled"} {field.required && <span className="text-danger">*</span>}
+                          </label>
+                          {field.fieldType === "textarea" ? (
+                            <div className="input-field bg-slate-50 min-h-[80px] text-sm text-muted">{field.placeholder || ""}</div>
+                          ) : field.fieldType === "select" ? (
+                            <select className="input-field w-full" disabled>
+                              <option>{field.placeholder || "Select..."}</option>
+                              {field.options.map(opt => <option key={opt}>{opt}</option>)}
+                            </select>
+                          ) : field.fieldType === "checkbox" ? (
+                            <label className="flex items-center gap-2 text-sm text-muted">
+                              <input type="checkbox" disabled className="rounded border-slate-300" /> {field.label}
+                            </label>
+                          ) : field.fieldType === "file" ? (
+                            <div className="input-field bg-slate-50 text-sm text-muted flex items-center gap-2"><Upload size={14} /> Choose file...</div>
+                          ) : (
+                            <input type={field.fieldType === "tel" ? "tel" : field.fieldType} placeholder={field.placeholder} disabled className="input-field w-full bg-slate-50" />
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+                {regForm.enabled && (
+                  <button className="btn-primary w-full mt-4" disabled>Register</button>
+                )}
+              </div>
+            ) : (
+              /* ─── Edit Mode ─── */
+              <div className="flex">
+                {/* Sidebar: Field list */}
+                <div className="w-80 border-r border-slate-100 p-4 max-h-[70vh] overflow-y-auto flex-shrink-0">
+                  <h4 className="text-xs font-bold text-muted uppercase tracking-wider mb-3 px-1">Fields ({regForm.fields.length})</h4>
+                  <div className="space-y-1.5">
+                    {regForm.fields.map((field, idx) => {
+                      const FTIcon = FIELD_TYPES.find(ft => ft.value === field.fieldType)?.icon || Type;
+                      return (
+                        <div key={field.id}
+                          className={`group flex items-center gap-2 px-3 py-2.5 rounded-lg cursor-pointer transition-all text-sm ${
+                            activeSection === field.id ? "bg-[#0d6662]/10 text-[#0d6662] border border-[#0d6662]/20" : "hover:bg-slate-50 text-ink border border-transparent"
+                          }`}
+                          onClick={() => setActiveSection(activeSection === field.id ? null : field.id)}>
+                          <GripVertical size={14} className="text-slate-300 flex-shrink-0" />
+                          <FTIcon size={14} className="flex-shrink-0 opacity-50" />
+                          <span className="flex-1 truncate font-medium">{field.label || field.fieldName || "Untitled"}</span>
+                          {field.required && <span className="text-danger text-xs">*</span>}
+                          <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button onClick={e => { e.stopPropagation(); moveField(field.id, "up"); }} className="p-0.5 hover:bg-white rounded" disabled={idx === 0}>
+                              <ChevronUp size={12} className={idx === 0 ? "text-slate-200" : "text-muted"} />
+                            </button>
+                            <button onClick={e => { e.stopPropagation(); moveField(field.id, "down"); }} className="p-0.5 hover:bg-white rounded" disabled={idx === regForm.fields.length - 1}>
+                              <ChevronDown size={12} className={idx === regForm.fields.length - 1 ? "text-slate-200" : "text-muted"} />
+                            </button>
+                            <button onClick={e => { e.stopPropagation(); removeField(field.id); }} className="p-0.5 hover:bg-red-50 rounded text-danger">
+                              <Trash2 size={12} />
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <button onClick={() => addField()} className="mt-3 w-full flex items-center justify-center gap-1.5 px-3 py-2 border-2 border-dashed border-slate-200 rounded-lg text-xs font-semibold text-muted hover:border-[#0d6662] hover:text-[#0d6662] transition-colors">
+                    <Plus size={14} /> Add Field
+                  </button>
+                </div>
+
+                {/* Main: Settings + Field editor */}
+                <div className="flex-1 max-h-[70vh] overflow-y-auto">
+                  {/* Form-level settings */}
+                  <div className="p-6 border-b border-slate-100 space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <label className="text-sm font-semibold text-ink">Registration Enabled</label>
+                        <p className="text-xs text-muted">Allow users to register for this event</p>
+                      </div>
+                      <button type="button" onClick={() => setRegForm(p => ({ ...p, enabled: !p.enabled }))}
+                        className={`relative w-12 h-6 rounded-full transition-colors ${regForm.enabled ? "bg-[#0d6662]" : "bg-slate-300"}`}>
+                        <span className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${regForm.enabled ? "left-6" : "left-0.5"}`} />
+                      </button>
+                    </div>
+
+                    {regForm.enabled && (
+                      <>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="col-span-2">
+                            <label className="block text-sm font-semibold text-ink mb-1.5">Form Title</label>
+                            <input value={regForm.title} onChange={e => setRegForm(p => ({ ...p, title: e.target.value }))}
+                              placeholder="Registration Form" className="input-field w-full" />
+                          </div>
+                          <div className="col-span-2">
+                            <label className="block text-sm font-semibold text-ink mb-1.5">Form Description</label>
+                            <textarea value={regForm.description} onChange={e => setRegForm(p => ({ ...p, description: e.target.value }))}
+                              rows={2} placeholder="Describe what this form is for..." className="input-field w-full resize-none" />
+                          </div>
+                        </div>
+
+                        <div className="border-t border-slate-100 pt-4 space-y-3">
+                          <h4 className="text-xs font-bold text-muted uppercase tracking-wider flex items-center gap-1.5"><Settings size={12} /> Options</h4>
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <label className="text-sm font-semibold text-ink">Requires Payment</label>
+                              <p className="text-xs text-muted">Collect payment during registration</p>
+                            </div>
+                            <button type="button" onClick={() => setRegForm(p => ({ ...p, requiresPayment: !p.requiresPayment }))}
+                              className={`relative w-12 h-6 rounded-full transition-colors ${regForm.requiresPayment ? "bg-[#c2761c]" : "bg-slate-300"}`}>
+                              <span className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${regForm.requiresPayment ? "left-6" : "left-0.5"}`} />
+                            </button>
+                          </div>
+                          {regForm.requiresPayment && (
+                            <div className="max-w-xs">
+                              <label className="block text-sm font-semibold text-ink mb-1.5">Ticket Price (₹)</label>
+                              <input type="number" value={regForm.ticketPrice} onChange={e => setRegForm(p => ({ ...p, ticketPrice: e.target.value }))}
+                                placeholder="e.g. 500" className="input-field w-full" />
+                            </div>
+                          )}
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <label className="text-sm font-semibold text-ink">Allow Multiple Registrations</label>
+                              <p className="text-xs text-muted">Let users submit more than one registration</p>
+                            </div>
+                            <button type="button" onClick={() => setRegForm(p => ({ ...p, allowMultipleRegistrations: !p.allowMultipleRegistrations }))}
+                              className={`relative w-12 h-6 rounded-full transition-colors ${regForm.allowMultipleRegistrations ? "bg-[#0d6662]" : "bg-slate-300"}`}>
+                              <span className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${regForm.allowMultipleRegistrations ? "left-6" : "left-0.5"}`} />
+                            </button>
+                          </div>
+                        </div>
+                      </>
+                    )}
+                  </div>
+
+                  {/* Field editor */}
+                  {regForm.enabled && activeSection && (() => {
+                    const field = regForm.fields.find(f => f.id === activeSection);
+                    if (!field) return null;
+                    return (
+                      <div className="p-6 space-y-4 border-b border-slate-100 bg-slate-50/50">
+                        <div className="flex items-center justify-between">
+                          <h4 className="text-sm font-bold text-ink">Edit Field</h4>
+                          <button onClick={() => setActiveSection(null)} className="p-1 hover:bg-white rounded-lg transition-colors text-muted">
+                            <X size={16} />
+                          </button>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-xs font-semibold text-muted mb-1">Field Name (key)</label>
+                            <input value={field.fieldName} onChange={e => updateField(field.id, { fieldName: e.target.value })}
+                              placeholder="e.g. first_name" className="input-field w-full text-sm" />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-semibold text-muted mb-1">Label</label>
+                            <input value={field.label} onChange={e => updateField(field.id, { label: e.target.value })}
+                              placeholder="e.g. First Name" className="input-field w-full text-sm" />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-semibold text-muted mb-1">Field Type</label>
+                            <select value={field.fieldType} onChange={e => {
+                              const newType = e.target.value;
+                              const updates: Partial<FormField> = { fieldType: newType };
+                              if (newType === "select" && field.options.length === 0) updates.options = ["Option 1", "Option 2"];
+                              updateField(field.id, updates);
+                            }} className="input-field w-full text-sm">
+                              {FIELD_TYPES.map(ft => <option key={ft.value} value={ft.value}>{ft.label}</option>)}
+                            </select>
+                          </div>
+                          <div>
+                            <label className="block text-xs font-semibold text-muted mb-1">Section</label>
+                            <select value={field.section} onChange={e => updateField(field.id, { section: e.target.value })} className="input-field w-full text-sm">
+                              {SECTIONS.map(s => <option key={s} value={s}>{s}</option>)}
+                            </select>
+                          </div>
+                          {field.fieldType !== "checkbox" && field.fieldType !== "file" && (
+                            <div className="col-span-2">
+                              <label className="block text-xs font-semibold text-muted mb-1">Placeholder</label>
+                              <input value={field.placeholder} onChange={e => updateField(field.id, { placeholder: e.target.value })}
+                                placeholder="Placeholder text" className="input-field w-full text-sm" />
+                            </div>
+                          )}
+                        </div>
+                        {field.fieldType === "select" && (
+                          <div>
+                            <label className="block text-xs font-semibold text-muted mb-1.5">Options (one per line)</label>
+                            <textarea value={field.options.join("\n")}
+                              onChange={e => updateField(field.id, { options: e.target.value.split("\n").filter(Boolean) })}
+                              rows={4} placeholder={"Option 1\nOption 2\nOption 3"} className="input-field w-full text-sm resize-none" />
+                          </div>
+                        )}
+                        <div className="flex items-center justify-between">
+                          <label className="text-sm font-semibold text-ink">Required</label>
+                          <button type="button" onClick={() => updateField(field.id, { required: !field.required })}
+                            className={`relative w-10 h-5 rounded-full transition-colors ${field.required ? "bg-danger" : "bg-slate-300"}`}>
+                            <span className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${field.required ? "left-5" : "left-0.5"}`} />
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })()}
+
+                  {regForm.enabled && !activeSection && (
+                    <div className="p-12 text-center text-muted">
+                      <Layout size={40} className="mx-auto mb-3 opacity-30" />
+                      <p className="text-sm">Select a field from the sidebar to edit it, or click &quot;Add Field&quot; to create a new one.</p>
+                    </div>
+                  )}
+
+                  {/* Footer */}
+                  {regForm.enabled && (
+                    <div className="p-6 flex justify-end gap-3">
+                      <button onClick={() => { setPreviewMode(true); }} className="btn-outline">
+                        <Eye size={16} /> Preview
+                      </button>
+                      <button onClick={saveFormConfig} disabled={formSaving} className="btn-gold">
+                        <Save size={16} /> {formSaving ? "Saving..." : "Save Form"}
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}

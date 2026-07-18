@@ -140,6 +140,7 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 0 0 3px rgba(13, 102, 98, 0.08);
 }
 .input-field::placeholder { color: #a0a0aa; }
+.input-field.has-icon { padding-left: 2.75rem !important; }
 
 .section-heading {
   text-align: center; margin-bottom: 3rem;

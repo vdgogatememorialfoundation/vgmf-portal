@@ -202,21 +202,21 @@ export default function SignupPage() {
                 <label className="block text-xs font-semibold text-ink/50 uppercase tracking-wider mb-1.5">Full Name</label>
                 <div className="relative">
                   <User size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink/30" />
-                  <input type="text" value={form.name} onChange={(e) => updateForm("name", e.target.value)} required className="input-field pl-11" placeholder="Your full name" />
+                  <input type="text" value={form.name} onChange={(e) => updateForm("name", e.target.value)} required className="input-field has-icon" placeholder="Your full name" />
                 </div>
               </div>
               <div>
                 <label className="block text-xs font-semibold text-ink/50 uppercase tracking-wider mb-1.5">Email Address</label>
                 <div className="relative">
                   <Mail size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink/30" />
-                  <input type="email" value={form.email} onChange={(e) => updateForm("email", e.target.value)} required className="input-field pl-11" placeholder="you@example.com" />
+                  <input type="email" value={form.email} onChange={(e) => updateForm("email", e.target.value)} required className="input-field has-icon" placeholder="you@example.com" />
                 </div>
               </div>
               <div>
                 <label className="block text-xs font-semibold text-ink/50 uppercase tracking-wider mb-1.5">Phone (optional)</label>
                 <div className="relative">
                   <Phone size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink/30" />
-                  <input type="tel" value={form.phone} onChange={(e) => updateForm("phone", e.target.value)} className="input-field pl-11" placeholder="+91 98765 43210" />
+                  <input type="tel" value={form.phone} onChange={(e) => updateForm("phone", e.target.value)} className="input-field has-icon" placeholder="+91 98765 43210" />
                 </div>
               </div>
               <button type="submit" disabled={loading} className="btn-primary w-full justify-center py-3 text-base disabled:opacity-50 disabled:cursor-not-allowed">
@@ -266,7 +266,7 @@ export default function SignupPage() {
                 <label className="block text-xs font-semibold text-ink/50 uppercase tracking-wider mb-1.5">Password</label>
                 <div className="relative">
                   <Lock size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink/30" />
-                  <input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} required className="input-field pl-11 pr-12" placeholder="Minimum 6 characters" />
+                  <input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} required className="input-field has-icon pr-12" placeholder="Minimum 6 characters" />
                   <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-ink/40 hover:text-ink transition-colors">
                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                   </button>
@@ -276,7 +276,7 @@ export default function SignupPage() {
                 <label className="block text-xs font-semibold text-ink/50 uppercase tracking-wider mb-1.5">Confirm Password</label>
                 <div className="relative">
                   <Lock size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink/30" />
-                  <input type="password" value={confirm} onChange={(e) => setConfirm(e.target.value)} required className="input-field pl-11" placeholder="Re-enter password" />
+                  <input type="password" value={confirm} onChange={(e) => setConfirm(e.target.value)} required className="input-field has-icon" placeholder="Re-enter password" />
                 </div>
               </div>
               <button type="button" onClick={handleVerify} disabled={loading} className="btn-primary w-full justify-center py-3 text-base disabled:opacity-50 disabled:cursor-not-allowed">

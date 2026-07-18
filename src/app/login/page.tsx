@@ -4,17 +4,8 @@ import { Suspense, useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { LogIn, ArrowLeft, Eye, EyeOff, Loader2, CheckCircle2, Stethoscope, GraduationCap, FlaskConical, Heart, Users, Building2 } from "lucide-react";
+import { LogIn, ArrowLeft, Eye, EyeOff, Loader2, CheckCircle2, Mail, Lock } from "lucide-react";
 import toast from "react-hot-toast";
-
-const categoryLinks = [
-  { href: "/signup", label: "Doctor", icon: Stethoscope, color: "hover:border-teal hover:text-teal" },
-  { href: "/signup", label: "Student", icon: GraduationCap, color: "hover:border-gold hover:text-gold" },
-  { href: "/signup", label: "Researcher", icon: FlaskConical, color: "hover:border-maroon hover:text-maroon" },
-  { href: "/signup", label: "Patient", icon: Heart, color: "hover:border-rose-500 hover:text-rose-500" },
-  { href: "/signup", label: "General", icon: Users, color: "hover:border-blue-500 hover:text-blue-500" },
-  { href: "/signup", label: "Institution", icon: Building2, color: "hover:border-purple-500 hover:text-purple-500" },
-];
 
 function LoginForm() {
   const [email, setEmail] = useState("");
@@ -94,25 +85,29 @@ function LoginForm() {
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label className="block text-xs font-semibold text-ink/50 uppercase tracking-wider mb-1.5">Email Address</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="input-field"
-              placeholder="you@example.com"
-            />
+            <div className="relative">
+              <Mail size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink/30" />
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="input-field has-icon"
+                placeholder="you@example.com"
+              />
+            </div>
           </div>
 
           <div>
             <label className="block text-xs font-semibold text-ink/50 uppercase tracking-wider mb-1.5">Password</label>
             <div className="relative">
+              <Lock size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink/30" />
               <input
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="input-field pr-12"
+                className="input-field has-icon pr-12"
                 placeholder="Enter your password"
               />
               <button
@@ -153,8 +148,8 @@ function LoginForm() {
           </p>
         </div>
 
-        <div className="mt-8 pt-6 border-t border-ink/10">
-          <p className="text-center text-xs text-ink/50 mb-4">Quick sign in</p>
+        <div className="mt-6 pt-6 border-t border-ink/10">
+          <p className="text-center text-xs text-ink/50 mb-4">Other sign in options</p>
           <div className="grid grid-cols-2 gap-3">
             <Link
               href="/admin/login"
@@ -183,21 +178,6 @@ function LoginForm() {
           </div>
         </div>
 
-        <div className="mt-6 pt-6 border-t border-ink/10">
-          <p className="text-center text-xs text-ink/50 mb-4">Register as</p>
-          <div className="grid grid-cols-3 gap-2">
-            {categoryLinks.map((cat, i) => (
-              <Link
-                key={i}
-                href={cat.href}
-                className={`flex flex-col items-center gap-1 py-2.5 px-2 border-2 border-ink/10 rounded-xl text-xs font-medium text-ink/50 transition-all ${cat.color}`}
-              >
-                <cat.icon size={16} />
-                {cat.label}
-              </Link>
-            ))}
-          </div>
-        </div>
       </div>
     </div>
   );
