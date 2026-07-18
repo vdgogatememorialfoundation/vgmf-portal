@@ -38,7 +38,8 @@ type Tab =
   | "live-chat"
   | "identity-verification"
   | "returns-refunds"
-  | "payment-methods";
+  | "payment-methods"
+  | "feedback";
 
 interface NavItem {
   id: Tab;
@@ -92,6 +93,7 @@ const navGroups: NavGroup[] = [
     title: "Support",
     items: [
       { id: "support", label: "Support Tickets", icon: Headphones },
+      { id: "feedback", label: "Feedback", icon: MessageSquare },
     ],
   },
 ];
@@ -450,6 +452,9 @@ function DashboardPageInner() {
             )}
             {activeTab === "payment-methods" && (
               <PaymentMethodsTab user={user} />
+            )}
+            {activeTab === "feedback" && (
+              <FeedbackTab data={data} />
             )}
           </div>
         </main>
@@ -3027,6 +3032,74 @@ function PaymentMethodsTab({ user }: { user: any }) {
           ))}
         </div>
       )}
+    </div>
+  );
+}
+
+
+function FeedbackTab({ data }: { data: any }) {
+  const [rating, setRating] = useState(5);
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [category, setCategory] = useState("GENERAL");
+  const [submitting, setSubmitting] = useState(false);
+  const registrations = data?.eventRegistrations || [];
+  const checkedIn = registrations.some((r: any) => r.isVerified || (r.scanLogs && r.scanLogs.length > 0));
+  const reviews = data?.siteReviews || [];
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/dashboard/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ rating, title, content, category }),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || "Unable to submit feedback");
+      toast.success("Feedback submitted for admin approval");
+      setTitle(""); setContent(""); setRating(5);
+    } catch (err: any) {
+      toast.error(err.message || "Unable to submit feedback");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      <SectionHeader title="Feedback" subtitle="Checked-in candidates can submit reviews based on the configured feedback form." />
+      {!checkedIn && (
+        <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm font-semibold text-amber-800">
+          Feedback opens after your event check-in is verified by staff.
+        </div>
+      )}
+      <form onSubmit={submit} className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 space-y-4">
+        <div className="grid md:grid-cols-2 gap-4">
+          <div>
+            <label className="text-sm font-bold text-ink">Rating</label>
+            <select value={rating} onChange={(e) => setRating(Number(e.target.value))} className="input-field w-full mt-1" disabled={!checkedIn}>
+              {[5,4,3,2,1].map((n) => <option key={n} value={n}>{n} Star{n > 1 ? "s" : ""}</option>)}
+            </select>
+          </div>
+          <div>
+            <label className="text-sm font-bold text-ink">Category</label>
+            <select value={category} onChange={(e) => setCategory(e.target.value)} className="input-field w-full mt-1" disabled={!checkedIn}>
+              <option value="GENERAL">General</option><option value="SEMINAR">Seminar</option><option value="FELLOWSHIP">Fellowship</option><option value="AUTISM">Autism Programme</option>
+            </select>
+          </div>
+        </div>
+        <div><label className="text-sm font-bold text-ink">Title</label><input value={title} onChange={(e) => setTitle(e.target.value)} className="input-field w-full mt-1" maxLength={120} disabled={!checkedIn} /></div>
+        <div><label className="text-sm font-bold text-ink">Review</label><textarea value={content} onChange={(e) => setContent(e.target.value)} className="input-field w-full mt-1" rows={5} maxLength={1200} disabled={!checkedIn} /></div>
+        <button className="btn-primary" disabled={!checkedIn || submitting}>{submitting ? "Submitting..." : "Submit Feedback"}</button>
+      </form>
+      <div className="bg-white rounded-2xl border border-slate-100 p-5">
+        <h3 className="font-heading font-bold text-ink mb-3">My Submitted Reviews</h3>
+        {reviews.length === 0 ? <p className="text-sm text-muted">No reviews submitted yet.</p> : reviews.map((r: any) => (
+          <div key={r.id} className="border-t first:border-t-0 py-3 text-sm"><b>{r.rating}★ {r.title || "Feedback"}</b><p className="text-muted">{r.content}</p><span className="text-xs text-muted">{r.isApproved ? "Approved" : "Pending approval"}</span></div>
+        ))}
+      </div>
     </div>
   );
 }

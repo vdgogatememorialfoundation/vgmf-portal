@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
-import { Menu, X, Phone, ChevronDown, User, LogOut, Shield, Settings } from "lucide-react";
+import { Menu, X, Phone, ChevronDown, User, LogOut, Shield, Settings, ShoppingCart } from "lucide-react";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -54,6 +54,7 @@ export default function Navbar({ logoUrl }: { logoUrl?: string }) {
 
             {/* Auth */}
             <div className="hidden lg:flex items-center gap-2">
+              <Link href="/shop/cart" className="relative p-2 rounded-lg text-[#0d6662] hover:bg-[#0d6662]/5" aria-label="Cart"><ShoppingCart size={17} /></Link>
               <a href="tel:+919373792952" className="flex items-center gap-1 text-xs text-[#7c7c8a] hover:text-[#0d6662] transition-colors px-2 py-1">
                 <Phone size={12} /> +91 93737 92952
               </a>

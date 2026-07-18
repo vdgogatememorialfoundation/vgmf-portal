@@ -1,67 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   const session = await auth();
-  if (!session || (session.user as any).role !== "ADMIN") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-  try {
-    const { searchParams } = new URL(req.url);
-    const search = searchParams.get("search") || "";
-    const isActive = searchParams.get("isActive");
-    const page = parseInt(searchParams.get("page") || "1");
-    const limit = parseInt(searchParams.get("limit") || "20");
-
-    const where: any = {};
-    if (search) {
-      where.OR = [
-        { title: { contains: search, mode: "insensitive" } },
-        { content: { contains: search, mode: "insensitive" } },
-      ];
-    }
-    if (isActive !== null && isActive !== "") {
-      where.isActive = isActive === "true";
-    }
-
-    const [items, total] = await Promise.all([
-      prisma.siteNotice.findMany({
-        where,
-        skip: (page - 1) * limit,
-        take: limit,
-        orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
-      }),
-      prisma.siteNotice.count({ where }),
-    ]);
-
-    return NextResponse.json({
-      items,
-      total,
-      page,
-      totalPages: Math.ceil(total / limit),
-    });
-  } catch (err) {
-    return NextResponse.json({ error: "Server error" }, { status: 500 });
-  }
+  if (!session || (session.user as any).role !== "ADMIN") return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const items = await prisma.siteNotice.findMany({ orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }] });
+  return NextResponse.json({ items });
 }
 
 export async function POST(req: NextRequest) {
   const session = await auth();
-  if (!session || (session.user as any).role !== "ADMIN") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-  try {
-    const data = await req.json();
-    if (data.startDate) {
-      data.startDate = new Date(data.startDate);
-    }
-    if (data.endDate) {
-      data.endDate = new Date(data.endDate);
-    }
-    const item = await prisma.siteNotice.create({ data });
-    return NextResponse.json(item, { status: 201 });
-  } catch (err) {
-    return NextResponse.json({ error: "Server error" }, { status: 500 });
-  }
+  if (!session || (session.user as any).role !== "ADMIN") return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const body = await req.json();
+  const item = await prisma.siteNotice.create({ data: {
+    title: body.title,
+    content: body.content || null,
+    noticeType: body.noticeType || "info",
+    position: body.position || "below-header",
+    sortOrder: Number(body.sortOrder || 0),
+    isActive: body.isActive ?? true,
+    startDate: body.startDate ? new Date(body.startDate) : null,
+    endDate: body.endDate ? new Date(body.endDate) : null,
+  }});
+  return NextResponse.json(item, { status: 201 });
 }
