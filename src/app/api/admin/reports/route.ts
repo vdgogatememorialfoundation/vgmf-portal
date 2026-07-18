@@ -225,7 +225,7 @@ export async function GET(req: NextRequest) {
                 select: {
                   registrations: true,
                   formSubmissions: true,
-                  schedule: true,
+                  schedules: true,
                 },
               },
             },
