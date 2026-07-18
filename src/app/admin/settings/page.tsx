@@ -100,7 +100,7 @@ export default function AdminSettings() {
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         {stats.map((s, i) => (
-          <div key={i} className="bg-white rounded-2xl border p-5">
+          <div key={i} className="bg-white rounded-2xl border border-slate-200 p-5">
             <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${s.color} mb-3`}><s.icon size={20} /></div>
             <p className="text-xs text-muted uppercase tracking-wider">{s.label}</p>
             <p className="font-heading text-xl font-extrabold text-navy mt-1">{s.value}</p>
@@ -110,45 +110,45 @@ export default function AdminSettings() {
 
       <form onSubmit={handleSave} className="space-y-6">
         {/* General Settings */}
-        <div className="bg-white rounded-2xl border p-6 space-y-5">
-          <div className="flex items-center gap-3 mb-2"><Globe size={20} className="text-navy" /><h3 className="font-heading text-lg font-bold text-navy">General Settings</h3></div>
+        <div className="bg-white rounded-2xl border border-slate-200 p-6 space-y-5">
+          <div className="flex items-center gap-3 mb-2"><Globe size={20} className="text-teal" /><h3 className="font-heading text-lg font-bold text-navy">General Settings</h3></div>
           <div className="grid md:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-semibold text-muted uppercase tracking-wider mb-1.5">Site Name</label>
               <input value={settings.siteName} onChange={e => setSettings({...settings, siteName: e.target.value})}
-                className="w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-navy/20" />
+                className="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal/20 focus:border-teal/40" />
             </div>
             <div>
               <label className="block text-xs font-semibold text-muted uppercase tracking-wider mb-1.5">Site URL</label>
               <input value={settings.siteUrl} onChange={e => setSettings({...settings, siteUrl: e.target.value})}
-                className="w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-navy/20" />
+                className="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal/20 focus:border-teal/40" />
             </div>
             <div>
               <label className="block text-xs font-semibold text-muted uppercase tracking-wider mb-1.5">Admin Email</label>
               <input value={settings.adminEmail} onChange={e => setSettings({...settings, adminEmail: e.target.value})}
-                className="w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-navy/20" />
+                className="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal/20 focus:border-teal/40" />
             </div>
             <div>
               <label className="block text-xs font-semibold text-muted uppercase tracking-wider mb-1.5">Timezone</label>
               <input value={settings.timezone} onChange={e => setSettings({...settings, timezone: e.target.value})}
-                className="w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-navy/20" />
+                className="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal/20 focus:border-teal/40" />
             </div>
           </div>
         </div>
 
         {/* Logo & Favicon */}
-        <div className="bg-white rounded-2xl border p-6 space-y-5">
-          <div className="flex items-center gap-3 mb-2"><Image size={20} className="text-navy" /><h3 className="font-heading text-lg font-bold text-navy">Logo & Favicon</h3></div>
+        <div className="bg-white rounded-2xl border border-slate-200 p-6 space-y-5">
+          <div className="flex items-center gap-3 mb-2"><Image size={20} className="text-teal" /><h3 className="font-heading text-lg font-bold text-navy">Logo & Favicon</h3></div>
           <div className="grid md:grid-cols-2 gap-6">
             {/* Logo Upload */}
             <div>
               <label className="block text-xs font-semibold text-muted uppercase tracking-wider mb-1.5">Site Logo</label>
               {logoPreview && (
-                <div className="mb-3 p-4 bg-gray-50 rounded-xl flex items-center justify-center">
+                <div className="mb-3 p-4 bg-slate-50 rounded-xl flex items-center justify-center">
                   <img src={logoPreview} alt="Logo preview" className="max-h-16 object-contain" />
                 </div>
               )}
-              <label className="border-2 border-dashed rounded-xl p-4 text-center cursor-pointer hover:border-navy/30 transition-colors block">
+              <label className="border-2 border-dashed border-slate-200 rounded-xl p-4 text-center cursor-pointer hover:border-teal/30 transition-colors block">
                 <Upload size={20} className="mx-auto text-muted mb-2" />
                 <p className="text-sm text-muted">Click to upload logo</p>
                 <p className="text-xs text-muted mt-1">PNG, JPG, SVG up to 2MB</p>
@@ -159,11 +159,11 @@ export default function AdminSettings() {
             <div>
               <label className="block text-xs font-semibold text-muted uppercase tracking-wider mb-1.5">Favicon</label>
               {faviconPreview && (
-                <div className="mb-3 p-4 bg-gray-50 rounded-xl flex items-center justify-center">
+                <div className="mb-3 p-4 bg-slate-50 rounded-xl flex items-center justify-center">
                   <img src={faviconPreview} alt="Favicon preview" className="max-h-8 object-contain" />
                 </div>
               )}
-              <label className="border-2 border-dashed rounded-xl p-4 text-center cursor-pointer hover:border-navy/30 transition-colors block">
+              <label className="border-2 border-dashed border-slate-200 rounded-xl p-4 text-center cursor-pointer hover:border-teal/30 transition-colors block">
                 <Upload size={20} className="mx-auto text-muted mb-2" />
                 <p className="text-sm text-muted">Click to upload favicon</p>
                 <p className="text-xs text-muted mt-1">ICO, PNG 32x32 or 64x64</p>
@@ -174,33 +174,33 @@ export default function AdminSettings() {
         </div>
 
         {/* Appearance */}
-        <div className="bg-white rounded-2xl border p-6 space-y-5">
-          <div className="flex items-center gap-3 mb-2"><Palette size={20} className="text-navy" /><h3 className="font-heading text-lg font-bold text-navy">Appearance</h3></div>
+        <div className="bg-white rounded-2xl border border-slate-200 p-6 space-y-5">
+          <div className="flex items-center gap-3 mb-2"><Palette size={20} className="text-teal" /><h3 className="font-heading text-lg font-bold text-navy">Appearance</h3></div>
           <div className="grid md:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-semibold text-muted uppercase tracking-wider mb-1.5">Primary Color</label>
               <div className="flex gap-2">
                 <input type="color" value={settings.primaryColor} onChange={e => setSettings({...settings, primaryColor: e.target.value})}
-                  className="w-12 h-12 rounded-xl border cursor-pointer" />
+                  className="w-12 h-12 rounded-xl border border-slate-200 cursor-pointer" />
                 <input value={settings.primaryColor} onChange={e => setSettings({...settings, primaryColor: e.target.value})}
-                  className="flex-1 px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-navy/20" />
+                  className="flex-1 px-4 py-3 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal/20 focus:border-teal/40" />
               </div>
             </div>
             <div>
               <label className="block text-xs font-semibold text-muted uppercase tracking-wider mb-1.5">Accent Color</label>
               <div className="flex gap-2">
                 <input type="color" value={settings.accentColor} onChange={e => setSettings({...settings, accentColor: e.target.value})}
-                  className="w-12 h-12 rounded-xl border cursor-pointer" />
+                  className="w-12 h-12 rounded-xl border border-slate-200 cursor-pointer" />
                 <input value={settings.accentColor} onChange={e => setSettings({...settings, accentColor: e.target.value})}
-                  className="flex-1 px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-navy/20" />
+                  className="flex-1 px-4 py-3 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal/20 focus:border-teal/40" />
               </div>
             </div>
           </div>
         </div>
 
         {/* Notification Settings */}
-        <div className="bg-white rounded-2xl border p-6 space-y-5">
-          <div className="flex items-center gap-3 mb-2"><Bell size={20} className="text-navy" /><h3 className="font-heading text-lg font-bold text-navy">Notification Settings</h3></div>
+        <div className="bg-white rounded-2xl border border-slate-200 p-6 space-y-5">
+          <div className="flex items-center gap-3 mb-2"><Bell size={20} className="text-teal" /><h3 className="font-heading text-lg font-bold text-navy">Notification Settings</h3></div>
           <div className="space-y-3">
             {[
               { label: "Order confirmation emails", checked: true },
@@ -209,9 +209,9 @@ export default function AdminSettings() {
               { label: "Fellowship application alerts", checked: true },
               { label: "Marketing emails", checked: false },
             ].map((opt, i) => (
-              <label key={i} className="flex items-center justify-between py-2 border-b last:border-0 cursor-pointer">
+              <label key={i} className="flex items-center justify-between py-2 border-b border-slate-100 last:border-0 cursor-pointer">
                 <span className="text-sm text-ink-soft">{opt.label}</span>
-                <input type="checkbox" defaultChecked={opt.checked} className="accent-navy w-4 h-4" />
+                <input type="checkbox" defaultChecked={opt.checked} className="accent-teal w-4 h-4" />
               </label>
             ))}
           </div>
@@ -220,7 +220,7 @@ export default function AdminSettings() {
         {/* Save Button */}
         <div className="flex items-center gap-4">
           <button type="submit" disabled={uploading}
-            className="flex items-center gap-2 px-6 py-3 bg-navy text-white font-semibold rounded-xl hover:bg-navy-light disabled:opacity-50">
+            className="btn-primary px-6 py-3 disabled:opacity-50">
             {saved ? <><Check size={18} /> Saved!</> : <><Save size={18} /> Save All Settings</>}
           </button>
           {uploading && <span className="text-sm text-muted animate-pulse">Uploading...</span>}

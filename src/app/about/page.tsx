@@ -17,26 +17,25 @@ export default async function AboutPage() {
   return (
     <div>
       {/* HERO */}
-      <section className="relative bg-navy py-24 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-[#0891b2] via-[#06b6d4] to-[#22d3ee] py-24 overflow-hidden">
         <div className="absolute inset-0">
-          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-navy via-navy-light to-navy" />
-          <div className="absolute top-20 right-[10%] w-[500px] h-[500px] bg-gold/8 rounded-full blur-[120px]" />
-          <div className="absolute bottom-20 left-[5%] w-[400px] h-[400px] bg-maroon/10 rounded-full blur-[100px]" />
-          <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)", backgroundSize: "60px 60px" }} />
+          <div className="absolute top-20 right-[10%] w-[500px] h-[500px] bg-white/10 rounded-full blur-[120px]" />
+          <div className="absolute bottom-20 left-[5%] w-[400px] h-[400px] bg-gold/10 rounded-full blur-[100px]" />
+          <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)", backgroundSize: "60px 60px" }} />
         </div>
         <div className="max-w-7xl mx-auto px-6 relative z-10 text-center">
-          <span className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-sm rounded-full border border-white/10 mb-8">
-            <span className="text-gold-light text-xs font-bold tracking-widest uppercase">Est. 1972</span>
+          <span className="inline-flex items-center gap-2 px-4 py-2 bg-white/15 backdrop-blur-sm rounded-full border border-white/20 mb-8">
+            <span className="text-white text-xs font-bold tracking-widest uppercase">Est. 1972</span>
           </span>
           <h1 className="font-heading text-5xl md:text-7xl font-extrabold text-white leading-[1.1] mb-6">
-            About the <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">Foundation</span>
+            About the <span className="text-gold-light">Foundation</span>
           </h1>
-          <p className="text-white/50 text-lg leading-relaxed mb-8 max-w-2xl mx-auto">
+          <p className="text-white/70 text-lg leading-relaxed mb-8 max-w-2xl mx-auto">
             {siteContent.about_hero || "Preserving the legacy of Vaidya R.B. Gogate through research, education, and community service rooted in authentic Ayurvedic tradition."}
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link href="/contact" className="btn-gold text-base !py-3.5 !px-7">Get in Touch <ArrowRight size={18} /></Link>
-            <Link href="/articles" className="btn-outline !border-white/25 !text-white hover:!bg-white/10 hover:!border-white/40 text-base !py-3.5 !px-7">Our Articles</Link>
+            <Link href="/articles" className="btn-outline !border-white/30 !text-white hover:!bg-white/10 hover:!border-white/50 text-base !py-3.5 !px-7">Our Articles</Link>
           </div>
         </div>
       </section>
@@ -44,7 +43,7 @@ export default async function AboutPage() {
       {/* STATS BAR */}
       <section className="relative -mt-10 z-20">
         <div className="max-w-5xl mx-auto px-6">
-          <div className="bg-white rounded-3xl p-8 grid grid-cols-2 md:grid-cols-4 gap-6 shadow-xl shadow-navy/8 border border-gray-100">
+          <div className="bg-white rounded-3xl p-8 grid grid-cols-2 md:grid-cols-4 gap-6 shadow-xl shadow-teal/8 border border-gray-100">
             {[
               { n: "1972", l: "Founded", icon: Calendar },
               { n: "50+", l: "Years Legacy", icon: Star },
@@ -52,8 +51,8 @@ export default async function AboutPage() {
               { n: "100+", l: "Vaidyas Trained", icon: GraduationCap },
             ].map((s, i) => (
               <div key={i} className="text-center group">
-                <div className="w-12 h-12 bg-gold/10 rounded-2xl flex items-center justify-center mx-auto mb-3 group-hover:bg-gold/20 transition-colors">
-                  <s.icon size={20} className="text-gold" />
+                <div className="w-12 h-12 bg-teal/10 rounded-2xl flex items-center justify-center mx-auto mb-3 group-hover:bg-teal/20 transition-colors">
+                  <s.icon size={20} className="text-[#0891b2]" />
                 </div>
                 <div className="font-heading text-2xl md:text-3xl font-extrabold text-navy">{s.n}</div>
                 <div className="text-xs text-muted font-medium mt-1 uppercase tracking-wider">{s.l}</div>
@@ -87,9 +86,9 @@ export default async function AboutPage() {
             </div>
             <div className="space-y-4">
               {[
-                { icon: Stethoscope, title: "Vd. Mahadev Gogate", desc: "Rajavaidya to the King of Jawhar — the patriarch who began our medical legacy.", color: "from-navy to-teal" },
-                { icon: BookOpen, title: "Vd. Vishnu & Trimbak Gogate", desc: "Specialists in Dravyaguna and Panchakarma who expanded Ayurvedic practice.", color: "from-navy to-navy-600" },
-                { icon: Star, title: "Vd. R.B. Gogate", desc: "Pioneer in Shalya Tantra, Agnikarma, and Viddhakarma with global recognition.", color: "from-maroon to-maroon-light" },
+                { icon: Stethoscope, title: "Vd. Mahadev Gogate", desc: "Rajavaidya to the King of Jawhar — the patriarch who began our medical legacy.", color: "from-[#0891b2] to-[#06b6d4]" },
+                { icon: BookOpen, title: "Vd. Vishnu & Trimbak Gogate", desc: "Specialists in Dravyaguna and Panchakarma who expanded Ayurvedic practice.", color: "from-[#0e7490] to-[#0891b2]" },
+                { icon: Star, title: "Vd. R.B. Gogate", desc: "Pioneer in Shalya Tantra, Agnikarma, and Viddhakarma with global recognition.", color: "from-[#b45309] to-[#d97706]" },
                 { icon: Heart, title: "The Next Generation", desc: "Continuing the tradition through VGMF — research, education, and community service.", color: "from-teal to-teal-light" },
               ].map((item, i) => (
                 <div key={i} className="card-hover bg-white rounded-2xl border border-gray-100 p-6 flex gap-4">
@@ -117,8 +116,8 @@ export default async function AboutPage() {
           </div>
           <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             <div className="card-hover bg-white rounded-3xl p-10 border border-gray-100 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-navy to-navy-light opacity-5 rounded-bl-[60px]" />
-              <div className="w-16 h-16 bg-gradient-to-br from-navy to-navy-light rounded-2xl flex items-center justify-center text-gold mb-6 shadow-lg">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#0891b2] to-[#06b6d4] opacity-5 rounded-bl-[60px]" />
+              <div className="w-16 h-16 bg-gradient-to-br from-[#0891b2] to-[#06b6d4] rounded-2xl flex items-center justify-center text-white mb-6 shadow-lg">
                 <Target size={28} />
               </div>
               <h3 className="font-heading text-2xl font-extrabold text-navy mb-4">Our Mission</h3>
@@ -128,7 +127,7 @@ export default async function AboutPage() {
             </div>
             <div className="card-hover bg-white rounded-3xl p-10 border border-gray-100 relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-gold to-gold-light opacity-5 rounded-bl-[60px]" />
-              <div className="w-16 h-16 bg-gradient-to-br from-gold to-gold-light rounded-2xl flex items-center justify-center text-navy mb-6 shadow-lg">
+              <div className="w-16 h-16 bg-gradient-to-br from-gold to-gold-light rounded-2xl flex items-center justify-center text-white mb-6 shadow-lg">
                 <Eye size={28} />
               </div>
               <h3 className="font-heading text-2xl font-extrabold text-navy mb-4">Our Vision</h3>
@@ -180,12 +179,12 @@ export default async function AboutPage() {
               </div>
             </div>
             <div className="space-y-4">
-              <div className="bg-gradient-to-br from-navy to-navy-light rounded-3xl p-8 text-white">
+              <div className="bg-gradient-to-br from-[#0891b2] to-[#06b6d4] rounded-3xl p-8 text-white">
                 <h3 className="font-heading text-lg font-extrabold text-gold mb-4">Books Published</h3>
                 <div className="space-y-3">
                   {["AIDS", "Viddha and Agnikarma", "Bhagna and Asthi roga", "Shalya Tantra", "Hasti Ayurved"].map((book, i) => (
                     <div key={i} className="flex items-center gap-3">
-                      <BookOpen size={16} className="text-gold/60 shrink-0" />
+                      <BookOpen size={16} className="text-white/60 shrink-0" />
                       <span className="text-sm text-white/80">{book}</span>
                     </div>
                   ))}
@@ -247,9 +246,9 @@ export default async function AboutPage() {
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { icon: BookOpen, title: "Knowledge", desc: "Free and open sharing of Ayurvedic wisdom for practitioners, students, and society.", color: "from-navy to-navy-light" },
+              { icon: BookOpen, title: "Knowledge", desc: "Free and open sharing of Ayurvedic wisdom for practitioners, students, and society.", color: "from-[#0891b2] to-[#06b6d4]" },
               { icon: Award, title: "Excellence", desc: "Maintaining the highest standards in research, education, and clinical practice.", color: "from-gold to-gold-light" },
-              { icon: Heart, title: "Compassion", desc: "Serving communities through free healthcare programmes and accessible therapy.", color: "from-maroon to-maroon-light" },
+              { icon: Heart, title: "Compassion", desc: "Serving communities through free healthcare programmes and accessible therapy.", color: "from-rose-500 to-rose-400" },
               { icon: Users, title: "Collaboration", desc: "Bridging traditional Ayurveda with modern evidence through inclusive partnerships.", color: "from-teal to-teal-light" },
             ].map((value, i) => (
               <div key={i} className="card-hover bg-white rounded-3xl border border-gray-100 p-8 text-center group">
@@ -265,21 +264,21 @@ export default async function AboutPage() {
       </section>
 
       {/* CONTACT CTA */}
-      <section className="py-24 bg-navy relative overflow-hidden">
+      <section className="py-24 bg-gradient-to-br from-[#0891b2] via-[#06b6d4] to-[#22d3ee] relative overflow-hidden">
         <div className="absolute inset-0">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-gold/10 rounded-full blur-[120px]" />
-          <div className="absolute bottom-0 left-0 w-72 h-72 bg-teal/10 rounded-full blur-[100px]" />
+          <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-[120px]" />
+          <div className="absolute bottom-0 left-0 w-72 h-72 bg-gold/10 rounded-full blur-[100px]" />
         </div>
         <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
           <h2 className="font-heading text-4xl md:text-5xl font-extrabold text-white mb-5 leading-tight">
             Interested in Our Work?
           </h2>
-          <p className="text-white/40 text-lg mb-10 max-w-2xl mx-auto">
+          <p className="text-white/60 text-lg mb-10 max-w-2xl mx-auto">
             Whether you are a researcher, practitioner, student, or supporter — we would love to hear from you.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link href="/contact" className="btn-gold text-lg !py-4 !px-10">Contact Us <ArrowRight size={20} /></Link>
-            <Link href="/fellowship" className="btn-outline !border-white/25 !text-white hover:!bg-white/10 hover:!border-white/40 text-lg !py-4 !px-10">Explore Fellowship</Link>
+            <Link href="/fellowship" className="btn-outline !border-white/30 !text-white hover:!bg-white/10 hover:!border-white/50 text-lg !py-4 !px-10">Explore Fellowship</Link>
           </div>
         </div>
       </section>

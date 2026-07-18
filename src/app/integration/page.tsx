@@ -87,11 +87,11 @@ export default function IntegrationPage() {
   return (
     <div className="min-h-screen">
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-navy via-navy-light to-navy">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(13,79,79,0.15),transparent_60%),radial-gradient(circle_at_70%_80%,rgba(212,168,67,0.1),transparent_50%)]" />
+      <section className="relative overflow-hidden bg-gradient-to-br from-[#0891b2] via-[#06b6d4] to-[#22d3ee]">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.15),transparent_60%),radial-gradient(circle_at_70%_80%,rgba(212,168,67,0.1),transparent_50%)]" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-20 sm:py-28 text-center">
-          <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/10 rounded-full px-4 py-1.5 mb-8">
-            <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
+          <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm border border-white/20 rounded-full px-4 py-1.5 mb-8">
+            <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
             <span className="text-xs font-semibold text-white/80">All Systems Operational</span>
           </div>
           <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white mb-6 leading-tight">
@@ -104,7 +104,7 @@ export default function IntegrationPage() {
             <Link href="/dashboard" className="inline-flex items-center gap-2 bg-gold text-navy font-bold px-6 py-3 rounded-xl hover:bg-gold/90 transition-colors">
               Go to Dashboard <ArrowRight size={16} />
             </Link>
-            <Link href="/login" className="inline-flex items-center gap-2 bg-white/10 text-white font-semibold px-6 py-3 rounded-xl border border-white/20 hover:bg-white/20 transition-colors">
+            <Link href="/login" className="inline-flex items-center gap-2 bg-white/15 text-white font-semibold px-6 py-3 rounded-xl border border-white/20 hover:bg-white/25 transition-colors">
               Sign In
             </Link>
           </div>
@@ -189,7 +189,7 @@ export default function IntegrationPage() {
           <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
             {SSO_FEATURES.map((feat) => (
               <div key={feat.title} className="bg-white rounded-2xl border border-gray-100 p-8 text-center card-hover">
-                <div className="w-14 h-14 bg-navy/5 rounded-2xl flex items-center justify-center mx-auto mb-5">
+                <div className="w-14 h-14 bg-[#0891b2]/5 rounded-2xl flex items-center justify-center mx-auto mb-5">
                   <feat.icon size={24} className="text-navy" />
                 </div>
                 <h3 className="font-heading text-lg font-extrabold text-navy mb-2">{feat.title}</h3>
@@ -214,7 +214,7 @@ export default function IntegrationPage() {
           ].map((s) => (
             <div key={s.step} className="relative text-center">
               {s.step !== "4" && <div className="hidden md:block absolute top-8 left-[60%] w-[80%] border-t-2 border-dashed border-gray-200" />}
-              <div className="w-16 h-16 bg-gradient-to-br from-navy to-navy-light rounded-2xl flex items-center justify-center text-gold font-heading font-extrabold text-xl mx-auto mb-5 relative z-10 shadow-lg">
+              <div className="w-16 h-16 bg-gradient-to-br from-[#0891b2] to-[#06b6d4] rounded-2xl flex items-center justify-center text-white font-heading font-extrabold text-xl mx-auto mb-5 relative z-10 shadow-lg">
                 {s.step}
               </div>
               <h3 className="font-heading text-base font-extrabold text-navy mb-2">{s.title}</h3>

@@ -28,7 +28,7 @@ export default function DashboardPage() {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
         <div className="text-center">
-          <Loader2 size={32} className="text-gold animate-spin mx-auto mb-4" />
+          <Loader2 size={32} className="text-[#0891b2] animate-spin mx-auto mb-4" />
           <p className="text-sm text-muted font-medium">Loading dashboard...</p>
         </div>
       </div>
@@ -74,7 +74,7 @@ export default function DashboardPage() {
       {/* HEADER */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-10">
         <div className="flex items-center gap-4">
-          <div className="w-14 h-14 bg-gradient-to-br from-navy to-navy-light rounded-2xl flex items-center justify-center text-gold text-xl font-heading font-extrabold shadow-lg">
+          <div className="w-14 h-14 bg-gradient-to-br from-[#0891b2] to-[#06b6d4] rounded-2xl flex items-center justify-center text-white text-xl font-heading font-extrabold shadow-lg">
             {user.name?.[0] || "U"}
           </div>
           <div>
@@ -91,9 +91,9 @@ export default function DashboardPage() {
       {/* STATS */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
         {[
-          { icon: ShoppingBag, label: "Orders", value: orderCount, color: "from-navy to-navy-light" },
+          { icon: ShoppingBag, label: "Orders", value: orderCount, color: "from-[#0891b2] to-[#06b6d4]" },
           { icon: GraduationCap, label: "Seminars", value: seminarCount, color: "from-teal to-teal-light" },
-          { icon: FlaskConical, label: "Fellowships", value: fellowshipCount, color: "from-maroon to-maroon-light" },
+          { icon: FlaskConical, label: "Fellowships", value: fellowshipCount, color: "from-[#0e7490] to-[#0891b2]" },
           { icon: Heart, label: "Autism", value: autismCount, color: "from-gold to-gold-light" },
         ].map((s, i) => (
           <div key={i} className="bg-white rounded-2xl border border-gray-100 p-5 card-hover">
@@ -114,11 +114,11 @@ export default function DashboardPage() {
       <div className="flex gap-1 bg-white rounded-2xl border border-gray-100 p-1.5 mb-8 overflow-x-auto">
         {tabs.map(tab => (
           <button key={tab.id} onClick={() => setActiveTab(tab.id)}
-            className={`flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold transition-all duration-200 whitespace-nowrap ${activeTab === tab.id ? "bg-navy text-white shadow-md shadow-navy/20" : "text-ink-soft hover:bg-navy/5"}`}>
+            className={`flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold transition-all duration-200 whitespace-nowrap ${activeTab === tab.id ? "bg-[#0891b2] text-white shadow-md shadow-[#0891b2]/20" : "text-ink-soft hover:bg-[#0891b2]/5"}`}>
             <tab.icon size={16} />
             {tab.label}
             {tab.count !== undefined && tab.count > 0 && (
-              <span className={`text-xs px-1.5 py-0.5 rounded-full ${activeTab === tab.id ? "bg-white/20" : "bg-navy/5"}`}>{tab.count}</span>
+              <span className={`text-xs px-1.5 py-0.5 rounded-full ${activeTab === tab.id ? "bg-white/20" : "bg-[#0891b2]/5"}`}>{tab.count}</span>
             )}
           </button>
         ))}
@@ -154,13 +154,13 @@ export default function DashboardPage() {
               <div className="text-center py-12">
                 <Package size={40} className="text-muted/30 mx-auto mb-3" />
                 <p className="text-sm text-muted font-medium">No recent activity</p>
-                <Link href="/shop" className="inline-flex items-center gap-1 text-sm font-bold text-navy mt-3 hover:text-gold transition-colors">Start Shopping <ArrowRight size={14} /></Link>
+                <Link href="/shop" className="inline-flex items-center gap-1 text-sm font-bold text-navy mt-3 hover:text-[#0891b2] transition-colors">Start Shopping <ArrowRight size={14} /></Link>
               </div>
             ) : (
               <div className="space-y-3">
                 {data?.orders?.slice(0, 3).map((o: any) => (
                   <div key={o.id} className="flex items-center gap-4 p-4 bg-cream-dark rounded-xl">
-                    <div className="w-10 h-10 bg-navy/10 rounded-xl flex items-center justify-center shrink-0"><ShoppingBag size={16} className="text-navy" /></div>
+                    <div className="w-10 h-10 bg-[#0891b2]/10 rounded-xl flex items-center justify-center shrink-0"><ShoppingBag size={16} className="text-[#0891b2]" /></div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-bold text-navy truncate">Order {o.orderNumber}</p>
                       <p className="text-xs text-muted">{new Date(o.orderDate).toLocaleDateString("en-IN")}</p>
@@ -183,7 +183,7 @@ export default function DashboardPage() {
                 ))}
                 {data?.fellowships?.slice(0, 2).map((f: any) => (
                   <div key={f.id} className="flex items-center gap-4 p-4 bg-cream-dark rounded-xl">
-                    <div className="w-10 h-10 bg-maroon/10 rounded-xl flex items-center justify-center shrink-0"><FlaskConical size={16} className="text-maroon" /></div>
+                    <div className="w-10 h-10 bg-[#0891b2]/10 rounded-xl flex items-center justify-center shrink-0"><FlaskConical size={16} className="text-[#0891b2]" /></div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-bold text-navy truncate">Fellowship — {f.trackingNumber}</p>
                       <p className="text-xs text-muted">{f.areaOfInterest || "Viddhakarma"}</p>
@@ -249,7 +249,7 @@ export default function DashboardPage() {
               <div className="p-10 text-center">
                 <Ticket size={32} className="text-muted/30 mx-auto mb-3" />
                 <p className="text-sm text-muted font-medium">No seminar registrations</p>
-                <Link href="/seminar" className="text-sm font-bold text-navy mt-2 inline-block hover:text-gold transition-colors">View Seminars →</Link>
+                <Link href="/seminar" className="text-sm font-bold text-navy mt-2 inline-block hover:text-[#0891b2] transition-colors">View Seminars →</Link>
               </div>
             ) : (
               <div className="overflow-x-auto">
@@ -278,14 +278,14 @@ export default function DashboardPage() {
           {/* Fellowships */}
           <div className="bg-white rounded-3xl border border-gray-100 overflow-hidden">
             <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-2">
-              <FlaskConical size={18} className="text-maroon" />
+              <FlaskConical size={18} className="text-[#0891b2]" />
               <h3 className="font-heading text-lg font-extrabold text-navy">Fellowship Applications</h3>
             </div>
             {fellowshipCount === 0 ? (
               <div className="p-10 text-center">
                 <FlaskConical size={32} className="text-muted/30 mx-auto mb-3" />
                 <p className="text-sm text-muted font-medium">No fellowship applications</p>
-                <Link href="/fellowship" className="text-sm font-bold text-navy mt-2 inline-block hover:text-gold transition-colors">Apply for Fellowship →</Link>
+                <Link href="/fellowship" className="text-sm font-bold text-navy mt-2 inline-block hover:text-[#0891b2] transition-colors">Apply for Fellowship →</Link>
               </div>
             ) : (
               <div className="overflow-x-auto">
@@ -316,14 +316,14 @@ export default function DashboardPage() {
           {/* Autism */}
           <div className="bg-white rounded-3xl border border-gray-100 overflow-hidden">
             <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-2">
-              <Heart size={18} className="text-pink-500" />
+              <Heart size={18} className="text-rose-500" />
               <h3 className="font-heading text-lg font-extrabold text-navy">Autism Programme</h3>
             </div>
             {autismCount === 0 ? (
               <div className="p-10 text-center">
                 <Heart size={32} className="text-muted/30 mx-auto mb-3" />
                 <p className="text-sm text-muted font-medium">No autism registrations</p>
-                <Link href="/autism" className="text-sm font-bold text-navy mt-2 inline-block hover:text-gold transition-colors">View Programme →</Link>
+                <Link href="/autism" className="text-sm font-bold text-navy mt-2 inline-block hover:text-[#0891b2] transition-colors">View Programme →</Link>
               </div>
             ) : (
               <div className="overflow-x-auto">

@@ -99,7 +99,7 @@ export default function TrusteeDashboard() {
   if (authStatus === "loading") {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
-        <Loader2 size={32} className="text-gold animate-spin" />
+        <Loader2 size={32} className="text-[#0891b2] animate-spin" />
       </div>
     );
   }
@@ -129,7 +129,7 @@ export default function TrusteeDashboard() {
       case "fellowship": return "bg-purple-50 text-purple-700";
       case "seminar": return "bg-teal/10 text-teal";
       case "autism": return "bg-rose-50 text-rose-600";
-      default: return "bg-navy/5 text-navy";
+      default: return "bg-[#0891b2]/5 text-[#0891b2]";
     }
   };
 

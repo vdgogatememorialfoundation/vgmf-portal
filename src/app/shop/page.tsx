@@ -169,8 +169,8 @@ export default function ShopPage() {
           onClick={() => setSelectedCategory("all")}
           className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${
             selectedCategory === "all"
-              ? "bg-navy text-white shadow-lg shadow-navy/20"
-              : "bg-white border border-gray-200 text-ink-soft hover:border-navy hover:text-navy"
+              ? "bg-[#0891b2] text-white shadow-lg shadow-[#0891b2]/20"
+              : "bg-white border border-gray-200 text-ink-soft hover:border-[#0891b2] hover:text-[#0891b2]"
           }`}
         >
           All
@@ -181,8 +181,8 @@ export default function ShopPage() {
             onClick={() => setSelectedCategory(cat.id)}
             className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${
               selectedCategory === cat.id
-                ? "bg-navy text-white shadow-lg shadow-navy/20"
-                : "bg-white border border-gray-200 text-ink-soft hover:border-navy hover:text-navy"
+                ? "bg-[#0891b2] text-white shadow-lg shadow-[#0891b2]/20"
+                : "bg-white border border-gray-200 text-ink-soft hover:border-[#0891b2] hover:text-[#0891b2]"
             }`}
           >
             {cat.name}
@@ -193,7 +193,7 @@ export default function ShopPage() {
       {/* Loading */}
       {loading && (
         <div className="flex flex-col items-center justify-center py-20">
-          <Loader2 size={40} className="text-gold animate-spin mb-4" />
+          <Loader2 size={40} className="text-[#0891b2] animate-spin mb-4" />
           <p className="text-muted font-medium">Loading products...</p>
         </div>
       )}

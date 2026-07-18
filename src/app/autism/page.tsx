@@ -23,26 +23,26 @@ export default async function AutismPage() {
   return (
     <div>
       {/* HERO */}
-      <section className="relative py-24 overflow-hidden" style={{ background: "linear-gradient(135deg, #7c1d1d, #0a1628)" }}>
+      <section className="relative py-24 overflow-hidden bg-gradient-to-br from-rose-400 via-[#0891b2] to-[#06b6d4]">
         <div className="absolute inset-0">
-          <div className="absolute top-20 right-[10%] w-[500px] h-[500px] bg-gold/8 rounded-full blur-[150px]" />
-          <div className="absolute bottom-0 left-[5%] w-[400px] h-[400px] bg-maroon/20 rounded-full blur-[120px]" />
-          <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)", backgroundSize: "60px 60px" }} />
+          <div className="absolute top-20 right-[10%] w-[500px] h-[500px] bg-white/10 rounded-full blur-[150px]" />
+          <div className="absolute bottom-0 left-[5%] w-[400px] h-[400px] bg-rose-300/20 rounded-full blur-[120px]" />
+          <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)", backgroundSize: "60px 60px" }} />
         </div>
         <div className="max-w-7xl mx-auto px-6 relative z-10 text-center">
-          <span className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-sm rounded-full border border-white/10 mb-8">
-            <Heart size={14} className="text-gold fill-gold" />
-            <span className="text-gold-light text-xs font-bold tracking-widest uppercase">Community Initiative</span>
+          <span className="inline-flex items-center gap-2 px-4 py-2 bg-white/15 backdrop-blur-sm rounded-full border border-white/20 mb-8">
+            <Heart size={14} className="text-white fill-white" />
+            <span className="text-white text-xs font-bold tracking-widest uppercase">Community Initiative</span>
           </span>
           <h1 className="font-heading text-5xl md:text-7xl font-extrabold text-white leading-[1.1] mb-6">
             {event.title || "Autism Awareness Programme"}
           </h1>
-          <p className="text-white/50 text-lg leading-relaxed mb-10 max-w-2xl mx-auto">
+          <p className="text-white/70 text-lg leading-relaxed mb-10 max-w-2xl mx-auto">
             {event.shortDesc || "Free awareness, therapy, and support integrating Ayurvedic Panchakarma approaches with compassionate community care."}
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link href="/autism/register" className="btn-gold text-lg !py-4 !px-10">Pre-Register Now <ArrowRight size={20} /></Link>
-            <Link href="#about" className="btn-outline !border-white/25 !text-white hover:!bg-white/10 hover:!border-white/40 text-lg !py-4 !px-10">Learn More</Link>
+            <Link href="#about" className="btn-outline !border-white/30 !text-white hover:!bg-white/10 hover:!border-white/50 text-lg !py-4 !px-10">Learn More</Link>
           </div>
         </div>
       </section>
@@ -50,7 +50,7 @@ export default async function AutismPage() {
       {/* STATS */}
       <section className="relative -mt-12 z-20">
         <div className="max-w-3xl mx-auto px-6">
-          <div className="bg-white rounded-3xl p-6 grid grid-cols-3 gap-4 shadow-xl shadow-navy/8 border border-gray-100">
+          <div className="bg-white rounded-3xl p-6 grid grid-cols-3 gap-4 shadow-xl shadow-rose-500/8 border border-gray-100">
             {[
               { v: "Free", l: "Programme Fee" },
               { v: "Panchakarma", l: "Therapy Used" },
@@ -74,7 +74,7 @@ export default async function AutismPage() {
           </div>
           <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             <div className="card-hover bg-white rounded-3xl border border-gray-100 p-8">
-              <div className="w-14 h-14 bg-gradient-to-br from-maroon to-maroon-light rounded-2xl flex items-center justify-center text-white mb-5 shadow-lg">
+              <div className="w-14 h-14 bg-gradient-to-br from-rose-500 to-rose-400 rounded-2xl flex items-center justify-center text-white mb-5 shadow-lg">
                 <Heart size={24} />
               </div>
               <h3 className="font-heading text-xl font-extrabold text-navy mb-3">Our Mission</h3>
@@ -83,7 +83,7 @@ export default async function AutismPage() {
               </p>
             </div>
             <div className="card-hover bg-white rounded-3xl border border-gray-100 p-8">
-              <div className="w-14 h-14 bg-gradient-to-br from-teal to-teal-light rounded-2xl flex items-center justify-center text-white mb-5 shadow-lg">
+              <div className="w-14 h-14 bg-gradient-to-br from-[#0891b2] to-[#06b6d4] rounded-2xl flex items-center justify-center text-white mb-5 shadow-lg">
                 <Users size={24} />
               </div>
               <h3 className="font-heading text-xl font-extrabold text-navy mb-3">Who Can Join</h3>
@@ -105,12 +105,12 @@ export default async function AutismPage() {
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { icon: Stethoscope, title: "Free Consultation", desc: "Initial Ayurvedic assessment and personalised consultation for each registrant.", color: "from-navy to-teal" },
-              { icon: Brain, title: "Panchakarma Therapy", desc: "Abhyanga, Shirodhara, Nasya, and Basti therapies tailored to individual constitution.", color: "from-maroon to-maroon-light" },
+              { icon: Stethoscope, title: "Free Consultation", desc: "Initial Ayurvedic assessment and personalised consultation for each registrant.", color: "from-[#0891b2] to-[#06b6d4]" },
+              { icon: Brain, title: "Panchakarma Therapy", desc: "Abhyanga, Shirodhara, Nasya, and Basti therapies tailored to individual constitution.", color: "from-rose-500 to-rose-400" },
               { icon: HandHeart, title: "Family Support", desc: "Counselling, caregiver training, and awareness workshops for affected families.", color: "from-teal to-teal-light" },
-              { icon: BookOpen, title: "Awareness Workshops", desc: "Educational sessions on ASD, early intervention, and Ayurvedic approaches.", color: "from-navy to-navy-600" },
+              { icon: BookOpen, title: "Awareness Workshops", desc: "Educational sessions on ASD, early intervention, and Ayurvedic approaches.", color: "from-[#0e7490] to-[#0891b2]" },
               { icon: ClipboardCheck, title: "Ongoing Monitoring", desc: "Regular follow-ups, progress tracking, and therapy adjustments as needed.", color: "from-gold to-gold-light" },
-              { icon: Users, title: "Community Building", desc: "Support groups connecting families, practitioners, and special educators.", color: "from-maroon to-maroon" },
+              { icon: Users, title: "Community Building", desc: "Support groups connecting families, practitioners, and special educators.", color: "from-rose-400 to-pink-400" },
             ].map((service, i) => (
               <div key={i} className="card-hover bg-white rounded-3xl border border-gray-100 p-8 text-center group">
                 <div className={`w-16 h-16 bg-gradient-to-br ${service.color} rounded-2xl flex items-center justify-center text-white mx-auto mb-5 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
@@ -141,7 +141,7 @@ export default async function AutismPage() {
               <div key={i} className="card-hover bg-white rounded-3xl border border-gray-100 p-8 relative group">
                 <div className="font-heading text-6xl font-extrabold text-navy/5 absolute top-4 right-4">{step.s}</div>
                 <div className="relative z-10">
-                  <div className="w-12 h-12 bg-gradient-to-br from-maroon to-maroon-light rounded-xl flex items-center justify-center text-gold text-sm font-heading font-extrabold mb-4 shadow-md">
+                  <div className="w-12 h-12 bg-gradient-to-br from-[#0891b2] to-[#06b6d4] rounded-xl flex items-center justify-center text-white text-sm font-heading font-extrabold mb-4 shadow-md">
                     {step.s}
                   </div>
                   <h3 className="font-heading text-lg font-extrabold text-navy mb-2">{step.t}</h3>
@@ -181,17 +181,17 @@ export default async function AutismPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-24 relative overflow-hidden" style={{ background: "linear-gradient(135deg, #7c1d1d, #0a1628)" }}>
+      <section className="py-24 relative overflow-hidden bg-gradient-to-br from-rose-400 via-[#0891b2] to-[#06b6d4]">
         <div className="absolute inset-0">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-gold/10 rounded-full blur-[120px]" />
-          <div className="absolute bottom-0 left-0 w-72 h-72 bg-maroon/10 rounded-full blur-[100px]" />
+          <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-[120px]" />
+          <div className="absolute bottom-0 left-0 w-72 h-72 bg-rose-300/10 rounded-full blur-[100px]" />
         </div>
         <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
-          <Heart size={40} className="text-gold mx-auto mb-6" />
+          <Heart size={40} className="text-white mx-auto mb-6" />
           <h2 className="font-heading text-4xl md:text-5xl font-extrabold text-white mb-5 leading-tight">
             Join the Programme Today
           </h2>
-          <p className="text-white/40 text-lg mb-10 max-w-2xl mx-auto">
+          <p className="text-white/60 text-lg mb-10 max-w-2xl mx-auto">
             Free Ayurvedic support for families affected by Autism Spectrum Disorder. Every child deserves compassionate care.
           </p>
           <Link href="/autism/register" className="btn-gold text-lg !py-4 !px-10">Pre-Register Now <ArrowRight size={20} /></Link>

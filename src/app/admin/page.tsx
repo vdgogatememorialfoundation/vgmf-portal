@@ -149,7 +149,7 @@ export default async function AdminDashboard() {
   const quickActions = [
     { label: "Add Product", href: "/admin/products", icon: Package, color: "bg-amber-50 text-amber-700 hover:bg-amber-100 ring-1 ring-amber-200" },
     { label: "Create Event", href: "/admin/events", icon: Calendar, color: "bg-rose-50 text-rose-700 hover:bg-rose-100 ring-1 ring-rose-200" },
-    { label: "New Announcement", href: "/admin/announcements", icon: Megaphone, color: "bg-blue-50 text-blue-700 hover:bg-blue-100 ring-1 ring-blue-200" },
+    { label: "New Announcement", href: "/admin/announcements", icon: Megaphone, color: "bg-teal-50 text-teal-700 hover:bg-teal-100 ring-1 ring-teal-200" },
   ];
 
   return (
@@ -167,14 +167,14 @@ export default async function AdminDashboard() {
         <div className="flex items-center gap-2">
           <Link
             href="/admin/orders"
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-navy bg-white border border-cream-dark hover:bg-cream/50 hover:border-navy/10 transition-all duration-200 shadow-sm"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-navy bg-white border border-slate-200 hover:bg-slate-50 hover:border-teal/30 transition-all duration-200 shadow-sm"
           >
             <ShoppingBag size={16} />
             View Orders
           </Link>
           <Link
             href="/admin/announcements"
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-navy to-navy-light hover:shadow-lg hover:shadow-navy/20 hover:-translate-y-0.5 transition-all duration-200"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-teal to-cyan-500 hover:shadow-lg hover:shadow-teal/20 hover:-translate-y-0.5 transition-all duration-200"
           >
             <Plus size={16} />
             New Post
@@ -187,7 +187,7 @@ export default async function AdminDashboard() {
         {stats.map((stat) => (
           <div
             key={stat.label}
-            className="bg-white rounded-2xl border border-cream-dark p-4 lg:p-5 hover:shadow-lg hover:shadow-navy/[0.04] hover:-translate-y-0.5 transition-all duration-300 group"
+            className="bg-white rounded-2xl border border-slate-200 p-4 lg:p-5 hover:shadow-lg hover:shadow-teal/[0.06] hover:-translate-y-0.5 transition-all duration-300 group"
           >
             <div className={`w-10 h-10 rounded-xl ${stat.bg} flex items-center justify-center mb-3`}>
               <stat.icon size={20} className={stat.iconColor} />
@@ -203,7 +203,7 @@ export default async function AdminDashboard() {
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-white rounded-2xl border border-cream-dark p-5 lg:p-6">
+      <div className="bg-white rounded-2xl border border-slate-200 p-5 lg:p-6">
         <h3 className="font-heading text-base font-bold text-navy mb-4">Quick Actions</h3>
         <div className="flex flex-wrap gap-3">
           {quickActions.map((action) => (
@@ -222,7 +222,7 @@ export default async function AdminDashboard() {
       {/* Registrations Overview + Recent Activity */}
       <div className="grid lg:grid-cols-3 gap-4 lg:gap-6">
         {/* Registration Breakdown */}
-        <div className="bg-white rounded-2xl border border-cream-dark p-5 lg:p-6">
+        <div className="bg-white rounded-2xl border border-slate-200 p-5 lg:p-6">
           <div className="flex items-center justify-between mb-5">
             <h3 className="font-heading text-base font-bold text-navy">Registrations</h3>
             <span className="text-xs text-muted font-medium">
@@ -241,7 +241,7 @@ export default async function AdminDashboard() {
                   </div>
                   <span className="text-sm font-bold text-navy">{reg.count.toLocaleString("en-IN")}</span>
                 </div>
-                <div className="w-full h-2 bg-cream rounded-full overflow-hidden">
+                <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
                   <div
                     className={`h-full rounded-full transition-all duration-700 ease-out ${
                       reg.color
@@ -253,12 +253,12 @@ export default async function AdminDashboard() {
             ))}
           </div>
           {/* Sub-stats */}
-          <div className="mt-6 pt-4 border-t border-cream-dark grid grid-cols-2 gap-3">
-            <div className="bg-cream/50 rounded-xl p-3">
+          <div className="mt-6 pt-4 border-t border-slate-100 grid grid-cols-2 gap-3">
+            <div className="bg-slate-50 rounded-xl p-3">
               <p className="text-[10px] font-semibold text-muted uppercase tracking-wider">Announcements</p>
               <p className="font-heading text-lg font-extrabold text-navy">{announcementsCount}</p>
             </div>
-            <div className="bg-cream/50 rounded-xl p-3">
+            <div className="bg-slate-50 rounded-xl p-3">
               <p className="text-[10px] font-semibold text-muted uppercase tracking-wider">Total Registrations</p>
               <p className="font-heading text-lg font-extrabold text-navy">
                 {(seminarRegsCount + fellowshipAppsCount + autismRegsCount).toLocaleString("en-IN")}
@@ -268,19 +268,19 @@ export default async function AdminDashboard() {
         </div>
 
         {/* Recent Orders */}
-        <div className="bg-white rounded-2xl border border-cream-dark p-5 lg:p-6">
+        <div className="bg-white rounded-2xl border border-slate-200 p-5 lg:p-6">
           <div className="flex items-center justify-between mb-5">
             <h3 className="font-heading text-base font-bold text-navy">Recent Orders</h3>
             <Link
               href="/admin/orders"
-              className="text-xs font-semibold text-gold hover:text-gold-light transition-colors flex items-center gap-1"
+              className="text-xs font-semibold text-teal hover:text-teal-700 transition-colors flex items-center gap-1"
             >
               View All <ArrowRight size={12} />
             </Link>
           </div>
           {recentOrders.length === 0 ? (
             <div className="text-center py-8">
-              <ShoppingBag size={32} className="mx-auto text-cream-dark mb-2" />
+              <ShoppingBag size={32} className="mx-auto text-slate-200 mb-2" />
               <p className="text-sm text-muted">No orders yet</p>
             </div>
           ) : (
@@ -288,7 +288,7 @@ export default async function AdminDashboard() {
               {recentOrders.map((order) => (
                 <div
                   key={order.id}
-                  className="flex items-center justify-between py-2.5 border-b border-cream-dark last:border-0 last:pb-0 first:pt-0"
+                  className="flex items-center justify-between py-2.5 border-b border-slate-100 last:border-0 last:pb-0 first:pt-0"
                 >
                   <div className="min-w-0 flex-1">
                     <p className="text-sm font-semibold text-navy font-mono text-xs truncate">
@@ -312,12 +312,12 @@ export default async function AdminDashboard() {
         </div>
 
         {/* Recent Registrations */}
-        <div className="bg-white rounded-2xl border border-cream-dark p-5 lg:p-6">
+        <div className="bg-white rounded-2xl border border-slate-200 p-5 lg:p-6">
           <div className="flex items-center justify-between mb-5">
             <h3 className="font-heading text-base font-bold text-navy">Recent Registrations</h3>
             <Link
               href="/admin/users"
-              className="text-xs font-semibold text-gold hover:text-gold-light transition-colors flex items-center gap-1"
+              className="text-xs font-semibold text-teal hover:text-teal-700 transition-colors flex items-center gap-1"
             >
               View All <ArrowRight size={12} />
             </Link>
@@ -326,7 +326,7 @@ export default async function AdminDashboard() {
           recentFellowshipApps.length === 0 &&
           recentAutismRegs.length === 0 ? (
             <div className="text-center py-8">
-              <UserPlus size={32} className="mx-auto text-cream-dark mb-2" />
+              <UserPlus size={32} className="mx-auto text-slate-200 mb-2" />
               <p className="text-sm text-muted">No registrations yet</p>
             </div>
           ) : (
@@ -360,7 +360,7 @@ export default async function AdminDashboard() {
                 .map((reg) => (
                   <div
                     key={reg.id}
-                    className="flex items-center gap-3 py-2 border-b border-cream-dark last:border-0 last:pb-0 first:pt-0"
+                    className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0 last:pb-0 first:pt-0"
                   >
                     <div className={`w-8 h-8 rounded-lg ${reg.accent} flex items-center justify-center flex-shrink-0`}>
                       <reg.icon size={14} />
@@ -383,11 +383,11 @@ export default async function AdminDashboard() {
       </div>
 
       {/* System Overview Bar */}
-      <div className="bg-gradient-to-r from-navy to-navy-light rounded-2xl p-5 lg:p-6 text-white">
+      <div className="bg-gradient-to-r from-teal to-cyan-500 rounded-2xl p-5 lg:p-6 text-white">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h3 className="font-heading text-base font-bold">Platform Overview</h3>
-            <p className="text-white/50 text-sm mt-0.5">
+            <p className="text-white/70 text-sm mt-0.5">
               {usersCount.toLocaleString("en-IN")} users &middot;{" "}
               {productsCount.toLocaleString("en-IN")} products &middot;{" "}
               {eventsCount.toLocaleString("en-IN")} events &middot;{" "}
@@ -395,8 +395,8 @@ export default async function AdminDashboard() {
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <TrendingUp size={18} className="text-gold" />
-            <span className="text-sm font-semibold text-gold">
+            <TrendingUp size={18} className="text-white" />
+            <span className="text-sm font-semibold text-white">
               {formatCurrency(totalRevenue)} revenue
             </span>
           </div>

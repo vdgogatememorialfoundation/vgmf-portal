@@ -70,7 +70,7 @@ export default function TrackFellowship() {
       case "INTERVIEW_SCHEDULED":
         return "bg-blue-50 text-blue-700";
       default:
-        return "bg-gold/10 text-gold";
+        return "bg-[#0891b2]/10 text-[#0891b2]";
     }
   };
 
@@ -88,7 +88,7 @@ export default function TrackFellowship() {
       </Link>
 
       <div className="text-center mb-10">
-        <span className="inline-block px-3 py-1 bg-gold/10 text-gold text-xs font-semibold rounded-full mb-4 tracking-wider uppercase">
+        <span className="inline-block px-3 py-1 bg-[#0891b2]/10 text-[#0891b2] text-xs font-semibold rounded-full mb-4 tracking-wider uppercase">
           Application Status
         </span>
         <h1 className="font-heading text-3xl md:text-4xl font-extrabold text-navy mb-2">
@@ -167,9 +167,9 @@ export default function TrackFellowship() {
                     <div
                       className={`w-9 h-9 sm:w-10 sm:h-10 mx-auto rounded-full flex items-center justify-center text-xs font-bold mb-1.5 transition-all ${
                         isActive
-                          ? "bg-navy text-white shadow-lg shadow-navy/20"
+                          ? "bg-[#0891b2] text-white shadow-lg shadow-[#0891b2]/20"
                           : "bg-gray-100 text-muted"
-                      } ${isCurrent ? "ring-4 ring-offset-2 ring-navy/20" : ""}`}
+                      } ${isCurrent ? "ring-4 ring-offset-2 ring-[#0891b2]/20" : ""}`}
                     >
                       {isActive ? (
                         <CheckCircle size={16} />

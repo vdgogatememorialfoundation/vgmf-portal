@@ -179,7 +179,7 @@ export default function CheckoutPage() {
                 step > i + 1
                   ? "bg-emerald-accent text-white"
                   : step === i + 1
-                  ? "bg-navy text-white shadow-lg shadow-navy/20"
+                  ? "bg-[#0891b2] text-white shadow-lg shadow-[#0891b2]/20"
                   : "bg-gray-100 text-muted"
               }`}
             >
@@ -256,7 +256,7 @@ export default function CheckoutPage() {
                     key={opt.value}
                     className={`flex items-center gap-4 p-4 border-2 rounded-xl cursor-pointer transition-all ${
                       paymentMethod === opt.value
-                        ? "border-navy bg-navy/5"
+                        ? "border-[#0891b2] bg-[#0891b2]/5"
                         : "border-gray-100 hover:border-gray-200"
                     }`}
                   >
@@ -266,7 +266,7 @@ export default function CheckoutPage() {
                       value={opt.value}
                       checked={paymentMethod === opt.value}
                       onChange={(e) => setPaymentMethod(e.target.value)}
-                      className="accent-navy"
+                      className="accent-[#0891b2]"
                     />
                     <opt.icon size={20} className="text-navy" />
                     <span className="text-sm font-medium text-navy flex-1">
@@ -318,7 +318,7 @@ export default function CheckoutPage() {
                 key={item.id}
                 className="flex gap-3 py-2 border-b border-gray-50 last:border-0"
               >
-                <div className="w-12 h-12 bg-navy/5 rounded-lg flex items-center justify-center shrink-0">
+                <div className="w-12 h-12 bg-[#0891b2]/5 rounded-lg flex items-center justify-center shrink-0">
                   {item.thumbnailUrl ? (
                     <img
                       src={item.thumbnailUrl}

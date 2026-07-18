@@ -81,32 +81,29 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     <div className="min-h-screen bg-cream flex">
       {/* Desktop Sidebar */}
       <aside
-        className={`hidden lg:flex flex-col fixed h-screen z-40 transition-all duration-300 ease-out ${
+        className={`hidden lg:flex flex-col fixed h-screen z-40 transition-all duration-300 ease-out bg-white border-r border-slate-200 ${
           collapsed ? "w-[72px]" : "w-64"
         }`}
-        style={{
-          background: "linear-gradient(180deg, #0a1628 0%, #142240 100%)",
-        }}
       >
         {/* Logo */}
-        <div className={`border-b border-white/10 flex items-center ${collapsed ? "justify-center px-2 py-5" : "px-5 py-5"}`}>
+        <div className={`border-b border-slate-100 flex items-center ${collapsed ? "justify-center px-2 py-5" : "px-5 py-5"}`}>
           {!collapsed ? (
             <Link href="/admin" className="flex items-center gap-3 group">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-gold to-gold-light flex items-center justify-center flex-shrink-0 shadow-lg shadow-gold/20">
-                <span className="text-navy font-heading font-extrabold text-sm">V</span>
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-teal to-cyan-500 flex items-center justify-center flex-shrink-0 shadow-lg shadow-teal/20">
+                <span className="text-white font-heading font-extrabold text-sm">V</span>
               </div>
               <div className="overflow-hidden">
-                <h1 className="font-heading text-lg font-bold text-gold leading-tight tracking-tight">
+                <h1 className="font-heading text-lg font-bold text-navy leading-tight tracking-tight">
                   VGMF
                 </h1>
-                <p className="text-[10px] text-white/40 uppercase tracking-widest leading-none">
+                <p className="text-[10px] text-muted uppercase tracking-widest leading-none">
                   Admin Panel
                 </p>
               </div>
             </Link>
           ) : (
-            <Link href="/admin" className="w-9 h-9 rounded-xl bg-gradient-to-br from-gold to-gold-light flex items-center justify-center shadow-lg shadow-gold/20">
-              <span className="text-navy font-heading font-extrabold text-sm">V</span>
+            <Link href="/admin" className="w-9 h-9 rounded-xl bg-gradient-to-br from-teal to-cyan-500 flex items-center justify-center shadow-lg shadow-teal/20">
+              <span className="text-white font-heading font-extrabold text-sm">V</span>
             </Link>
           )}
         </div>
@@ -123,24 +120,24 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   collapsed ? "justify-center px-2 py-3" : "px-3 py-2.5"
                 } ${
                   active
-                    ? "bg-gold/10 text-gold"
-                    : "text-white/50 hover:text-white hover:bg-white/[0.06]"
+                    ? "bg-teal/10 text-teal"
+                    : "text-ink-soft hover:text-navy hover:bg-slate-50"
                 }`}
                 title={collapsed ? link.label : undefined}
               >
                 {active && (
-                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 bg-gold rounded-r-full" />
+                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 bg-teal rounded-r-full" />
                 )}
                 <link.icon
                   size={20}
                   className={`flex-shrink-0 transition-colors duration-200 ${
-                    active ? "text-gold" : "text-white/50 group-hover:text-white/80"
+                    active ? "text-teal" : "text-muted group-hover:text-navy"
                   }`}
                 />
                 {!collapsed && (
                   <span
                     className={`text-sm font-medium transition-colors duration-200 ${
-                      active ? "text-gold font-semibold" : ""
+                      active ? "text-teal font-semibold" : ""
                     }`}
                   >
                     {link.label}
@@ -152,10 +149,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </nav>
 
         {/* Back to Site + Collapse Toggle */}
-        <div className="border-t border-white/10 p-3 space-y-1">
+        <div className="border-t border-slate-100 p-3 space-y-1">
           <Link
             href="/"
-            className={`flex items-center gap-2.5 rounded-xl text-white/40 hover:text-white hover:bg-white/[0.06] transition-all duration-200 ${
+            className={`flex items-center gap-2.5 rounded-xl text-muted hover:text-navy hover:bg-slate-50 transition-all duration-200 ${
               collapsed ? "justify-center px-2 py-2.5" : "px-3 py-2.5"
             }`}
             title={collapsed ? "Back to Site" : undefined}
@@ -165,7 +162,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </Link>
           <button
             onClick={() => setCollapsed(!collapsed)}
-            className="w-full flex items-center gap-2.5 rounded-xl text-white/30 hover:text-white/60 hover:bg-white/[0.04] transition-all duration-200 px-3 py-2"
+            className="w-full flex items-center gap-2.5 rounded-xl text-muted hover:text-navy hover:bg-slate-50 transition-all duration-200 px-3 py-2"
           >
             {collapsed ? (
               <ChevronRight size={18} className="mx-auto" />
@@ -186,7 +183,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         }`}
       >
         {/* Top Header Bar */}
-        <header className="sticky top-0 z-30 bg-white/80 backdrop-blur-xl border-b border-cream-dark">
+        <header className="sticky top-0 z-30 bg-white/90 backdrop-blur-xl border-b border-slate-200">
           <div className="flex items-center justify-between px-4 lg:px-6 h-16">
             {/* Left: Page Title */}
             <div className="flex items-center gap-3">
@@ -203,8 +200,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   onClick={() => setSearchOpen(!searchOpen)}
                   className={`flex items-center gap-2 rounded-xl border transition-all duration-200 ${
                     searchOpen
-                      ? "w-64 border-gold/40 bg-white shadow-sm"
-                      : "w-10 h-10 border-cream-dark bg-cream/50 hover:bg-cream"
+                      ? "w-64 border-teal/40 bg-white shadow-sm"
+                      : "w-10 h-10 border-slate-200 bg-slate-50 hover:bg-slate-100"
                   }`}
                 >
                   <Search
@@ -223,7 +220,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               </div>
 
               {/* Notifications */}
-              <button className="relative w-10 h-10 flex items-center justify-center rounded-xl border border-cream-dark bg-cream/50 hover:bg-cream transition-colors">
+              <button className="relative w-10 h-10 flex items-center justify-center rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 transition-colors">
                 <Bell size={18} className="text-muted" />
                 <span className="absolute top-2 right-2 w-2 h-2 bg-danger rounded-full ring-2 ring-white" />
               </button>
@@ -232,10 +229,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <div className="relative" ref={profileRef}>
                 <button
                   onClick={() => setProfileOpen(!profileOpen)}
-                  className="flex items-center gap-2.5 pl-1 pr-3 py-1 rounded-xl hover:bg-cream/80 transition-colors"
+                  className="flex items-center gap-2.5 pl-1 pr-3 py-1 rounded-xl hover:bg-slate-50 transition-colors"
                 >
-                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-navy to-navy-light flex items-center justify-center shadow-sm">
-                    <span className="text-gold font-heading font-bold text-xs">A</span>
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-teal to-cyan-500 flex items-center justify-center shadow-sm">
+                    <span className="text-white font-heading font-bold text-xs">A</span>
                   </div>
                   <div className="hidden sm:block text-left">
                     <p className="text-xs font-semibold text-navy leading-tight">Admin</p>
@@ -244,14 +241,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 </button>
 
                 {profileOpen && (
-                  <div className="absolute right-0 top-full mt-2 w-52 bg-white rounded-xl shadow-xl border border-cream-dark py-1.5 animate-scale-in">
-                    <div className="px-4 py-2.5 border-b border-cream-dark">
+                  <div className="absolute right-0 top-full mt-2 w-52 bg-white rounded-xl shadow-xl border border-slate-200 py-1.5 animate-scale-in">
+                    <div className="px-4 py-2.5 border-b border-slate-100">
                       <p className="text-sm font-semibold text-navy">Admin</p>
                       <p className="text-xs text-muted">admin@vgmf.org</p>
                     </div>
                     <Link
                       href="/admin/settings"
-                      className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-ink-soft hover:bg-cream/60 transition-colors"
+                      className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-ink-soft hover:bg-slate-50 transition-colors"
                       onClick={() => setProfileOpen(false)}
                     >
                       <Settings size={16} /> Settings
@@ -276,7 +273,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </div>
 
       {/* Mobile Bottom Navigation */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-xl border-t border-cream-dark safe-area-bottom">
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-xl border-t border-slate-200 safe-area-bottom">
         <div className="flex items-center justify-around px-2 py-1.5">
           {sidebarLinks.slice(0, 5).map((link) => {
             const active = isActive(link.href);
@@ -286,16 +283,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 href={link.href}
                 className={`flex flex-col items-center gap-1 px-3 py-1.5 rounded-xl min-w-[56px] transition-all duration-200 ${
                   active
-                    ? "text-gold"
+                    ? "text-teal"
                     : "text-muted hover:text-navy"
                 }`}
               >
                 <div className={`relative p-1 rounded-xl transition-colors ${
-                  active ? "bg-gold/10" : ""
+                  active ? "bg-teal/10" : ""
                 }`}>
                   <link.icon size={20} />
                   {active && (
-                    <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-gold rounded-full" />
+                    <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-teal rounded-full" />
                   )}
                 </div>
                 <span className="text-[10px] font-medium">{link.label}</span>
@@ -307,7 +304,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             className="flex flex-col items-center gap-1 px-3 py-1.5 rounded-xl min-w-[56px] text-muted hover:text-navy transition-colors"
             onClick={(e) => {
               e.preventDefault();
-              // Could open a "more" drawer in the future
             }}
           >
             <div className="p-1">

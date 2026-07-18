@@ -97,7 +97,7 @@ export default function SeminarRegisterPage() {
             email will be sent shortly.
           </p>
           {ticketNumber && (
-            <div className="bg-navy/5 rounded-2xl p-5 mb-6">
+            <div className="bg-teal/5 rounded-2xl p-5 mb-6">
               <p className="text-xs text-muted uppercase tracking-wider mb-1">
                 Ticket Number
               </p>
@@ -160,7 +160,7 @@ export default function SeminarRegisterPage() {
 
         {/* Event Preview */}
         {selectedEvent && (
-          <div className="bg-navy/5 rounded-xl p-4 border border-navy/10">
+          <div className="bg-teal/5 rounded-xl p-4 border border-[#0891b2]/10">
             <h3 className="font-heading font-bold text-navy mb-2">
               {selectedEvent.title}
             </h3>
@@ -251,7 +251,7 @@ export default function SeminarRegisterPage() {
                       value={opt}
                       checked={form.accommodation === opt}
                       onChange={(e) => updateField("accommodation", e.target.value)}
-                      className="accent-navy"
+                      className="accent-[#0891b2]"
                     />
                     <span className="text-sm capitalize font-medium text-ink-soft">
                       {opt}

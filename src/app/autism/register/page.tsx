@@ -193,7 +193,7 @@ export default function AutismRegisterPage() {
               <div
                 className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center shrink-0 transition-all ${
                   step >= s.num
-                    ? "bg-navy text-white shadow-lg shadow-navy/20"
+                    ? "bg-[#0891b2] text-white shadow-lg shadow-[#0891b2]/20"
                     : "bg-gray-100 text-muted"
                 }`}
               >
@@ -213,7 +213,7 @@ export default function AutismRegisterPage() {
               {i < SECTIONS.length - 1 && (
                 <div
                   className={`h-0.5 flex-1 rounded-full ${
-                    step > s.num ? "bg-navy" : "bg-gray-200"
+                    step > s.num ? "bg-[#0891b2]" : "bg-gray-200"
                   }`}
                 />
               )}
@@ -473,7 +473,7 @@ export default function AutismRegisterPage() {
             </div>
 
             {/* Summary */}
-            <div className="bg-navy/5 rounded-xl p-5 space-y-2 text-sm">
+            <div className="bg-teal/5 rounded-xl p-5 space-y-2 text-sm">
               <h3 className="font-heading font-bold text-navy mb-3">
                 Registration Summary
               </h3>

@@ -176,7 +176,7 @@ export default function TrackingPage() {
 
             {/* Estimated Delivery */}
             {order.status !== "DELIVERED" && order.estimatedDelivery && (
-              <div className="bg-gradient-to-r from-navy to-navy-light text-white rounded-xl p-5 mb-5">
+              <div className="bg-gradient-to-r from-[#0891b2] to-[#06b6d4] text-white rounded-xl p-5 mb-5">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center">
                     <Calendar size={24} className="text-gold" />
@@ -352,7 +352,7 @@ export default function TrackingPage() {
                     key={index}
                     className="flex gap-3 pb-4 border-b border-gray-50 last:border-0"
                   >
-                    <div className="w-2.5 h-2.5 rounded-full bg-navy mt-1.5 shrink-0" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#0891b2] mt-1.5 shrink-0" />
                     <div className="flex-1">
                       <p className="font-semibold text-ink text-sm">
                         {event.description}

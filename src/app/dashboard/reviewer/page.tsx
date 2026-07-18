@@ -70,7 +70,7 @@ export default function ReviewerDashboard() {
   if (authStatus === "loading") {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
-        <Loader2 size={32} className="text-gold animate-spin" />
+        <Loader2 size={32} className="text-[#0891b2] animate-spin" />
       </div>
     );
   }
@@ -114,7 +114,7 @@ export default function ReviewerDashboard() {
         ].map((s) => (
           <div key={s.label} className="bg-white rounded-2xl border border-gray-100 p-6 card-hover">
             <div className="flex items-center gap-4">
-              <div className={`w-12 h-12 bg-gradient-to-br ${s.color} rounded-xl flex items-center justify-center text-white shadow-md`}>
+                <div className={`w-12 h-12 bg-gradient-to-br ${s.color} rounded-xl flex items-center justify-center text-white shadow-md ring-0`}>
                 <s.icon size={20} />
               </div>
               <div>
@@ -160,7 +160,7 @@ export default function ReviewerDashboard() {
                   <tr key={app.id} className="hover:bg-cream-dark/50 transition-colors">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 bg-navy/5 rounded-xl flex items-center justify-center shrink-0">
+                        <div className="w-9 h-9 bg-[#0891b2]/5 rounded-xl flex items-center justify-center shrink-0">
                           <User size={14} className="text-navy" />
                         </div>
                         <div className="min-w-0">

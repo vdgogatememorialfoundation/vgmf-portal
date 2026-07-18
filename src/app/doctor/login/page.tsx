@@ -57,23 +57,23 @@ export default function DoctorLogin() {
 
   return (
     <div className="min-h-screen flex">
-      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-gradient-to-br from-emerald-accent via-teal to-navy">
+      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-gradient-to-br from-[#0891b2] via-emerald-500 to-teal-300">
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-20 left-20 w-72 h-72 bg-gold rounded-full blur-3xl" />
-          <div className="absolute bottom-20 right-20 w-96 h-96 bg-white rounded-full blur-3xl" />
+          <div className="absolute top-20 left-20 w-72 h-72 bg-white rounded-full blur-3xl" />
+          <div className="absolute bottom-20 right-20 w-96 h-96 bg-[#d97706] rounded-full blur-3xl" />
         </div>
         <div className="relative z-10 flex flex-col justify-center px-16 text-white">
-          <Link href="/" className="inline-flex items-center gap-2 text-gold/80 hover:text-gold mb-12 transition-colors text-sm font-medium">
+          <Link href="/" className="inline-flex items-center gap-2 text-white/70 hover:text-white mb-12 transition-colors text-sm font-medium">
             <ArrowLeft size={16} />
             Back to Home
           </Link>
-          <div className="w-20 h-20 bg-white/10 border-2 border-white/20 rounded-2xl flex items-center justify-center mb-8">
-            <Stethoscope className="text-gold" size={36} />
+          <div className="w-20 h-20 bg-white/15 border-2 border-white/25 rounded-2xl flex items-center justify-center mb-8">
+            <Stethoscope className="text-white" size={36} />
           </div>
           <h1 className="font-heading text-4xl xl:text-5xl font-extrabold leading-tight mb-4">
-            Doctor <span className="text-gold">Portal</span>
+            Doctor <span className="text-[#d97706]">Portal</span>
           </h1>
-          <p className="text-white/60 text-lg max-w-md leading-relaxed">
+          <p className="text-white/70 text-lg max-w-md leading-relaxed">
             Access your medical dashboard to manage patient records, camp schedules, and healthcare delivery.
           </p>
           <div className="mt-12 space-y-4">
@@ -84,7 +84,7 @@ export default function DoctorLogin() {
               "Access medical records securely",
             ].map((item) => (
               <div key={item} className="flex items-center gap-3">
-                <div className="w-1.5 h-1.5 rounded-full bg-gold shrink-0" />
+                <div className="w-1.5 h-1.5 rounded-full bg-[#d97706] shrink-0" />
                 <span className="text-white/70 text-sm">{item}</span>
               </div>
             ))}
@@ -92,31 +92,31 @@ export default function DoctorLogin() {
         </div>
       </div>
 
-      <div className="w-full lg:w-1/2 flex items-center justify-center bg-cream px-6 py-12">
+      <div className="w-full lg:w-1/2 flex items-center justify-center bg-[#f8fafc] px-6 py-12">
         <div className="w-full max-w-md">
-          <Link href="/" className="lg:hidden inline-flex items-center gap-2 text-muted hover:text-navy mb-8 transition-colors text-sm font-medium">
+          <Link href="/" className="lg:hidden inline-flex items-center gap-2 text-[#1e293b]/60 hover:text-[#1e293b] mb-8 transition-colors text-sm font-medium">
             <ArrowLeft size={16} />
             Back to Home
           </Link>
 
           <div className="lg:hidden flex items-center gap-3 mb-8">
-            <div className="w-12 h-12 bg-emerald-accent rounded-xl flex items-center justify-center">
+            <div className="w-12 h-12 bg-[#0891b2] rounded-xl flex items-center justify-center">
               <Stethoscope className="text-white" size={22} />
             </div>
-            <span className="font-heading text-xl font-bold text-navy">VGMF Doctor</span>
+            <span className="font-heading text-xl font-bold text-[#1e293b]">VGMF Doctor</span>
           </div>
 
           <div className="mb-8">
-            <div className="w-14 h-14 bg-emerald-accent rounded-2xl flex items-center justify-center mb-4">
+            <div className="w-14 h-14 bg-[#0891b2] rounded-2xl flex items-center justify-center mb-4">
               <Stethoscope className="text-white" size={28} />
             </div>
-            <h1 className="font-heading text-3xl font-extrabold text-navy mb-2">Doctor Login</h1>
-            <p className="text-muted">VGMF Medical Portal</p>
+            <h1 className="font-heading text-3xl font-extrabold text-[#1e293b] mb-2">Doctor Login</h1>
+            <p className="text-[#1e293b]/60">VGMF Medical Portal</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-xs font-semibold text-muted uppercase tracking-wider mb-1.5">Doctor Email</label>
+              <label className="block text-xs font-semibold text-[#1e293b]/60 uppercase tracking-wider mb-1.5">Doctor Email</label>
               <input
                 type="email"
                 value={email}
@@ -128,7 +128,7 @@ export default function DoctorLogin() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-muted uppercase tracking-wider mb-1.5">Password</label>
+              <label className="block text-xs font-semibold text-[#1e293b]/60 uppercase tracking-wider mb-1.5">Password</label>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -141,7 +141,7 @@ export default function DoctorLogin() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-navy transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#1e293b]/60 hover:text-[#1e293b] transition-colors"
                 >
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
@@ -168,9 +168,9 @@ export default function DoctorLogin() {
           </form>
 
           <div className="mt-6 text-center">
-            <p className="text-sm text-muted">
+            <p className="text-sm text-[#1e293b]/60">
               Not a doctor?{" "}
-              <Link href="/login" className="text-navy font-semibold hover:underline">
+              <Link href="/login" className="text-[#0891b2] font-semibold hover:underline">
                 User Login
               </Link>
             </p>

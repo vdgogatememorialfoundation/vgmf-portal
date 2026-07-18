@@ -72,7 +72,7 @@ export default function CartPage() {
     return (
       <div className="max-w-2xl mx-auto px-4 py-20 text-center">
         <div className="bg-white rounded-3xl border border-gray-100 p-12 shadow-sm">
-          <div className="w-20 h-20 bg-navy/5 rounded-2xl flex items-center justify-center mx-auto mb-6">
+          <div className="w-20 h-20 bg-[#0891b2]/5 rounded-2xl flex items-center justify-center mx-auto mb-6">
             <ShoppingCart size={36} className="text-muted" />
           </div>
           <h1 className="font-heading text-3xl font-extrabold text-navy mb-4">

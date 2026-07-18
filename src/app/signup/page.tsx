@@ -91,23 +91,23 @@ export default function SignupPage() {
 
   return (
     <div className="min-h-screen flex">
-      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-gradient-to-br from-navy via-navy-light to-teal">
+      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-gradient-to-br from-[#0891b2] via-cyan-500 to-teal-300">
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-20 left-20 w-72 h-72 bg-gold rounded-full blur-3xl" />
-          <div className="absolute bottom-20 right-20 w-96 h-96 bg-gold rounded-full blur-3xl" />
+          <div className="absolute top-20 left-20 w-72 h-72 bg-white rounded-full blur-3xl" />
+          <div className="absolute bottom-20 right-20 w-96 h-96 bg-[#d97706] rounded-full blur-3xl" />
         </div>
         <div className="relative z-10 flex flex-col justify-center px-16 text-white">
-          <Link href="/" className="inline-flex items-center gap-2 text-gold/80 hover:text-gold mb-12 transition-colors text-sm font-medium">
+          <Link href="/" className="inline-flex items-center gap-2 text-white/70 hover:text-white mb-12 transition-colors text-sm font-medium">
             <ArrowLeft size={16} />
             Back to Home
           </Link>
-          <div className="w-20 h-20 bg-gold/10 border-2 border-gold/30 rounded-2xl flex items-center justify-center mb-8">
-            <span className="font-heading text-3xl font-extrabold text-gold">VG</span>
+          <div className="w-20 h-20 bg-white/15 border-2 border-white/25 rounded-2xl flex items-center justify-center mb-8">
+            <span className="font-heading text-3xl font-extrabold text-white">VG</span>
           </div>
           <h1 className="font-heading text-4xl xl:text-5xl font-extrabold leading-tight mb-4">
-            Join <span className="text-gold">VGMF</span> Today
+            Join <span className="text-[#d97706]">VGMF</span> Today
           </h1>
-          <p className="text-white/60 text-lg max-w-md leading-relaxed">
+          <p className="text-white/70 text-lg max-w-md leading-relaxed">
             Be part of a movement transforming healthcare access for underserved communities across India.
           </p>
           <div className="mt-12 space-y-4">
@@ -117,7 +117,7 @@ export default function SignupPage() {
               "Track your applications in real-time",
             ].map((item) => (
               <div key={item} className="flex items-center gap-3">
-                <CheckCircle2 size={18} className="text-gold shrink-0" />
+                <CheckCircle2 size={18} className="text-[#d97706] shrink-0" />
                 <span className="text-white/70 text-sm">{item}</span>
               </div>
             ))}
@@ -125,35 +125,35 @@ export default function SignupPage() {
         </div>
       </div>
 
-      <div className="w-full lg:w-1/2 flex items-center justify-center bg-cream px-6 py-12">
+      <div className="w-full lg:w-1/2 flex items-center justify-center bg-[#f8fafc] px-6 py-12">
         <div className="w-full max-w-md">
-          <Link href="/" className="lg:hidden inline-flex items-center gap-2 text-muted hover:text-navy mb-8 transition-colors text-sm font-medium">
+          <Link href="/" className="lg:hidden inline-flex items-center gap-2 text-[#1e293b]/60 hover:text-[#1e293b] mb-8 transition-colors text-sm font-medium">
             <ArrowLeft size={16} />
             Back to Home
           </Link>
 
           <div className="lg:hidden flex items-center gap-3 mb-8">
-            <div className="w-12 h-12 bg-navy rounded-xl flex items-center justify-center">
-              <span className="font-heading text-xl font-extrabold text-gold">VG</span>
+            <div className="w-12 h-12 bg-[#0891b2] rounded-xl flex items-center justify-center">
+              <span className="font-heading text-xl font-extrabold text-white">VG</span>
             </div>
-            <span className="font-heading text-xl font-bold text-navy">VGMF</span>
+            <span className="font-heading text-xl font-bold text-[#1e293b]">VGMF</span>
           </div>
 
           <div className="mb-8">
-            <h1 className="font-heading text-3xl font-extrabold text-navy mb-2">Create Account</h1>
-            <p className="text-muted">Join the VGMF community</p>
+            <h1 className="font-heading text-3xl font-extrabold text-[#1e293b] mb-2">Create Account</h1>
+            <p className="text-[#1e293b]/60">Join the VGMF community</p>
           </div>
 
           <div className="flex items-center gap-3 mb-8">
-            <div className={`flex items-center gap-2 ${step >= 1 ? "text-navy" : "text-muted"}`}>
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-colors ${step >= 1 ? "bg-navy text-white" : "bg-gray-200 text-muted"}`}>
+            <div className={`flex items-center gap-2 ${step >= 1 ? "text-[#0891b2]" : "text-[#1e293b]/60"}`}>
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-colors ${step >= 1 ? "bg-[#0891b2] text-white" : "bg-gray-200 text-[#1e293b]/60"}`}>
                 {step > 1 ? <CheckCircle2 size={16} /> : "1"}
               </div>
               <span className="text-sm font-medium hidden sm:inline">Verify</span>
             </div>
-            <div className={`flex-1 h-0.5 transition-colors ${step >= 2 ? "bg-navy" : "bg-gray-200"}`} />
-            <div className={`flex items-center gap-2 ${step >= 2 ? "text-navy" : "text-muted"}`}>
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-colors ${step >= 2 ? "bg-navy text-white" : "bg-gray-200 text-muted"}`}>
+            <div className={`flex-1 h-0.5 transition-colors ${step >= 2 ? "bg-[#0891b2]" : "bg-gray-200"}`} />
+            <div className={`flex items-center gap-2 ${step >= 2 ? "text-[#0891b2]" : "text-[#1e293b]/60"}`}>
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-colors ${step >= 2 ? "bg-[#0891b2] text-white" : "bg-gray-200 text-[#1e293b]/60"}`}>
                 2
               </div>
               <span className="text-sm font-medium hidden sm:inline">Details</span>
@@ -163,9 +163,9 @@ export default function SignupPage() {
           {step === 1 && (
             <form onSubmit={handleSendOtp} className="space-y-5">
               <div>
-                <label className="block text-xs font-semibold text-muted uppercase tracking-wider mb-1.5">Full Name</label>
+                <label className="block text-xs font-semibold text-[#1e293b]/60 uppercase tracking-wider mb-1.5">Full Name</label>
                 <div className="relative">
-                  <User size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
+                  <User size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#1e293b]/40" />
                   <input
                     type="text"
                     value={form.name}
@@ -177,9 +177,9 @@ export default function SignupPage() {
                 </div>
               </div>
               <div>
-                <label className="block text-xs font-semibold text-muted uppercase tracking-wider mb-1.5">Email Address</label>
+                <label className="block text-xs font-semibold text-[#1e293b]/60 uppercase tracking-wider mb-1.5">Email Address</label>
                 <div className="relative">
-                  <Mail size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
+                  <Mail size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#1e293b]/40" />
                   <input
                     type="email"
                     value={form.email}
@@ -212,12 +212,12 @@ export default function SignupPage() {
 
           {step === 2 && (
             <form onSubmit={handleVerify} className="space-y-5">
-              <div className="bg-navy/5 rounded-xl p-4 text-center">
-                <p className="text-sm text-muted">Verification code sent to</p>
-                <p className="text-sm font-semibold text-navy">{form.email}</p>
+              <div className="bg-[#0891b2]/5 rounded-xl p-4 text-center">
+                <p className="text-sm text-[#1e293b]/60">Verification code sent to</p>
+                <p className="text-sm font-semibold text-[#0891b2]">{form.email}</p>
               </div>
               <div>
-                <label className="block text-xs font-semibold text-muted uppercase tracking-wider mb-1.5">Verification Code</label>
+                <label className="block text-xs font-semibold text-[#1e293b]/60 uppercase tracking-wider mb-1.5">Verification Code</label>
                 <input
                   type="text"
                   value={otp}
@@ -229,9 +229,9 @@ export default function SignupPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-muted uppercase tracking-wider mb-1.5">Password</label>
+                <label className="block text-xs font-semibold text-[#1e293b]/60 uppercase tracking-wider mb-1.5">Password</label>
                 <div className="relative">
-                  <Lock size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
+                  <Lock size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#1e293b]/40" />
                   <input
                     type={showPassword ? "text" : "password"}
                     value={form.password}
@@ -243,16 +243,16 @@ export default function SignupPage() {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-navy transition-colors"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#1e293b]/60 hover:text-[#1e293b] transition-colors"
                   >
                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                   </button>
                 </div>
               </div>
               <div>
-                <label className="block text-xs font-semibold text-muted uppercase tracking-wider mb-1.5">Confirm Password</label>
+                <label className="block text-xs font-semibold text-[#1e293b]/60 uppercase tracking-wider mb-1.5">Confirm Password</label>
                 <div className="relative">
-                  <Lock size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
+                  <Lock size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#1e293b]/40" />
                   <input
                     type="password"
                     value={form.confirm}
@@ -284,14 +284,14 @@ export default function SignupPage() {
                 <button
                   type="button"
                   onClick={() => { setStep(1); setOtp(""); }}
-                  className="flex-1 py-2.5 text-sm text-muted hover:text-navy font-medium transition-colors border-2 border-gray-200 rounded-xl hover:border-navy/20"
+                  className="flex-1 py-2.5 text-sm text-[#1e293b]/60 hover:text-[#0891b2] font-medium transition-colors border-2 border-gray-200 rounded-xl hover:border-[#0891b2]/30"
                 >
                   Back
                 </button>
                 <button
                   type="button"
                   onClick={handleSendOtp}
-                  className="flex-1 py-2.5 text-sm text-muted hover:text-navy font-medium transition-colors border-2 border-gray-200 rounded-xl hover:border-navy/20"
+                  className="flex-1 py-2.5 text-sm text-[#1e293b]/60 hover:text-[#0891b2] font-medium transition-colors border-2 border-gray-200 rounded-xl hover:border-[#0891b2]/30"
                 >
                   Resend Code
                 </button>
@@ -299,9 +299,9 @@ export default function SignupPage() {
             </form>
           )}
 
-          <p className="mt-6 text-center text-sm text-muted">
+          <p className="mt-6 text-center text-sm text-[#1e293b]/60">
             Already have an account?{" "}
-            <Link href="/login" className="text-navy font-semibold hover:underline">
+            <Link href="/login" className="text-[#0891b2] font-semibold hover:underline">
               Sign In
             </Link>
           </p>

@@ -57,23 +57,23 @@ export default function StaffLogin() {
 
   return (
     <div className="min-h-screen flex">
-      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-gradient-to-br from-teal via-navy-light to-navy">
+      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-gradient-to-br from-teal via-cyan-500 to-teal">
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-20 left-20 w-72 h-72 bg-gold rounded-full blur-3xl" />
-          <div className="absolute bottom-20 right-20 w-96 h-96 bg-teal rounded-full blur-3xl" />
+          <div className="absolute top-20 left-20 w-72 h-72 bg-white rounded-full blur-3xl" />
+          <div className="absolute bottom-20 right-20 w-96 h-96 bg-gold rounded-full blur-3xl" />
         </div>
         <div className="relative z-10 flex flex-col justify-center px-16 text-white">
-          <Link href="/" className="inline-flex items-center gap-2 text-gold/80 hover:text-gold mb-12 transition-colors text-sm font-medium">
+          <Link href="/" className="inline-flex items-center gap-2 text-white/80 hover:text-white mb-12 transition-colors text-sm font-medium">
             <ArrowLeft size={16} />
             Back to Home
           </Link>
-          <div className="w-20 h-20 bg-teal-light/20 border-2 border-teal-light/40 rounded-2xl flex items-center justify-center mb-8">
-            <Users className="text-gold" size={36} />
+          <div className="w-20 h-20 bg-white/10 border-2 border-white/30 rounded-2xl flex items-center justify-center mb-8">
+            <Users className="text-white" size={36} />
           </div>
           <h1 className="font-heading text-4xl xl:text-5xl font-extrabold leading-tight mb-4">
-            Staff <span className="text-gold">Portal</span>
+            Staff <span className="text-white/80">Portal</span>
           </h1>
-          <p className="text-white/60 text-lg max-w-md leading-relaxed">
+          <p className="text-white/70 text-lg max-w-md leading-relaxed">
             Access your staff dashboard to manage day-to-day operations and coordinate foundation activities.
           </p>
           <div className="mt-12 space-y-4">
@@ -84,8 +84,8 @@ export default function StaffLogin() {
               "Access internal communications",
             ].map((item) => (
               <div key={item} className="flex items-center gap-3">
-                <div className="w-1.5 h-1.5 rounded-full bg-gold shrink-0" />
-                <span className="text-white/70 text-sm">{item}</span>
+                <div className="w-1.5 h-1.5 rounded-full bg-white shrink-0" />
+                <span className="text-white/80 text-sm">{item}</span>
               </div>
             ))}
           </div>
@@ -101,14 +101,14 @@ export default function StaffLogin() {
 
           <div className="lg:hidden flex items-center gap-3 mb-8">
             <div className="w-12 h-12 bg-teal rounded-xl flex items-center justify-center">
-              <Users className="text-gold" size={22} />
+              <Users className="text-white" size={22} />
             </div>
             <span className="font-heading text-xl font-bold text-navy">VGMF Staff</span>
           </div>
 
           <div className="mb-8">
             <div className="w-14 h-14 bg-teal rounded-2xl flex items-center justify-center mb-4">
-              <Users className="text-gold" size={28} />
+              <Users className="text-white" size={28} />
             </div>
             <h1 className="font-heading text-3xl font-extrabold text-navy mb-2">Staff Login</h1>
             <p className="text-muted">VGMF Staff Portal</p>
@@ -170,7 +170,7 @@ export default function StaffLogin() {
           <div className="mt-6 text-center">
             <p className="text-sm text-muted">
               Not a staff member?{" "}
-              <Link href="/login" className="text-navy font-semibold hover:underline">
+              <Link href="/login" className="text-teal font-semibold hover:underline">
                 User Login
               </Link>
             </p>

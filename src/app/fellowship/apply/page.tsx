@@ -147,7 +147,7 @@ export default function ApplyPage() {
           <p className="text-muted mb-6">
             Your fellowship application has been successfully submitted.
           </p>
-          <div className="bg-navy/5 rounded-2xl p-6 mb-6">
+          <div className="bg-teal/5 rounded-2xl p-6 mb-6">
             <p className="text-xs text-muted uppercase tracking-wider mb-1">
               Your Tracking Number
             </p>
@@ -196,7 +196,7 @@ export default function ApplyPage() {
             <div
               className={`w-10 h-10 mx-auto rounded-full flex items-center justify-center text-sm font-bold mb-2 transition-all ${
                 step >= s.num
-                  ? "bg-navy text-white shadow-lg shadow-navy/20"
+                  ? "bg-[#0891b2] text-white shadow-lg shadow-[#0891b2]/20"
                   : "bg-gray-100 text-muted"
               }`}
             >
@@ -417,7 +417,7 @@ export default function ApplyPage() {
               />
             </div>
 
-            <div className="bg-navy/5 rounded-2xl p-5 space-y-3 text-sm text-ink-soft">
+            <div className="bg-teal/5 rounded-2xl p-5 space-y-3 text-sm text-ink-soft">
               <h3 className="font-heading font-bold text-navy">
                 Important Information
               </h3>
@@ -446,7 +446,7 @@ export default function ApplyPage() {
                 type="checkbox"
                 checked={form.termsAccepted}
                 onChange={(e) => update("termsAccepted", e.target.checked)}
-                className="mt-0.5 accent-navy"
+                className="mt-0.5 accent-[#0891b2]"
               />
               <span className="text-sm text-ink-soft">
                 I confirm that all information provided is true and accurate. I

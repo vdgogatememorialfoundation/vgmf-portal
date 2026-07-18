@@ -56,14 +56,14 @@ export default function StaffLayout({ children }: { children: React.ReactNode })
   return (
     <div className="min-h-screen bg-cream flex">
       <aside
-        className={`hidden lg:flex flex-col fixed h-screen z-40 transition-all duration-300 ease-out bg-white border-r border-cream-dark ${
+        className={`hidden lg:flex flex-col fixed h-screen z-40 transition-all duration-300 ease-out bg-white border-r border-slate-200 ${
           collapsed ? "w-[72px]" : "w-64"
         }`}
       >
-        <div className={`border-b border-cream-dark flex items-center ${collapsed ? "justify-center px-2 py-5" : "px-5 py-5"}`}>
+        <div className={`border-b border-slate-100 flex items-center ${collapsed ? "justify-center px-2 py-5" : "px-5 py-5"}`}>
           {!collapsed ? (
             <Link href="/staff" className="flex items-center gap-3 group">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-teal to-teal-light flex items-center justify-center flex-shrink-0 shadow-lg shadow-teal/20">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-teal to-cyan-500 flex items-center justify-center flex-shrink-0 shadow-lg shadow-teal/20">
                 <span className="text-white font-heading font-extrabold text-sm">V</span>
               </div>
               <div className="overflow-hidden">
@@ -76,7 +76,7 @@ export default function StaffLayout({ children }: { children: React.ReactNode })
               </div>
             </Link>
           ) : (
-            <Link href="/staff" className="w-9 h-9 rounded-xl bg-gradient-to-br from-teal to-teal-light flex items-center justify-center shadow-lg shadow-teal/20">
+            <Link href="/staff" className="w-9 h-9 rounded-xl bg-gradient-to-br from-teal to-cyan-500 flex items-center justify-center shadow-lg shadow-teal/20">
               <span className="text-white font-heading font-extrabold text-sm">V</span>
             </Link>
           )}
@@ -94,7 +94,7 @@ export default function StaffLayout({ children }: { children: React.ReactNode })
                 } ${
                   active
                     ? "bg-teal/10 text-teal"
-                    : "text-ink-soft hover:text-navy hover:bg-cream"
+                    : "text-ink-soft hover:text-navy hover:bg-slate-50"
                 }`}
                 title={collapsed ? link.label : undefined}
               >
@@ -121,10 +121,10 @@ export default function StaffLayout({ children }: { children: React.ReactNode })
           })}
         </nav>
 
-        <div className="border-t border-cream-dark p-3 space-y-1">
+        <div className="border-t border-slate-100 p-3 space-y-1">
           <Link
             href="/"
-            className={`flex items-center gap-2.5 rounded-xl text-muted hover:text-navy hover:bg-cream transition-all duration-200 ${
+            className={`flex items-center gap-2.5 rounded-xl text-muted hover:text-navy hover:bg-slate-50 transition-all duration-200 ${
               collapsed ? "justify-center px-2 py-2.5" : "px-3 py-2.5"
             }`}
             title={collapsed ? "Back to Site" : undefined}
@@ -134,7 +134,7 @@ export default function StaffLayout({ children }: { children: React.ReactNode })
           </Link>
           <button
             onClick={() => setCollapsed(!collapsed)}
-            className="w-full flex items-center gap-2.5 rounded-xl text-muted/60 hover:text-muted hover:bg-cream transition-all duration-200 px-3 py-2"
+            className="w-full flex items-center gap-2.5 rounded-xl text-muted hover:text-navy hover:bg-slate-50 transition-all duration-200 px-3 py-2"
           >
             {collapsed ? (
               <ChevronRight size={18} className="mx-auto" />
@@ -153,7 +153,7 @@ export default function StaffLayout({ children }: { children: React.ReactNode })
           collapsed ? "lg:ml-[72px]" : "lg:ml-64"
         }`}
       >
-        <header className="sticky top-0 z-30 bg-white/80 backdrop-blur-xl border-b border-cream-dark">
+        <header className="sticky top-0 z-30 bg-white/90 backdrop-blur-xl border-b border-slate-200">
           <div className="flex items-center justify-between px-4 lg:px-6 h-16">
             <div className="flex items-center gap-3">
               <h2 className="font-heading text-lg font-bold text-navy hidden sm:block">
@@ -162,7 +162,7 @@ export default function StaffLayout({ children }: { children: React.ReactNode })
             </div>
 
             <div className="flex items-center gap-2">
-              <button className="relative w-10 h-10 flex items-center justify-center rounded-xl border border-cream-dark bg-cream/50 hover:bg-cream transition-colors">
+              <button className="relative w-10 h-10 flex items-center justify-center rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 transition-colors">
                 <Bell size={18} className="text-muted" />
                 <span className="absolute top-2 right-2 w-2 h-2 bg-danger rounded-full ring-2 ring-white" />
               </button>
@@ -170,9 +170,9 @@ export default function StaffLayout({ children }: { children: React.ReactNode })
               <div className="relative" ref={profileRef}>
                 <button
                   onClick={() => setProfileOpen(!profileOpen)}
-                  className="flex items-center gap-2.5 pl-1 pr-3 py-1 rounded-xl hover:bg-cream/80 transition-colors"
+                  className="flex items-center gap-2.5 pl-1 pr-3 py-1 rounded-xl hover:bg-slate-50 transition-colors"
                 >
-                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-teal to-teal-light flex items-center justify-center shadow-sm">
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-teal to-cyan-500 flex items-center justify-center shadow-sm">
                     <span className="text-white font-heading font-bold text-xs">S</span>
                   </div>
                   <div className="hidden sm:block text-left">
@@ -182,8 +182,8 @@ export default function StaffLayout({ children }: { children: React.ReactNode })
                 </button>
 
                 {profileOpen && (
-                  <div className="absolute right-0 top-full mt-2 w-52 bg-white rounded-xl shadow-xl border border-cream-dark py-1.5 animate-scale-in">
-                    <div className="px-4 py-2.5 border-b border-cream-dark">
+                  <div className="absolute right-0 top-full mt-2 w-52 bg-white rounded-xl shadow-xl border border-slate-200 py-1.5 animate-scale-in">
+                    <div className="px-4 py-2.5 border-b border-slate-100">
                       <p className="text-sm font-semibold text-navy">Staff Member</p>
                       <p className="text-xs text-muted">staff@vgmf.org</p>
                     </div>
@@ -205,7 +205,7 @@ export default function StaffLayout({ children }: { children: React.ReactNode })
         </main>
       </div>
 
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-xl border-t border-cream-dark safe-area-bottom">
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-xl border-t border-slate-200 safe-area-bottom">
         <div className="flex items-center justify-around px-2 py-1.5">
           {sidebarLinks.map((link) => {
             const active = isActive(link.href);
