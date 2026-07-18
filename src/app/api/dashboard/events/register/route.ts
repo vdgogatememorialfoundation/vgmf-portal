@@ -61,31 +61,31 @@ export async function POST(req: NextRequest) {
     }
 
     const ticketNumber = generateTicketNumber();
+    const paymentStatus = event.requiresPayment ? "PENDING" : "COMPLETED";
 
-    const [registration, formSubmission] = await prisma.$transaction([
-      prisma.eventRegistration.create({
+    const registration = await prisma.eventRegistration.create({
+      data: {
+        eventId,
+        userId,
+        ticketNumber,
+        formData: formData || undefined,
+        paymentStatus,
+        paymentAmount: event.ticketPrice || undefined,
+      },
+    });
+
+    if (event.hasForm && formData) {
+      await prisma.eventFormSubmission.create({
         data: {
           eventId,
           userId,
+          formData,
           ticketNumber,
-          formData: formData || undefined,
-          paymentStatus: event.requiresPayment ? "PENDING" : "COMPLETED",
+          paymentStatus,
           paymentAmount: event.ticketPrice || undefined,
         },
-      }),
-      event.hasForm && formData
-        ? prisma.eventFormSubmission.create({
-            data: {
-              eventId,
-              userId,
-              formData,
-              ticketNumber,
-              paymentStatus: event.requiresPayment ? "PENDING" : "COMPLETED",
-              paymentAmount: event.ticketPrice || undefined,
-            },
-          })
-        : null,
-    ]);
+      });
+    }
 
     return NextResponse.json({
       success: true,
