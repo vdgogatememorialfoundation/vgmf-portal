@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   ArrowLeft, Mail, Lock, User, Eye, EyeOff, Loader2,
   CheckCircle2, ArrowRight, Stethoscope, GraduationCap,
-  FlaskConical, Heart, Users, Building2, Phone,
+  FlaskConical, Heart, Users, Building2, Phone, RotateCcw,
 } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -28,7 +28,19 @@ export default function SignupPage() {
   const [confirm, setConfirm] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [resendCooldown, setResendCooldown] = useState(0);
   const router = useRouter();
+
+  useEffect(() => {
+    if (resendCooldown <= 0) return;
+    const timer = setInterval(() => {
+      setResendCooldown((prev) => {
+        if (prev <= 1) { clearInterval(timer); return 0; }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [resendCooldown]);
 
   const updateForm = (field: string, value: string) => {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -51,7 +63,30 @@ export default function SignupPage() {
       });
       const data = await res.json();
       if (!res.ok) { toast.error(data.error || "Failed to send OTP"); }
-      else { toast.success("OTP sent to your email"); setStep(3); }
+      else {
+        toast.success("OTP sent to your email");
+        setStep(3);
+        setResendCooldown(60);
+      }
+    } catch { toast.error("Something went wrong. Please try again."); }
+    finally { setLoading(false); }
+  };
+
+  const handleResendOtp = async () => {
+    if (resendCooldown > 0) return;
+    setLoading(true);
+    try {
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "resend-otp", email: form.email, name: form.name }),
+      });
+      const data = await res.json();
+      if (!res.ok) { toast.error(data.error || "Failed to resend OTP"); }
+      else {
+        toast.success("OTP resent to your email");
+        setResendCooldown(60);
+      }
     } catch { toast.error("Something went wrong. Please try again."); }
     finally { setLoading(false); }
   };
@@ -94,6 +129,12 @@ export default function SignupPage() {
       step === s ? "bg-teal text-white shadow-md shadow-teal/30" :
       "bg-ink/10 text-ink/40"
     }`;
+
+  const formatTime = (seconds: number) => {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return m > 0 ? `${m}:${s.toString().padStart(2, "0")}` : `${s}s`;
+  };
 
   return (
     <div className="min-h-screen flex">
@@ -262,9 +303,20 @@ export default function SignupPage() {
               <button type="button" onClick={() => { setStep(4); }} disabled={otp.length !== 6} className="btn-primary w-full justify-center py-3 text-base disabled:opacity-50 disabled:cursor-not-allowed">
                 Verify & Set Password <ArrowRight size={18} />
               </button>
-              <button type="button" onClick={() => { setStep(2); setOtp(""); }} className="w-full text-center text-sm text-ink/50 hover:text-teal font-medium transition-colors">
-                &larr; Change email
-              </button>
+              <div className="flex items-center justify-center gap-4">
+                <button
+                  type="button"
+                  onClick={handleResendOtp}
+                  disabled={resendCooldown > 0 || loading}
+                  className="flex items-center gap-2 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:text-ink/30 text-teal hover:text-teal/80"
+                >
+                  <RotateCcw size={14} className={loading ? "animate-spin" : ""} />
+                  {resendCooldown > 0 ? `Resend in ${formatTime(resendCooldown)}` : "Resend OTP"}
+                </button>
+                <button type="button" onClick={() => { setStep(2); setOtp(""); setResendCooldown(0); }} className="text-sm text-ink/50 hover:text-teal font-medium transition-colors">
+                  Change email
+                </button>
+              </div>
             </div>
           )}
 

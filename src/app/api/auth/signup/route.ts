@@ -3,19 +3,31 @@ import { prisma } from "@/lib/prisma";
 import { sendEmail, generateOTP } from "@/lib/email";
 import bcrypt from "bcryptjs";
 
-const otpStore = new Map<string, { otp: string; expires: number }>();
+const otpStore = new Map<string, { otp: string; expires: number; sentAt: number }>();
+
+const RESEND_COOLDOWN = 60 * 1000;
 
 export async function POST(req: NextRequest) {
   try {
     const { action, email, name, phone, password, otp, category } = await req.json();
 
-    if (action === "send-otp") {
+    if (action === "send-otp" || action === "resend-otp") {
       if (!email) return NextResponse.json({ error: "Email required" }, { status: 400 });
-      const existing = await prisma.user.findUnique({ where: { email } });
-      if (existing) return NextResponse.json({ error: "Email already registered" }, { status: 400 });
+
+      if (action === "resend-otp") {
+        const existing = otpStore.get(email);
+        if (existing && Date.now() - existing.sentAt < RESEND_COOLDOWN) {
+          const waitSeconds = Math.ceil((RESEND_COOLDOWN - (Date.now() - existing.sentAt)) / 1000);
+          return NextResponse.json({ error: `Please wait ${waitSeconds} seconds before resending` }, { status: 429 });
+        }
+      }
+
+      const existingUser = await prisma.user.findUnique({ where: { email } });
+      if (existingUser) return NextResponse.json({ error: "Email already registered" }, { status: 400 });
 
       const code = generateOTP();
-      otpStore.set(email, { otp: code, expires: Date.now() + 10 * 60 * 1000 });
+      const now = Date.now();
+      otpStore.set(email, { otp: code, expires: now + 10 * 60 * 1000, sentAt: now });
 
       await sendEmail({
         to: [{ email, name: name || email }],
@@ -29,7 +41,7 @@ export async function POST(req: NextRequest) {
         </div>`,
       });
 
-      return NextResponse.json({ success: true, message: "OTP sent to your email" });
+      return NextResponse.json({ success: true, message: "OTP sent to your email", resendAfter: now + RESEND_COOLDOWN });
     }
 
     if (action === "verify") {
