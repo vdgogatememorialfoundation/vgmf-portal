@@ -61,12 +61,12 @@ export async function POST(req: NextRequest) {
   }
   try {
     const data = await req.json();
-    if (data.eventDate) {
-      data.eventDate = new Date(data.eventDate);
+    const dateFields = ["eventDate", "endDate", "registrationStartDate", "registrationDeadline", "cancellationDeadline"];
+    for (const f of dateFields) {
+      if (data[f]) data[f] = new Date(data[f]);
+      else data[f] = null;
     }
-    if (data.endDate) {
-      data.endDate = new Date(data.endDate);
-    }
+
     let slug = data.slug || slugify(data.title);
     const existing = await prisma.event.findUnique({ where: { slug } });
     if (existing) {
@@ -80,7 +80,7 @@ export async function POST(req: NextRequest) {
         description: data.description || null,
         shortDesc: data.shortDesc || null,
         eventDate: data.eventDate,
-        endDate: data.endDate || null,
+        endDate: data.endDate,
         location: data.location || null,
         city: data.city || null,
         address: data.address || null,
@@ -95,6 +95,14 @@ export async function POST(req: NextRequest) {
         contactPhone: data.contactPhone || null,
         restrictToDoctors: data.restrictToDoctors ?? false,
         requiresIdentityVerification: data.requiresIdentityVerification ?? false,
+        registrationStartDate: data.registrationStartDate,
+        registrationDeadline: data.registrationDeadline,
+        cancellationDeadline: data.cancellationDeadline,
+        cancellationFee: data.cancellationFee || null,
+        refundPercentage: data.refundPercentage || null,
+        isCancellationEnabled: data.isCancellationEnabled ?? false,
+        isRegistrationOpen: data.isRegistrationOpen ?? true,
+        showCountdown: data.showCountdown ?? false,
       },
     });
 

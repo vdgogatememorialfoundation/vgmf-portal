@@ -73,6 +73,14 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     if (data.contactPhone !== undefined) updateData.contactPhone = data.contactPhone;
     if (data.restrictToDoctors !== undefined) updateData.restrictToDoctors = data.restrictToDoctors;
     if (data.requiresIdentityVerification !== undefined) updateData.requiresIdentityVerification = data.requiresIdentityVerification;
+    if (data.registrationStartDate !== undefined) updateData.registrationStartDate = data.registrationStartDate ? new Date(data.registrationStartDate) : null;
+    if (data.registrationDeadline !== undefined) updateData.registrationDeadline = data.registrationDeadline ? new Date(data.registrationDeadline) : null;
+    if (data.cancellationDeadline !== undefined) updateData.cancellationDeadline = data.cancellationDeadline ? new Date(data.cancellationDeadline) : null;
+    if (data.cancellationFee !== undefined) updateData.cancellationFee = data.cancellationFee;
+    if (data.refundPercentage !== undefined) updateData.refundPercentage = data.refundPercentage;
+    if (data.isCancellationEnabled !== undefined) updateData.isCancellationEnabled = data.isCancellationEnabled;
+    if (data.isRegistrationOpen !== undefined) updateData.isRegistrationOpen = data.isRegistrationOpen;
+    if (data.showCountdown !== undefined) updateData.showCountdown = data.showCountdown;
 
     const event = await prisma.event.update({
       where: { id },

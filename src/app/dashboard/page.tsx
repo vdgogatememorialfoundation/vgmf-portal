@@ -21,6 +21,7 @@ import {
 type Tab =
   | "overview"
   | "my-profile"
+  | "change-password"
   | "events"
   | "event-register"
   | "my-registrations"
@@ -56,6 +57,7 @@ const navGroups: NavGroup[] = [
     items: [
       { id: "overview", label: "Overview", icon: LayoutDashboard },
       { id: "my-profile", label: "My Profile", icon: User },
+      { id: "change-password", label: "Change Password", icon: ShieldCheck },
     ],
   },
   {
@@ -64,14 +66,24 @@ const navGroups: NavGroup[] = [
       { id: "events", label: "Events & Programmes", icon: Calendar },
       { id: "my-registrations", label: "My Registrations", icon: ClipboardList },
       { id: "my-fellowships", label: "Fellowships", icon: Award },
+      { id: "my-competitions", label: "Competitions", icon: Trophy },
     ],
   },
   {
     title: "Orders & Payments",
     items: [
       { id: "my-orders", label: "My Orders", icon: ShoppingBag },
+      { id: "payments", label: "Payments", icon: CreditCard },
       { id: "my-certificates", label: "Certificates", icon: FileBadge },
       { id: "my-e-tickets", label: "E-Tickets", icon: Ticket },
+      { id: "returns-refunds", label: "Refunds", icon: RotateCcw },
+    ],
+  },
+  {
+    title: "Account",
+    items: [
+      { id: "my-address", label: "My Address", icon: MapPin },
+      { id: "identity-verification", label: "Identity Verification", icon: ShieldCheck },
     ],
   },
   {
@@ -382,6 +394,9 @@ function DashboardPageInner() {
             )}
             {activeTab === "my-profile" && (
               <MyProfileTab user={user} category={category} />
+            )}
+            {activeTab === "change-password" && (
+              <ChangePasswordTab />
             )}
             {activeTab === "events" && (
               <EventsTab events={events} loadingEvents={loadingEvents} navigateTab={navigateTab} />
@@ -889,6 +904,74 @@ function MyProfileTab({ user, category }: { user: any; category: string }) {
             ))}
           </div>
         )}
+      </Card>
+    </div>
+  );
+}
+
+function ChangePasswordTab() {
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [showCurrent, setShowCurrent] = useState(false);
+  const [showNew, setShowNew] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (newPassword.length < 6) { toast.error("Password must be at least 6 characters"); return; }
+    if (newPassword !== confirmPassword) { toast.error("Passwords do not match"); return; }
+    setLoading(true);
+    try {
+      const res = await fetch("/api/dashboard/change-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ currentPassword, newPassword }),
+      });
+      const data = await res.json();
+      if (!res.ok) { toast.error(data.error || "Failed to change password"); }
+      else {
+        toast.success("Password changed successfully!");
+        setCurrentPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
+      }
+    } catch { toast.error("Something went wrong"); }
+    finally { setLoading(false); }
+  };
+
+  return (
+    <div className="space-y-6">
+      <Card>
+        <h3 className="font-heading text-lg font-bold text-navy mb-1">Change Password</h3>
+        <p className="text-sm text-muted mb-6">Update your account password for security.</p>
+        <form onSubmit={handleSubmit} className="space-y-4 max-w-md">
+          <div>
+            <label className="block text-xs font-semibold text-ink/50 uppercase tracking-wider mb-1.5">Current Password</label>
+            <div className="relative">
+              <input type={showCurrent ? "text" : "password"} value={currentPassword} onChange={e => setCurrentPassword(e.target.value)} className="input-field pr-10" placeholder="Enter current password" />
+              <button type="button" onClick={() => setShowCurrent(!showCurrent)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-ink">
+                {showCurrent ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+            </div>
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-ink/50 uppercase tracking-wider mb-1.5">New Password</label>
+            <div className="relative">
+              <input type={showNew ? "text" : "password"} value={newPassword} onChange={e => setNewPassword(e.target.value)} className="input-field pr-10" placeholder="At least 6 characters" />
+              <button type="button" onClick={() => setShowNew(!showNew)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-ink">
+                {showNew ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+            </div>
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-ink/50 uppercase tracking-wider mb-1.5">Confirm New Password</label>
+            <input type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} className="input-field" placeholder="Re-enter new password" />
+          </div>
+          <button type="submit" disabled={loading || !currentPassword || !newPassword || !confirmPassword} className="btn-primary justify-center disabled:opacity-50">
+            {loading ? <><Loader2 size={16} className="animate-spin" /> Updating...</> : "Update Password"}
+          </button>
+        </form>
       </Card>
     </div>
   );

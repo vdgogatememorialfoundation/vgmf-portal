@@ -34,6 +34,14 @@ interface Event {
   allowMultipleRegistrations?: boolean;
   requiresPayment?: boolean;
   requiresIdentityVerification?: boolean;
+  registrationStartDate?: string;
+  registrationDeadline?: string;
+  cancellationDeadline?: string;
+  cancellationFee?: number;
+  refundPercentage?: number;
+  isCancellationEnabled?: boolean;
+  isRegistrationOpen?: boolean;
+  showCountdown?: boolean;
 }
 
 const EVENT_TYPES = ["Seminar", "Fellowship", "Autism", "Competition", "Workshop", "Guest Lecture"];
@@ -54,6 +62,10 @@ interface EventForm {
   maxAttendees: string; ticketPrice: string; bannerUrl: string; imageUrl: string;
   contactEmail: string; contactPhone: string; restrictToDoctors: boolean;
   requiresIdentityVerification: boolean;
+  registrationStartDate: string; registrationDeadline: string;
+  cancellationDeadline: string; cancellationFee: string; refundPercentage: string;
+  isCancellationEnabled: boolean; isRegistrationOpen: boolean;
+  showCountdown: boolean;
 }
 
 const EMPTY_FORM: EventForm = {
@@ -61,6 +73,9 @@ const EMPTY_FORM: EventForm = {
   location: "", city: "", address: "", eventType: "Seminar", isPublished: true,
   isFeatured: false, maxAttendees: "", ticketPrice: "", bannerUrl: "", imageUrl: "",
   contactEmail: "", contactPhone: "", restrictToDoctors: false, requiresIdentityVerification: false,
+  registrationStartDate: "", registrationDeadline: "",
+  cancellationDeadline: "", cancellationFee: "", refundPercentage: "",
+  isCancellationEnabled: false, isRegistrationOpen: true, showCountdown: false,
 };
 
 const FIELD_TYPES = [
@@ -166,6 +181,36 @@ function getDefaultFields(eventType: string): FormField[] {
         make("address", "textarea", "Address", [], "Address"),
         make("health_notes", "textarea", "Health Notes / Special Needs", [], "Other"),
       ];
+    case "Competition":
+      return [
+        make("fname", "text", "First Name"),
+        make("lname", "text", "Last Name"),
+        make("email", "email", "Email Address"),
+        make("phone", "tel", "Phone Number"),
+        make("category", "select", "Competition Category", ["ART", "ESSAY", "VIDEO", "PRESENTATION", "OTHER"]),
+        make("topic", "text", "Topic / Title"),
+        make("description", "textarea", "Brief Description"),
+        make("file_upload", "file", "Submission File", [], "Documents"),
+      ];
+    case "Workshop":
+      return [
+        make("fname", "text", "First Name"),
+        make("lname", "text", "Last Name"),
+        make("email", "email", "Email Address"),
+        make("phone", "tel", "Phone Number"),
+        make("organization", "text", "Organization / Institute", [], "Professional Details"),
+        make("experience", "text", "Years of Experience", [], "Professional Details"),
+        make("expectations", "textarea", "What do you expect from this workshop?", [], "Other"),
+      ];
+    case "Guest Lecture":
+      return [
+        make("fname", "text", "First Name"),
+        make("lname", "text", "Last Name"),
+        make("email", "email", "Email Address"),
+        make("phone", "tel", "Phone Number"),
+        make("institution", "text", "Institution", [], "Professional Details"),
+        make("designation", "text", "Designation", [], "Professional Details"),
+      ];
     default:
       return [
         make("fname", "text", "First Name"),
@@ -237,6 +282,14 @@ export default function AdminEvents() {
         maxAttendees: form.maxAttendees ? parseInt(form.maxAttendees) : null,
         ticketPrice: form.ticketPrice ? parseFloat(form.ticketPrice) : null,
         requiresIdentityVerification: form.requiresIdentityVerification,
+        registrationStartDate: form.registrationStartDate || null,
+        registrationDeadline: form.registrationDeadline || null,
+        cancellationDeadline: form.cancellationDeadline || null,
+        cancellationFee: form.cancellationFee ? parseFloat(form.cancellationFee) : null,
+        refundPercentage: form.refundPercentage ? parseInt(form.refundPercentage) : null,
+        isCancellationEnabled: form.isCancellationEnabled,
+        isRegistrationOpen: form.isRegistrationOpen,
+        showCountdown: form.showCountdown,
       };
       const url = editing ? `/api/admin/events/${editing.id}` : "/api/admin/events";
       const method = editing ? "PUT" : "POST";
@@ -283,6 +336,14 @@ export default function AdminEvents() {
       contactEmail: event.contactEmail || "", contactPhone: event.contactPhone || "",
       restrictToDoctors: event.restrictToDoctors,
       requiresIdentityVerification: event.requiresIdentityVerification || false,
+      registrationStartDate: event.registrationStartDate ? event.registrationStartDate.slice(0, 16) : "",
+      registrationDeadline: event.registrationDeadline ? event.registrationDeadline.slice(0, 16) : "",
+      cancellationDeadline: event.cancellationDeadline ? event.cancellationDeadline.slice(0, 16) : "",
+      cancellationFee: event.cancellationFee ? String(event.cancellationFee) : "",
+      refundPercentage: event.refundPercentage ? String(event.refundPercentage) : "",
+      isCancellationEnabled: event.isCancellationEnabled || false,
+      isRegistrationOpen: event.isRegistrationOpen !== false,
+      showCountdown: event.showCountdown || false,
     });
     setShowForm(true);
   };
@@ -597,6 +658,66 @@ export default function AdminEvents() {
                     <span className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${form.requiresIdentityVerification ? "left-6" : "left-0.5"}`} />
                   </button>
                 </div>
+                <div className="flex items-center justify-between">
+                  <div><label className="text-sm font-semibold text-ink">Show Countdown</label><p className="text-xs text-muted">Display countdown timer on homepage</p></div>
+                  <button type="button" onClick={() => setField("showCountdown", !form.showCountdown)}
+                    className={`relative w-12 h-6 rounded-full transition-colors ${form.showCountdown ? "bg-teal" : "bg-slate-300"}`}>
+                    <span className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${form.showCountdown ? "left-6" : "left-0.5"}`} />
+                  </button>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div><label className="text-sm font-semibold text-ink">Registration Open</label><p className="text-xs text-muted">Allow users to register for this event</p></div>
+                  <button type="button" onClick={() => setField("isRegistrationOpen", !form.isRegistrationOpen)}
+                    className={`relative w-12 h-6 rounded-full transition-colors ${form.isRegistrationOpen ? "bg-emerald-accent" : "bg-slate-300"}`}>
+                    <span className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${form.isRegistrationOpen ? "left-6" : "left-0.5"}`} />
+                  </button>
+                </div>
+              </div>
+
+              {/* Registration Dates */}
+              <div className="border-t border-slate-100 pt-4">
+                <h4 className="text-sm font-bold text-ink mb-3">Registration Period</h4>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-ink mb-1.5">Registration Start Date</label>
+                    <input type="datetime-local" value={form.registrationStartDate} onChange={e => setField("registrationStartDate", e.target.value)} className="input-field w-full" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-ink mb-1.5">Registration Deadline</label>
+                    <input type="datetime-local" value={form.registrationDeadline} onChange={e => setField("registrationDeadline", e.target.value)} className="input-field w-full" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Cancellation Settings */}
+              <div className="border-t border-slate-100 pt-4">
+                <div className="flex items-center justify-between mb-3">
+                  <div><h4 className="text-sm font-bold text-ink">Cancellation Policy</h4><p className="text-xs text-muted">Configure cancellation and refund rules for this event</p></div>
+                  <button type="button" onClick={() => setField("isCancellationEnabled", !form.isCancellationEnabled)}
+                    className={`relative w-12 h-6 rounded-full transition-colors ${form.isCancellationEnabled ? "bg-teal" : "bg-slate-300"}`}>
+                    <span className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${form.isCancellationEnabled ? "left-6" : "left-0.5"}`} />
+                  </button>
+                </div>
+                {form.isCancellationEnabled && (
+                  <div className="grid grid-cols-2 gap-4 bg-slate-50 rounded-xl p-4">
+                    <div>
+                      <label className="block text-sm font-semibold text-ink mb-1.5">Cancellation Deadline</label>
+                      <input type="datetime-local" value={form.cancellationDeadline} onChange={e => setField("cancellationDeadline", e.target.value)} className="input-field w-full" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-ink mb-1.5">Cancellation Fee (₹)</label>
+                      <input type="number" value={form.cancellationFee} onChange={e => setField("cancellationFee", e.target.value)} placeholder="0 for free cancellation" className="input-field w-full" />
+                    </div>
+                    <div className="col-span-2">
+                      <label className="block text-sm font-semibold text-ink mb-1.5">Refund Percentage ({form.refundPercentage || "0"}%)</label>
+                      <input type="range" min="0" max="100" value={form.refundPercentage || "0"} onChange={e => setField("refundPercentage", e.target.value)} className="w-full" />
+                      <div className="flex justify-between text-xs text-muted"><span>No refund</span><span>Full refund</span></div>
+                    </div>
+                    {form.eventType === "Free" || !form.ticketPrice || parseFloat(form.ticketPrice) === 0 ? (
+                      <p className="col-span-2 text-xs text-emerald-600 bg-emerald-50 rounded-lg p-2">Free event — no cancellation fee applies</p>
+                    ) : null}
+                  </div>
+                )}
               </div>
 
               <button type="submit" disabled={saving} className="btn-primary w-full">

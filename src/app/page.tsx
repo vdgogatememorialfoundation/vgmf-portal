@@ -5,12 +5,11 @@ import HeroSlider from "@/components/HeroSlider";
 import EventGallery from "@/components/EventGallery";
 import EventCountdown from "@/components/EventCountdown";
 import SiteReviews from "@/components/SiteReviews";
-import SiteNotices from "@/components/SiteNotices";
 
 export default async function Home() {
   const now = new Date();
 
-  const [events, articles, upcomingEvents, reviews, notices] = await Promise.all([
+  const [events, articles, upcomingEvents, reviews] = await Promise.all([
     prisma.event.findMany({ where: { isPublished: true }, orderBy: { eventDate: "desc" }, take: 6 }),
     prisma.article.findMany({ where: { isPublished: true }, orderBy: { createdAt: "desc" }, take: 50 }),
     prisma.event.findMany({
@@ -24,25 +23,6 @@ export default async function Home() {
       orderBy: [{ isFeatured: "desc" }, { sortOrder: "asc" }, { createdAt: "desc" }],
       take: 8,
       select: { id: true, rating: true, title: true, content: true, userId: true, createdAt: true, user: { select: { name: true, role: true } } },
-    }),
-    prisma.siteNotice.findMany({
-      where: {
-        isActive: true,
-        position: "above-hero",
-        OR: [
-          { startDate: null },
-          { startDate: { lte: now } },
-        ],
-        AND: [
-          {
-            OR: [
-              { endDate: null },
-              { endDate: { gte: now } },
-            ],
-          },
-        ],
-      },
-      orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
     }),
   ]);
 
@@ -64,13 +44,8 @@ export default async function Home() {
     userDesignation: r.user.role || null,
   }));
 
-  const activeNotices = notices.filter(n => n.isActive && (!n.startDate || n.startDate <= now) && (!n.endDate || n.endDate >= now));
-
   return (
     <>
-      {/* SITE NOTICES - Below Header */}
-      <SiteNotices />
-
       {/* HERO SLIDER */}
       <HeroSlider />
 

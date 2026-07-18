@@ -3,6 +3,7 @@ import { usePathname } from "next/navigation";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import Chatbot from "./Chatbot";
+import SiteNotices from "./SiteNotices";
 
 const HIDE_NAV_FOOTER = ["/admin", "/staff", "/dashboard", "/judge", "/scanner", "/doctor", "/trustee", "/reviewer"];
 
@@ -17,6 +18,7 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
   return (
     <>
       <Navbar />
+      <SiteNotices />
       <main className="min-h-screen bg-[#faf9f6]">{children}</main>
       <Footer />
       <Chatbot />
