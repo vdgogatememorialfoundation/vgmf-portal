@@ -34,7 +34,7 @@ model User {
   fellowshipApps FellowshipApplication[]
   autismRegs    AutismRegistration[]
   eventRegistrations EventRegistration[]
-  supportTickets    SupportTicket[]
+  supportTickets    Ticket[]
   certificates      Certificate[]
   competitions      Competition[]
   identityVerifications IdentityVerification[]
@@ -442,6 +442,7 @@ model EventRegistration {
 model Ticket {
   id             String   @id @default(uuid())
   userId         String
+  user           User     @relation(fields: [userId], references: [id])
   subject        String
   description    String?
   category       String   @default("GENERAL") // GENERAL, TECHNICAL, PAYMENT, REGISTRATION, OTHER
@@ -535,6 +536,7 @@ model PaymentMethod {
 model PaymentReceipt {
   id             String   @id @default(uuid())
   userId         String
+  user           User     @relation(fields: [userId], references: [id])
   receiptNumber  String   @unique
   relatedType    String   // EVENT, ORDER, FELLOWSHIP
   relatedId      String?
@@ -552,6 +554,7 @@ model PaymentReceipt {
 model Refund {
   id             String   @id @default(uuid())
   userId         String
+  user           User     @relation(fields: [userId], references: [id])
   relatedType    String   // EVENT, ORDER
   relatedId      String?
   amount         Float
