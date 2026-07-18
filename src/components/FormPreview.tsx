@@ -96,7 +96,7 @@ export default function FormPreview({ fields, title, description }: FormPreviewP
                 <div className="w-1 h-4 bg-teal rounded-full" />
                 <h4 className="text-xs font-bold text-muted uppercase tracking-wider">{sectionName}</h4>
               </div>
-            ))}
+            )}
             <div className="grid md:grid-cols-2 gap-4">
               {sections.get(sectionName)!.map((field) => (
                 <PreviewField key={field.fieldName} field={field} />
