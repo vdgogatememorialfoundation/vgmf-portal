@@ -2,6 +2,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { ArrowRight, Calendar, MapPin, Users, Video, Award, Mic, Presentation, Clock, CheckCircle, History } from "lucide-react";
+import GoogleMapEmbed from "@/components/GoogleMapEmbed";
 
 export const metadata = { title: "National Seminar" };
 

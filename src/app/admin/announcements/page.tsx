@@ -53,6 +53,7 @@ export default function AdminAnnouncements() {
   const [search, setSearch] = useState("");
   const [saving, setSaving] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   const fetchAnnouncements = useCallback(async () => {
     setLoading(true);
@@ -99,14 +100,22 @@ export default function AdminAnnouncements() {
 
   const handleDelete = async () => {
     if (!deleteId) return;
+    setDeleting(true);
     try {
       const res = await fetch(`/api/admin/announcements/${deleteId}`, { method: "DELETE" });
-      if (!res.ok) throw new Error("Failed");
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        console.error("Delete announcement failed:", res.status, data);
+        throw new Error(data.error || "Failed");
+      }
       toast.success("Announcement deleted");
       setDeleteId(null);
       fetchAnnouncements();
-    } catch {
-      toast.error("Failed to delete");
+    } catch (err: any) {
+      console.error(err);
+      toast.error(err.message || "Failed to delete");
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -295,7 +304,9 @@ export default function AdminAnnouncements() {
             <p className="text-muted text-sm text-center mt-2">This announcement will be permanently removed.</p>
             <div className="flex gap-3 mt-6">
               <button onClick={() => setDeleteId(null)} className="btn-outline flex-1">Cancel</button>
-              <button onClick={handleDelete} className="flex-1 py-2.5 bg-danger text-white rounded-xl text-sm font-semibold hover:bg-red-700 transition-colors">Delete</button>
+              <button onClick={handleDelete} disabled={deleting} className="flex-1 py-2.5 bg-danger text-white rounded-xl text-sm font-semibold hover:bg-red-700 transition-colors disabled:opacity-60">
+                {deleting ? "Deleting..." : "Delete"}
+              </button>
             </div>
           </div>
         </div>

@@ -3,23 +3,28 @@ import { DM_Sans, Baloo_2 } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "react-hot-toast";
 import { LayoutWrapper } from "@/components/LayoutWrapper";
+import { getBrandingSettings } from "@/lib/settings";
 import "./globals.css";
 
 const dmSans = DM_Sans({ subsets: ["latin"], variable: "--font-body", weight: ["400", "500", "600", "700"] });
 const baloo2 = Baloo_2({ subsets: ["latin"], variable: "--font-heading", weight: ["400", "500", "600", "700", "800"] });
 
-export const metadata: Metadata = {
-  title: { default: "Vaidya Gogate Memorial Foundation", template: "%s - VGMF" },
-  description: "VGMF - Preserving Ayurvedic heritage through research, education, and community service since 1972.",
-  icons: { icon: "/favicon.ico" },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { faviconUrl } = await getBrandingSettings();
+  return {
+    title: { default: "Vaidya Gogate Memorial Foundation", template: "%s - VGMF" },
+    description: "VGMF - Preserving Ayurvedic heritage through research, education, and community service since 1972.",
+    icons: { icon: faviconUrl || "/favicon.ico" },
+  };
+}
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const { logoUrl, faviconUrl } = await getBrandingSettings();
   return (
     <html lang="en">
       <body className={`${dmSans.variable} ${baloo2.variable} font-body bg-cream text-ink antialiased`}>
         <SessionProvider>
-          <LayoutWrapper>{children}</LayoutWrapper>
+          <LayoutWrapper logoUrl={logoUrl} faviconUrl={faviconUrl}>{children}</LayoutWrapper>
           <Toaster
             position="top-right"
             toastOptions={{

@@ -31,6 +31,7 @@ type Tab =
   | "track-orders"
   | "my-address"
   | "payments"
+  | "my-receipts"
   | "my-certificates"
   | "my-e-tickets"
   | "support"
@@ -74,6 +75,7 @@ const navGroups: NavGroup[] = [
     items: [
       { id: "my-orders", label: "My Orders", icon: ShoppingBag },
       { id: "payments", label: "Payments", icon: CreditCard },
+      { id: "my-receipts", label: "My Receipts", icon: FileText },
       { id: "my-certificates", label: "Certificates", icon: FileBadge },
       { id: "my-e-tickets", label: "E-Tickets", icon: Ticket },
       { id: "returns-refunds", label: "Refunds", icon: RotateCcw },
@@ -425,6 +427,9 @@ function DashboardPageInner() {
             {activeTab === "payments" && (
               <PaymentsTab data={data} />
             )}
+            {activeTab === "my-receipts" && (
+              <MyReceiptsTab data={data} />
+            )}
             {activeTab === "my-certificates" && (
               <MyCertificatesTab data={data} />
             )}
@@ -593,6 +598,12 @@ function OverviewTab({ user, category, data, orderCount, totalRegistrations, nav
             <p className="text-sm text-muted mt-1">{user.email}</p>
           </div>
         </div>
+        {user.loginTime && (
+          <div className="mt-3 pt-3 border-t border-ink/5 flex items-center gap-2 text-xs text-muted">
+            <Clock size={12} />
+            Logged in at {new Date(user.loginTime).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" })}
+          </div>
+        )}
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -2220,6 +2231,57 @@ function PaymentsTab({ data }: { data: any }) {
             </table>
           </div>
         </Card>
+      )}
+    </div>
+  );
+}
+
+/* ================================================================
+   MY RECEIPTS TAB
+   ================================================================ */
+function MyReceiptsTab({ data }: { data: any }) {
+  const receipts = data?.paymentReceipts || data?.payments || [];
+
+  return (
+    <div className="space-y-6">
+      <SectionHeader title="My Receipts" subtitle="Download your payment receipts and registration invoices." />
+
+      {receipts.length === 0 ? (
+        <EmptyState
+          icon={FileText}
+          title="No receipts yet"
+          description="Your receipts will appear here after a successful payment or registration."
+        />
+      ) : (
+        <div className="grid gap-4 sm:grid-cols-2">
+          {receipts.map((r: any) => (
+            <Card key={r.id} className="p-5">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-teal/10 rounded-xl flex items-center justify-center shrink-0">
+                  <FileText size={20} className="text-teal" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-bold text-ink truncate">{r.receiptNumber || r.orderNumber || r.id}</p>
+                  <p className="text-xs text-muted mt-0.5">
+                    {new Date(r.createdAt || r.paymentDate).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
+                  </p>
+                  <p className="text-sm font-extrabold text-ink mt-1">₹{(r.amount || r.totalAmount || 0).toLocaleString("en-IN")}</p>
+                  <div className="flex gap-2 mt-3">
+                    <button
+                      onClick={() => {
+                        if (r.downloadUrl) window.open(r.downloadUrl, "_blank");
+                        else toast.success("Receipt download coming soon!");
+                      }}
+                      className="text-xs font-bold text-teal hover:underline flex items-center gap-1"
+                    >
+                      <Download size={12} /> Download
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          ))}
+        </div>
       )}
     </div>
   );

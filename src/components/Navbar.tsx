@@ -15,7 +15,7 @@ const navLinks = [
   { href: "/contact", label: "Contact" },
 ];
 
-export default function Navbar() {
+export default function Navbar({ logoUrl }: { logoUrl?: string }) {
   const [open, setOpen] = useState(false);
   const [userMenu, setUserMenu] = useState(false);
   const { data: session } = useSession();
@@ -29,9 +29,13 @@ export default function Navbar() {
           <div className="flex items-center justify-between h-14">
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2.5 shrink-0">
-              <div className="w-9 h-9 bg-[#0d6662] rounded-lg flex items-center justify-center text-white font-heading font-extrabold text-sm">
-                VG
-              </div>
+              {logoUrl ? (
+                <img src={logoUrl} alt="VGMF" className="h-9 w-9 object-contain rounded-lg" />
+              ) : (
+                <div className="w-9 h-9 bg-[#0d6662] rounded-lg flex items-center justify-center text-white font-heading font-extrabold text-sm">
+                  VG
+                </div>
+              )}
               <div className="hidden sm:block">
                 <h1 className="font-heading text-[#1a1a2e] font-extrabold text-sm leading-none">Vaidya Gogate</h1>
                 <p className="text-[9px] text-[#7c7c8a] font-medium tracking-wider uppercase">Memorial Foundation</p>

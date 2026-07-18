@@ -88,9 +88,12 @@ export default function RazorpayButton({
       if (!orderRes.ok) {
         throw new Error(orderData.error || "Failed to create payment order");
       }
+      if (!orderData.keyId) {
+        throw new Error("Payment gateway not configured. Please contact support.");
+      }
 
       const options = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        key: orderData.keyId,
         amount: orderData.amount,
         currency: orderData.currency,
         name: "VaidyaGo Medical Foundation",

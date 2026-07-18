@@ -25,6 +25,7 @@ import {
   Link2,
   Shield,
   FileCode,
+  Lock,
 } from "lucide-react";
 
 const sidebarLinks = [
@@ -267,6 +268,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                       onClick={() => setProfileOpen(false)}
                     >
                       <Settings size={16} /> Settings
+                    </Link>
+                    <Link
+                      href="/change-password"
+                      className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-muted hover:bg-cream transition-colors"
+                      onClick={() => setProfileOpen(false)}
+                    >
+                      <Lock size={16} /> Change Password
                     </Link>
                     <Link
                       href="/"

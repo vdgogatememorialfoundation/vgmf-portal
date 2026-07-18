@@ -16,6 +16,7 @@ import {
   Clock,
   ChevronDown,
   AlertCircle,
+  Lock,
 } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -237,16 +238,26 @@ export default function ScannerPage() {
               </p>
             </div>
           </div>
-          <button
-            onClick={() => {
-              const el = document.createElement("a");
-              el.href = "/api/auth/signout";
-              el.click();
-            }}
-            className="w-9 h-9 flex items-center justify-center rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-colors"
-          >
-            <LogOut size={16} className="text-white/50" />
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => router.push("/change-password")}
+              className="w-9 h-9 flex items-center justify-center rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-colors"
+              title="Change Password"
+            >
+              <Lock size={16} className="text-white/50" />
+            </button>
+            <button
+              onClick={() => {
+                const el = document.createElement("a");
+                el.href = "/api/auth/signout";
+                el.click();
+              }}
+              className="w-9 h-9 flex items-center justify-center rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-colors"
+              title="Sign Out"
+            >
+              <LogOut size={16} className="text-white/50" />
+            </button>
+          </div>
         </div>
       </header>
 

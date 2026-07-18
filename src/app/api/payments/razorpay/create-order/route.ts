@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getRazorpay } from "@/lib/razorpay";
+import { getRazorpay, getRazorpayPublicKey } from "@/lib/razorpay";
 import { auth } from "@/lib/auth";
 
 export async function POST(req: NextRequest) {
@@ -20,7 +20,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Receipt identifier is required" }, { status: 400 });
     }
 
-    const order = await getRazorpay().orders.create({
+    const razorpay = await getRazorpay();
+    const order = await razorpay.orders.create({
       amount: Math.round(amount * 100),
       currency: "INR",
       receipt,
@@ -31,11 +32,13 @@ export async function POST(req: NextRequest) {
       },
     });
 
+    const keyId = await getRazorpayPublicKey();
+
     return NextResponse.json({
       orderId: order.id,
       amount: order.amount,
       currency: order.currency,
-      keyId: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+      keyId,
     });
   } catch (error) {
     console.error("Razorpay create order error:", error);

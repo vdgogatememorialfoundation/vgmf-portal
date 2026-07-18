@@ -1,5 +1,6 @@
+import { getEmailSettings } from "./settings";
+
 const ZEPTO_API = "https://api.zeptomail.in/v1.1/email";
-const ZEPTO_KEY = process.env.ZEPTOMAIL_API_KEY || "";
 
 interface EmailOptions {
   to: { email: string; name?: string }[];
@@ -9,6 +10,7 @@ interface EmailOptions {
 }
 
 export async function sendEmail(options: EmailOptions) {
+  const { apiKey: ZEPTO_KEY, fromAddress: defaultFrom } = await getEmailSettings();
   if (!ZEPTO_KEY) { console.log("ZeptoMail not configured, skipping email"); return; }
   try {
     await fetch(ZEPTO_API, {
@@ -19,7 +21,7 @@ export async function sendEmail(options: EmailOptions) {
         "Authorization": `Zoho-enczapikey ${ZEPTO_KEY}`,
       },
       body: JSON.stringify({
-        from: { address: options.from || "noreply@vaidyagogate.org", name: "VGMF Portal" },
+        from: { address: options.from || defaultFrom, name: "VGMF Portal" },
         to: options.to.map(t => ({ email_address: { address: t.email, name: t.name || t.email } })),
         subject: options.subject,
         htmlbody: options.htmlBody,

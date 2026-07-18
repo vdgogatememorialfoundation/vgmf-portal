@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
+import { clearSettingsCache } from "@/lib/settings";
 
 export const dynamic = "force-dynamic";
 
@@ -8,9 +9,16 @@ const DEFAULT_SETTINGS = [
   { key: "auth.allowSignup", value: "true", description: "Allow new user signups", group: "auth" },
   { key: "auth.allowLogin", value: "true", description: "Allow user login", group: "auth" },
   { key: "auth.loginMethod", value: "password", description: "Login method: password, otp, or both", group: "auth" },
-  { key: "payment.razorpayKeyId", value: "", description: "Razorpay Key ID", group: "payment" },
-  { key: "payment.razorpayKeySecret", value: "", description: "Razorpay Key Secret", group: "payment" },
+  { key: "payment.razorpayKeyId", value: "", description: "Razorpay Live Key ID", group: "payment" },
+  { key: "payment.razorpayKeySecret", value: "", description: "Razorpay Live Key Secret", group: "payment" },
+  { key: "payment.razorpayTestKeyId", value: "", description: "Razorpay Test Key ID", group: "payment" },
+  { key: "payment.razorpayTestSecret", value: "", description: "Razorpay Test Key Secret", group: "payment" },
+  { key: "payment.razorpayTestMode", value: "false", description: "Use Razorpay test mode", group: "payment" },
   { key: "payment.isEnabled", value: "true", description: "Enable payment processing", group: "payment" },
+  { key: "email.zeptoApiKey", value: "", description: "ZeptoMail API key", group: "email" },
+  { key: "email.fromAddress", value: "noreply@vaidyagogate.org", description: "Default from email address", group: "email" },
+  { key: "branding.logoUrl", value: "", description: "Site logo URL", group: "branding" },
+  { key: "branding.faviconUrl", value: "", description: "Site favicon URL", group: "branding" },
   { key: "general.siteName", value: "Vaidya Gogate Memorial Foundation", description: "Site name", group: "general" },
   { key: "general.contactEmail", value: "admin@vaidyagogate.org", description: "Contact email", group: "general" },
   { key: "general.contactPhone", value: "", description: "Contact phone", group: "general" },
@@ -71,6 +79,7 @@ export async function PATCH(req: NextRequest) {
       });
     }
 
+    clearSettingsCache();
     const all = await prisma.siteSetting.findMany({ orderBy: { key: "asc" } });
     return NextResponse.json({ items: all });
   } catch (err) {

@@ -3,11 +3,18 @@ import { usePathname } from "next/navigation";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import Chatbot from "./Chatbot";
-import SiteNotices from "./SiteNotices";
 
 const HIDE_NAV_FOOTER = ["/admin", "/staff", "/dashboard", "/judge", "/scanner", "/doctor", "/trustee", "/reviewer"];
 
-export function LayoutWrapper({ children }: { children: React.ReactNode }) {
+export function LayoutWrapper({
+  children,
+  logoUrl,
+  faviconUrl,
+}: {
+  children: React.ReactNode;
+  logoUrl?: string;
+  faviconUrl?: string;
+}) {
   const pathname = usePathname();
   const hideNavFooter = HIDE_NAV_FOOTER.some(p => pathname.startsWith(p));
 
@@ -17,8 +24,7 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <Navbar />
-      <SiteNotices />
+      <Navbar logoUrl={logoUrl} />
       <main className="min-h-screen bg-[#faf9f6]">{children}</main>
       <Footer />
       <Chatbot />

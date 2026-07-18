@@ -67,6 +67,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.role = (user as any).role;
         token.image = (user as any).image;
         token.category = (user as any).category;
+        token.loginTime = new Date().toISOString();
       }
       return token;
     },
@@ -76,6 +77,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         (session.user as any).role = token.role;
         (session.user as any).image = token.image;
         (session.user as any).category = token.category;
+        (session.user as any).loginTime = token.loginTime;
       }
       return session;
     },

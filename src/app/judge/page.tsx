@@ -28,6 +28,7 @@ import {
   BarChart3,
   SlidersHorizontal,
   MessageSquare,
+  Lock,
 } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -348,6 +349,13 @@ export default function JudgePanel() {
               <p className="text-[10px] text-white/40 truncate">{role}</p>
             </div>
           </div>
+          <Link
+            href="/change-password"
+            className="flex items-center gap-2 text-xs text-white/40 hover:text-white/70 transition-colors px-2 py-1.5"
+          >
+            <Lock size={14} />
+            Change Password
+          </Link>
           <Link
             href="/api/auth/signout"
             className="flex items-center gap-2 text-xs text-white/40 hover:text-white/70 transition-colors px-2 py-1.5"

@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import crypto from "crypto";
 import { generateETicketNumber } from "@/lib/razorpay";
+import { getRazorpayKeys } from "@/lib/settings";
 import { sendPaymentConfirmation, sendETicket } from "@/lib/email-notifications";
 
 export async function POST(req: NextRequest) {
@@ -19,7 +20,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Missing payment verification parameters" }, { status: 400 });
     }
 
-    const keySecret = process.env.RAZORPAY_KEY_SECRET || "";
+    const { keySecret } = await getRazorpayKeys();
+    if (!keySecret) {
+      return NextResponse.json({ error: "Payment gateway not configured" }, { status: 500 });
+    }
     const expectedSignature = crypto
       .createHmac("sha256", keySecret)
       .update(`${razorpay_order_id}|${razorpay_payment_id}`)

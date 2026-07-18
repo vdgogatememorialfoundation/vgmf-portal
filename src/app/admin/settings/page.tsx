@@ -14,6 +14,8 @@ import {
   Key,
   ToggleLeft,
   ToggleRight,
+  Mail,
+  Image as ImageIcon,
 } from "lucide-react";
 
 interface SettingItem {
@@ -232,9 +234,77 @@ export default function AdminSettings() {
             description="Enable or disable payment processing"
             settingKey="payment.isEnabled"
           />
+          <Toggle
+            label="Razorpay Test Mode"
+            description="Use test keys instead of live keys"
+            settingKey="payment.razorpayTestMode"
+          />
           <div className="grid md:grid-cols-2 gap-4">
             <SecretInput label="Razorpay Key ID" settingKey="payment.razorpayKeyId" placeholder="rzp_live_..." />
             <SecretInput label="Razorpay Key Secret" settingKey="payment.razorpayKeySecret" placeholder="••••••••" />
+            <SecretInput label="Razorpay Test Key ID" settingKey="payment.razorpayTestKeyId" placeholder="rzp_test_..." />
+            <SecretInput label="Razorpay Test Secret" settingKey="payment.razorpayTestSecret" placeholder="••••••••" />
+          </div>
+        </div>
+      </div>
+
+      {/* Email Settings */}
+      <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+        <div className="flex items-center gap-3 mb-5">
+          <div className="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center">
+            <Mail size={20} className="text-purple-600" />
+          </div>
+          <div>
+            <h3 className="font-heading text-lg font-bold text-navy">Email Settings</h3>
+            <p className="text-xs text-muted">ZeptoMail email gateway configuration</p>
+          </div>
+        </div>
+        <div className="space-y-4">
+          <div className="grid md:grid-cols-2 gap-4">
+            <SecretInput label="ZeptoMail API Key" settingKey="email.zeptoApiKey" placeholder="PHtE6r0..." />
+            <div>
+              <label className="block text-xs font-semibold text-muted uppercase tracking-wider mb-1.5">From Email</label>
+              <input
+                type="email"
+                value={settings["email.fromAddress"] || ""}
+                onChange={(e) => updateSetting("email.fromAddress", e.target.value)}
+                className="input-field w-full"
+                placeholder="noreply@vaidyagogate.org"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Branding Settings */}
+      <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+        <div className="flex items-center gap-3 mb-5">
+          <div className="w-10 h-10 rounded-xl bg-pink-50 flex items-center justify-center">
+            <ImageIcon size={20} className="text-pink-600" />
+          </div>
+          <div>
+            <h3 className="font-heading text-lg font-bold text-navy">Branding</h3>
+            <p className="text-xs text-muted">Logo, favicon and site appearance</p>
+          </div>
+        </div>
+        <div className="grid md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-xs font-semibold text-muted uppercase tracking-wider mb-1.5">Site Logo URL</label>
+            <input
+              value={settings["branding.logoUrl"] || ""}
+              onChange={(e) => updateSetting("branding.logoUrl", e.target.value)}
+              className="input-field w-full"
+              placeholder="https://..."
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-muted uppercase tracking-wider mb-1.5">Favicon URL</label>
+            <input
+              value={settings["branding.faviconUrl"] || ""}
+              onChange={(e) => updateSetting("branding.faviconUrl", e.target.value)}
+              className="input-field w-full"
+              placeholder="https://..."
+            />
           </div>
         </div>
       </div>

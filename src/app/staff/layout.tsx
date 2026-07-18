@@ -11,6 +11,8 @@ import {
   Bell,
   ChevronLeft,
   ChevronRight,
+  Lock,
+  LogOut,
 } from "lucide-react";
 
 const sidebarLinks = [
@@ -188,10 +190,17 @@ export default function StaffLayout({ children }: { children: React.ReactNode })
                       <p className="text-xs text-muted">staff@vgmf.org</p>
                     </div>
                     <Link
+                      href="/change-password"
+                      className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-muted hover:bg-slate-50 transition-colors"
+                      onClick={() => setProfileOpen(false)}
+                    >
+                      <Lock size={16} /> Change Password
+                    </Link>
+                    <Link
                       href="/"
                       className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-danger hover:bg-red-50 transition-colors"
                     >
-                      Sign Out
+                      <LogOut size={16} /> Sign Out
                     </Link>
                   </div>
                 )}
