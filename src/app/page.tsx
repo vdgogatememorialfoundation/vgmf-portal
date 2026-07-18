@@ -61,7 +61,7 @@ export default async function Home() {
     title: r.title,
     content: r.content,
     userName: r.user.name,
-    userDesignation: r.role || null,
+    userDesignation: r.user.role || null,
   }));
 
   const activeNotices = notices.filter(n => n.isActive && (!n.startDate || n.startDate <= now) && (!n.endDate || n.endDate >= now));
