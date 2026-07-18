@@ -8,6 +8,9 @@ interface Notice {
   content: string | null;
   noticeType: string;
   position: string;
+  startDate?: string | null;
+  endDate?: string | null;
+  isActive: boolean;
 }
 
 const noticeTypeConfig: Record<string, { icon: any; bg: string; border: string; iconColor: string; label: string }> = {
