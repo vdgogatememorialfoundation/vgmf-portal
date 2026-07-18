@@ -1,71 +1,212 @@
 "use client";
+
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { LogIn } from "lucide-react";
+import { LogIn, ArrowLeft, Eye, EyeOff, Loader2 } from "lucide-react";
+import toast from "react-hot-toast";
 
 export default function UserLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!email || !password) {
+      toast.error("Please fill in all fields");
+      return;
+    }
     setLoading(true);
-    setError("");
-    
-    const result = await signIn("credentials", { email, password, redirect: false });
-    
-    if (result?.error) {
-      setError("Invalid email or password");
+
+    try {
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        toast.error("Invalid email or password");
+        setLoading(false);
+        return;
+      }
+
+      const sessionRes = await fetch("/api/auth/session");
+      const session = await sessionRes.json();
+      const role = session?.user?.role;
+
+      toast.success("Welcome back!");
+
+      if (role === "ADMIN") router.push("/admin");
+      else if (role === "STAFF") router.push("/staff");
+      else if (role === "DOCTOR") router.push("/dashboard");
+      else if (role === "JUDGE" || role === "REVIEWER") router.push("/dashboard");
+      else if (role === "TRUSTEE") router.push("/dashboard");
+      else router.push("/dashboard");
+
+      router.refresh();
+    } catch {
+      toast.error("Something went wrong. Please try again.");
+    } finally {
       setLoading(false);
-      return;
     }
-    
-    const sessionRes = await fetch("/api/auth/session");
-    const session = await sessionRes.json();
-    
-    if (session?.user?.role && session.user.role !== "USER") {
-      await signIn("credentials", { email: "", password: "", redirect: false });
-      setError("This login is for registered users only. Please use the appropriate portal login.");
-      setLoading(false);
-      return;
-    }
-    
-    router.push("/dashboard");
-    router.refresh();
   };
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center px-4 py-12">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <h1 className="font-heading text-3xl font-extrabold text-navy">Welcome Back</h1>
-          <p className="text-muted mt-2">Sign in to your VGMF account</p>
+    <div className="min-h-screen flex">
+      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-gradient-to-br from-navy via-navy-light to-navy">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-20 left-20 w-72 h-72 bg-gold rounded-full blur-3xl" />
+          <div className="absolute bottom-20 right-20 w-96 h-96 bg-teal rounded-full blur-3xl" />
         </div>
-        <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm border p-8 space-y-5">
-          {error && <div className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-xl">{error}</div>}
-          <div>
-            <label className="block text-xs font-semibold text-muted uppercase tracking-wider mb-1.5">Email</label>
-            <input type="email" value={email} onChange={e => setEmail(e.target.value)} required
-              className="w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-navy/20 focus:border-navy" placeholder="you@example.com" />
+        <div className="relative z-10 flex flex-col justify-center px-16 text-white">
+          <Link href="/" className="inline-flex items-center gap-2 text-gold/80 hover:text-gold mb-12 transition-colors text-sm font-medium">
+            <ArrowLeft size={16} />
+            Back to Home
+          </Link>
+          <div className="w-20 h-20 bg-gold/10 border-2 border-gold/30 rounded-2xl flex items-center justify-center mb-8">
+            <span className="font-heading text-3xl font-extrabold text-gold">VG</span>
           </div>
-          <div>
-            <label className="block text-xs font-semibold text-muted uppercase tracking-wider mb-1.5">Password</label>
-            <input type="password" value={password} onChange={e => setPassword(e.target.value)} required
-              className="w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-navy/20 focus:border-navy" placeholder="••••••••" />
-          </div>
-          <button type="submit" disabled={loading}
-            className="w-full py-3 bg-navy text-white font-semibold rounded-xl hover:bg-navy-light transition-colors disabled:opacity-50 flex items-center justify-center gap-2">
-            <LogIn size={18} /> {loading ? "Signing in..." : "Sign In"}
-          </button>
-          <p className="text-center text-sm text-muted">
-            Don&apos;t have an account? <Link href="/signup" className="text-navy font-semibold hover:underline">Create one</Link>
+          <h1 className="font-heading text-4xl xl:text-5xl font-extrabold leading-tight mb-4">
+            Vaidya Go <span className="text-gold">Medical</span> Foundation
+          </h1>
+          <p className="text-white/60 text-lg max-w-md leading-relaxed">
+            Empowering communities through healthcare, education, and social welfare initiatives since 1992.
           </p>
-        </form>
+          <div className="mt-12 flex items-center gap-8 text-sm text-white/40">
+            <div>
+              <p className="text-gold font-heading text-2xl font-bold">25K+</p>
+              <p>Lives Impacted</p>
+            </div>
+            <div className="w-px h-10 bg-white/10" />
+            <div>
+              <p className="text-gold font-heading text-2xl font-bold">150+</p>
+              <p>Medical Camps</p>
+            </div>
+            <div className="w-px h-10 bg-white/10" />
+            <div>
+              <p className="text-gold font-heading text-2xl font-bold">30+</p>
+              <p>Years of Service</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="w-full lg:w-1/2 flex items-center justify-center bg-cream px-6 py-12">
+        <div className="w-full max-w-md">
+          <Link href="/" className="lg:hidden inline-flex items-center gap-2 text-muted hover:text-navy mb-8 transition-colors text-sm font-medium">
+            <ArrowLeft size={16} />
+            Back to Home
+          </Link>
+
+          <div className="lg:hidden flex items-center gap-3 mb-8">
+            <div className="w-12 h-12 bg-navy rounded-xl flex items-center justify-center">
+              <span className="font-heading text-xl font-extrabold text-gold">VG</span>
+            </div>
+            <span className="font-heading text-xl font-bold text-navy">VGMF</span>
+          </div>
+
+          <div className="mb-8">
+            <h1 className="font-heading text-3xl font-extrabold text-navy mb-2">Welcome Back</h1>
+            <p className="text-muted">Sign in to your VGMF account</p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div>
+              <label className="block text-xs font-semibold text-muted uppercase tracking-wider mb-1.5">Email Address</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="input-field"
+                placeholder="you@example.com"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-muted uppercase tracking-wider mb-1.5">Password</label>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="input-field pr-12"
+                  placeholder="Enter your password"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-navy transition-colors"
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="btn-primary w-full justify-center py-3 text-base disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading ? (
+                <>
+                  <Loader2 size={18} className="animate-spin" />
+                  Signing in...
+                </>
+              ) : (
+                <>
+                  <LogIn size={18} />
+                  Sign In
+                </>
+              )}
+            </button>
+          </form>
+
+          <div className="mt-6 text-center">
+            <p className="text-sm text-muted">
+              Don&apos;t have an account?{" "}
+              <Link href="/signup" className="text-navy font-semibold hover:underline">
+                Create one
+              </Link>
+            </p>
+          </div>
+
+          <div className="mt-8 pt-6 border-t border-gray-200">
+            <p className="text-center text-xs text-muted mb-4">Or sign in as</p>
+            <div className="grid grid-cols-2 gap-3">
+              <Link
+                href="/admin/login"
+                className="flex items-center justify-center gap-2 py-2.5 px-4 border-2 border-gray-200 rounded-xl text-sm font-medium text-muted hover:border-navy hover:text-navy transition-all"
+              >
+                Admin
+              </Link>
+              <Link
+                href="/staff/login"
+                className="flex items-center justify-center gap-2 py-2.5 px-4 border-2 border-gray-200 rounded-xl text-sm font-medium text-muted hover:border-teal hover:text-teal transition-all"
+              >
+                Staff
+              </Link>
+              <Link
+                href="/doctor/login"
+                className="flex items-center justify-center gap-2 py-2.5 px-4 border-2 border-gray-200 rounded-xl text-sm font-medium text-muted hover:border-emerald-accent hover:text-emerald-accent transition-all"
+              >
+                Doctor
+              </Link>
+              <Link
+                href="/judge/login"
+                className="flex items-center justify-center gap-2 py-2.5 px-4 border-2 border-gray-200 rounded-xl text-sm font-medium text-muted hover:border-maroon hover:text-maroon transition-all"
+              >
+                Judge
+              </Link>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

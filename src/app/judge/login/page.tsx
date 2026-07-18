@@ -1,74 +1,181 @@
 "use client";
+
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Scale } from "lucide-react";
+import { Scale, ArrowLeft, Eye, EyeOff, Loader2, Lock } from "lucide-react";
+import toast from "react-hot-toast";
 
 export default function JudgeLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!email || !password) {
+      toast.error("Please fill in all fields");
+      return;
+    }
     setLoading(true);
-    setError("");
 
-    const result = await signIn("credentials", { email, password, redirect: false });
+    try {
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
 
-    if (result?.error) {
-      setError("Invalid credentials");
+      if (result?.error) {
+        toast.error("Invalid email or password");
+        setLoading(false);
+        return;
+      }
+
+      const sessionRes = await fetch("/api/auth/session");
+      const session = await sessionRes.json();
+
+      if (session?.user?.role !== "JUDGE" && session?.user?.role !== "REVIEWER") {
+        await signIn("credentials", { email: "", password: "", redirect: false });
+        toast.error("Access denied. Judge/Reviewer privileges required.");
+        setLoading(false);
+        return;
+      }
+
+      toast.success("Welcome, Judge!");
+      router.push("/dashboard");
+      router.refresh();
+    } catch {
+      toast.error("Something went wrong. Please try again.");
+    } finally {
       setLoading(false);
-      return;
     }
-
-    const sessionRes = await fetch("/api/auth/session");
-    const session = await sessionRes.json();
-
-    if (session?.user?.role !== "JUDGE" && session?.user?.role !== "REVIEWER") {
-      await signIn("credentials", { email: "", password: "", redirect: false });
-      setError("Access denied for this portal");
-      setLoading(false);
-      return;
-    }
-
-    router.push("/dashboard/reviewer");
-    router.refresh();
   };
 
   return (
-    <div className="min-h-screen bg-cream flex items-center justify-center px-4">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-navy rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <Scale className="text-gold" size={32} />
-          </div>
-          <h1 className="font-heading text-3xl font-extrabold text-navy">Judge / Reviewer Login</h1>
-          <p className="text-muted mt-2">VGMF Review Portal</p>
+    <div className="min-h-screen flex">
+      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-gradient-to-br from-maroon via-navy-light to-navy">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-20 left-20 w-72 h-72 bg-gold rounded-full blur-3xl" />
+          <div className="absolute bottom-20 right-20 w-96 h-96 bg-maroon rounded-full blur-3xl" />
         </div>
-        <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm border p-8 space-y-5">
-          {error && <div className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-xl">{error}</div>}
-          <div>
-            <label className="block text-xs font-semibold text-muted uppercase tracking-wider mb-1.5">Email</label>
-            <input type="email" value={email} onChange={e => setEmail(e.target.value)} required
-              className="w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-navy/20" placeholder="judge@vaidyagogate.org" />
+        <div className="relative z-10 flex flex-col justify-center px-16 text-white">
+          <Link href="/" className="inline-flex items-center gap-2 text-gold/80 hover:text-gold mb-12 transition-colors text-sm font-medium">
+            <ArrowLeft size={16} />
+            Back to Home
+          </Link>
+          <div className="w-20 h-20 bg-gold/10 border-2 border-gold/30 rounded-2xl flex items-center justify-center mb-8">
+            <Scale className="text-gold" size={36} />
           </div>
-          <div>
-            <label className="block text-xs font-semibold text-muted uppercase tracking-wider mb-1.5">Password</label>
-            <input type="password" value={password} onChange={e => setPassword(e.target.value)} required
-              className="w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-navy/20" placeholder="••••••••" />
+          <h1 className="font-heading text-4xl xl:text-5xl font-extrabold leading-tight mb-4">
+            Judge / <span className="text-gold">Reviewer</span> Portal
+          </h1>
+          <p className="text-white/60 text-lg max-w-md leading-relaxed">
+            Access the review dashboard to evaluate applications, provide feedback, and ensure fair governance.
+          </p>
+          <div className="mt-12 space-y-4">
+            {[
+              "Review scholarship applications",
+              "Evaluate healthcare requests",
+              "Provide structured feedback",
+              "Ensure transparent decision-making",
+            ].map((item) => (
+              <div key={item} className="flex items-center gap-3">
+                <div className="w-1.5 h-1.5 rounded-full bg-gold shrink-0" />
+                <span className="text-white/70 text-sm">{item}</span>
+              </div>
+            ))}
           </div>
-          <button type="submit" disabled={loading}
-            className="w-full py-3 bg-navy text-white font-semibold rounded-xl hover:bg-navy-light transition-colors disabled:opacity-50">
-            {loading ? "Verifying..." : "Sign In as Judge / Reviewer"}
-          </button>
-        </form>
-        <p className="text-center text-sm text-muted mt-6">
-          <Link href="/" className="hover:text-navy">&larr; Back to Main Site</Link>
-        </p>
+        </div>
+      </div>
+
+      <div className="w-full lg:w-1/2 flex items-center justify-center bg-cream px-6 py-12">
+        <div className="w-full max-w-md">
+          <Link href="/" className="lg:hidden inline-flex items-center gap-2 text-muted hover:text-navy mb-8 transition-colors text-sm font-medium">
+            <ArrowLeft size={16} />
+            Back to Home
+          </Link>
+
+          <div className="lg:hidden flex items-center gap-3 mb-8">
+            <div className="w-12 h-12 bg-maroon rounded-xl flex items-center justify-center">
+              <Scale className="text-gold" size={22} />
+            </div>
+            <span className="font-heading text-xl font-bold text-navy">VGMF Judge</span>
+          </div>
+
+          <div className="mb-8">
+            <div className="w-14 h-14 bg-maroon rounded-2xl flex items-center justify-center mb-4">
+              <Scale className="text-gold" size={28} />
+            </div>
+            <h1 className="font-heading text-3xl font-extrabold text-navy mb-2">Judge / Reviewer Login</h1>
+            <p className="text-muted">VGMF Review Portal</p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div>
+              <label className="block text-xs font-semibold text-muted uppercase tracking-wider mb-1.5">Email Address</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="input-field"
+                placeholder="judge@vaidyagogate.org"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-muted uppercase tracking-wider mb-1.5">Password</label>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="input-field pr-12"
+                  placeholder="Enter your password"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-navy transition-colors"
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="btn-primary w-full justify-center py-3 text-base disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading ? (
+                <>
+                  <Loader2 size={18} className="animate-spin" />
+                  Verifying...
+                </>
+              ) : (
+                <>
+                  <Lock size={18} />
+                  Sign In as Judge / Reviewer
+                </>
+              )}
+            </button>
+          </form>
+
+          <div className="mt-6 text-center">
+            <p className="text-sm text-muted">
+              Not a judge?{" "}
+              <Link href="/login" className="text-navy font-semibold hover:underline">
+                User Login
+              </Link>
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );
