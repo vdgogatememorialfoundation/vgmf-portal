@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -16,7 +16,7 @@ const categoryLinks = [
   { href: "/signup", label: "Institution", icon: Building2, color: "hover:border-purple-500 hover:text-purple-500" },
 ];
 
-export default function UserLogin() {
+function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -49,16 +49,11 @@ export default function UserLogin() {
       const sessionRes = await fetch("/api/auth/session");
       const session = await sessionRes.json();
       const role = session?.user?.role;
-      const category = session?.user?.category;
 
       toast.success("Welcome back!");
 
       if (role === "ADMIN") router.push("/admin");
       else if (role === "STAFF") router.push("/staff");
-      else if (role === "DOCTOR") router.push("/dashboard");
-      else if (role === "JUDGE" || role === "REVIEWER") router.push("/dashboard");
-      else if (role === "TRUSTEE") router.push("/dashboard");
-      else if (category) router.push("/dashboard");
       else router.push("/dashboard");
 
       router.refresh();
@@ -69,6 +64,146 @@ export default function UserLogin() {
     }
   };
 
+  return (
+    <div className="w-full lg:w-1/2 flex items-center justify-center bg-cream px-6 py-12">
+      <div className="w-full max-w-md">
+        <Link href="/" className="lg:hidden inline-flex items-center gap-2 text-ink/60 hover:text-ink mb-8 transition-colors text-sm font-medium">
+          <ArrowLeft size={16} />
+          Back to Home
+        </Link>
+
+        <div className="lg:hidden flex items-center gap-3 mb-8">
+          <div className="w-12 h-12 bg-teal rounded-xl flex items-center justify-center">
+            <span className="font-heading text-xl font-extrabold text-white">VG</span>
+          </div>
+          <span className="font-heading text-xl font-bold text-ink">VGMF</span>
+        </div>
+
+        <div className="mb-8">
+          <h1 className="font-heading text-3xl font-extrabold text-ink mb-2">Welcome Back</h1>
+          <p className="text-ink/60">Sign in to your VGMF account</p>
+        </div>
+
+        {justRegistered && (
+          <div className="flex items-center gap-3 p-4 bg-teal/5 border border-teal/20 rounded-xl mb-6">
+            <CheckCircle2 size={20} className="text-teal shrink-0" />
+            <p className="text-sm text-teal font-medium">Account created! Please sign in.</p>
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div>
+            <label className="block text-xs font-semibold text-ink/60 uppercase tracking-wider mb-1.5">Email Address</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="input-field"
+              placeholder="you@example.com"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-ink/60 uppercase tracking-wider mb-1.5">Password</label>
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="input-field pr-12"
+                placeholder="Enter your password"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-ink/60 hover:text-ink transition-colors"
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="btn-primary w-full justify-center py-3 text-base disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading ? (
+              <>
+                <Loader2 size={18} className="animate-spin" />
+                Signing in...
+              </>
+            ) : (
+              <>
+                <LogIn size={18} />
+                Sign In
+              </>
+            )}
+          </button>
+        </form>
+
+        <div className="mt-6 text-center">
+          <p className="text-sm text-ink/60">
+            Don&apos;t have an account?{" "}
+            <Link href="/signup" className="text-teal font-semibold hover:underline">
+              Create one
+            </Link>
+          </p>
+        </div>
+
+        <div className="mt-8 pt-6 border-t border-gray-200">
+          <p className="text-center text-xs text-ink/60 mb-4">Quick sign in</p>
+          <div className="grid grid-cols-2 gap-3">
+            <Link
+              href="/admin/login"
+              className="flex items-center justify-center gap-2 py-2.5 px-4 border-2 border-gray-200 rounded-xl text-sm font-medium text-ink/60 hover:border-teal hover:text-teal transition-all"
+            >
+              Admin
+            </Link>
+            <Link
+              href="/staff/login"
+              className="flex items-center justify-center gap-2 py-2.5 px-4 border-2 border-gray-200 rounded-xl text-sm font-medium text-ink/60 hover:border-teal hover:text-teal transition-all"
+            >
+              Staff
+            </Link>
+            <Link
+              href="/doctor/login"
+              className="flex items-center justify-center gap-2 py-2.5 px-4 border-2 border-gray-200 rounded-xl text-sm font-medium text-ink/60 hover:border-teal hover:text-teal transition-all"
+            >
+              Doctor
+            </Link>
+            <Link
+              href="/judge/login"
+              className="flex items-center justify-center gap-2 py-2.5 px-4 border-2 border-gray-200 rounded-xl text-sm font-medium text-ink/60 hover:border-teal hover:text-teal transition-all"
+            >
+              Judge
+            </Link>
+          </div>
+        </div>
+
+        <div className="mt-6 pt-6 border-t border-gray-200">
+          <p className="text-center text-xs text-ink/60 mb-4">Register as</p>
+          <div className="grid grid-cols-3 gap-2">
+            {categoryLinks.map((cat, i) => (
+              <Link
+                key={i}
+                href={cat.href}
+                className={`flex flex-col items-center gap-1 py-2.5 px-2 border-2 border-gray-200 rounded-xl text-xs font-medium text-ink/60 transition-all ${cat.color}`}
+              >
+                <cat.icon size={16} />
+                {cat.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function UserLogin() {
   return (
     <div className="min-h-screen flex">
       <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-gradient-to-br from-teal via-cyan-500 to-teal-light">
@@ -109,141 +244,9 @@ export default function UserLogin() {
         </div>
       </div>
 
-      <div className="w-full lg:w-1/2 flex items-center justify-center bg-cream px-6 py-12">
-        <div className="w-full max-w-md">
-          <Link href="/" className="lg:hidden inline-flex items-center gap-2 text-ink/60 hover:text-ink mb-8 transition-colors text-sm font-medium">
-            <ArrowLeft size={16} />
-            Back to Home
-          </Link>
-
-          <div className="lg:hidden flex items-center gap-3 mb-8">
-            <div className="w-12 h-12 bg-teal rounded-xl flex items-center justify-center">
-              <span className="font-heading text-xl font-extrabold text-white">VG</span>
-            </div>
-            <span className="font-heading text-xl font-bold text-ink">VGMF</span>
-          </div>
-
-          <div className="mb-8">
-            <h1 className="font-heading text-3xl font-extrabold text-ink mb-2">Welcome Back</h1>
-            <p className="text-ink/60">Sign in to your VGMF account</p>
-          </div>
-
-          {justRegistered && (
-            <div className="flex items-center gap-3 p-4 bg-teal/5 border border-teal/20 rounded-xl mb-6">
-              <CheckCircle2 size={20} className="text-teal shrink-0" />
-              <p className="text-sm text-teal font-medium">Account created! Please sign in.</p>
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div>
-              <label className="block text-xs font-semibold text-ink/60 uppercase tracking-wider mb-1.5">Email Address</label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="input-field"
-                placeholder="you@example.com"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-ink/60 uppercase tracking-wider mb-1.5">Password</label>
-              <div className="relative">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  className="input-field pr-12"
-                  placeholder="Enter your password"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-ink/60 hover:text-ink transition-colors"
-                >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                </button>
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="btn-primary w-full justify-center py-3 text-base disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loading ? (
-                <>
-                  <Loader2 size={18} className="animate-spin" />
-                  Signing in...
-                </>
-              ) : (
-                <>
-                  <LogIn size={18} />
-                  Sign In
-                </>
-              )}
-            </button>
-          </form>
-
-          <div className="mt-6 text-center">
-            <p className="text-sm text-ink/60">
-              Don&apos;t have an account?{" "}
-              <Link href="/signup" className="text-teal font-semibold hover:underline">
-                Create one
-              </Link>
-            </p>
-          </div>
-
-          <div className="mt-8 pt-6 border-t border-gray-200">
-            <p className="text-center text-xs text-ink/60 mb-4">Quick sign in</p>
-            <div className="grid grid-cols-2 gap-3">
-              <Link
-                href="/admin/login"
-                className="flex items-center justify-center gap-2 py-2.5 px-4 border-2 border-gray-200 rounded-xl text-sm font-medium text-ink/60 hover:border-teal hover:text-teal transition-all"
-              >
-                Admin
-              </Link>
-              <Link
-                href="/staff/login"
-                className="flex items-center justify-center gap-2 py-2.5 px-4 border-2 border-gray-200 rounded-xl text-sm font-medium text-ink/60 hover:border-teal hover:text-teal transition-all"
-              >
-                Staff
-              </Link>
-              <Link
-                href="/doctor/login"
-                className="flex items-center justify-center gap-2 py-2.5 px-4 border-2 border-gray-200 rounded-xl text-sm font-medium text-ink/60 hover:border-teal hover:text-teal transition-all"
-              >
-                Doctor
-              </Link>
-              <Link
-                href="/judge/login"
-                className="flex items-center justify-center gap-2 py-2.5 px-4 border-2 border-gray-200 rounded-xl text-sm font-medium text-ink/60 hover:border-teal hover:text-teal transition-all"
-              >
-                Judge
-              </Link>
-            </div>
-          </div>
-
-          <div className="mt-6 pt-6 border-t border-gray-200">
-            <p className="text-center text-xs text-ink/60 mb-4">Register as</p>
-            <div className="grid grid-cols-3 gap-2">
-              {categoryLinks.map((cat, i) => (
-                <Link
-                  key={i}
-                  href={cat.href}
-                  className={`flex flex-col items-center gap-1 py-2.5 px-2 border-2 border-gray-200 rounded-xl text-xs font-medium text-ink/60 transition-all ${cat.color}`}
-                >
-                  <cat.icon size={16} />
-                  {cat.label}
-                </Link>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
+      <Suspense fallback={<div className="w-full lg:w-1/2 flex items-center justify-center bg-cream"><Loader2 className="animate-spin text-teal" size={32} /></div>}>
+        <LoginForm />
+      </Suspense>
     </div>
   );
 }
