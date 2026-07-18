@@ -11,7 +11,7 @@ import {
   CheckSquare,
   Hash,
   ChevronDown,
-  Textarea,
+  AlignLeft,
   List,
 } from "lucide-react";
 
@@ -37,7 +37,7 @@ const FIELD_ICONS: Record<string, any> = {
   tel: Phone,
   date: Calendar,
   select: List,
-  textarea: Textarea,
+  textarea: AlignLeft,
   file: Upload,
   number: Hash,
   checkbox: CheckSquare,
