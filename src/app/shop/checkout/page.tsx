@@ -130,16 +130,16 @@ export default function CheckoutPage() {
   if (orderPlaced) {
     return (
       <div className="max-w-2xl mx-auto px-4 py-20 text-center">
-        <div className="bg-white rounded-3xl border border-gray-100 p-10 shadow-sm">
-          <div className="w-20 h-20 bg-emerald-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
-            <CheckCircle size={40} className="text-emerald-accent" />
+        <div className="bg-white rounded-3xl border border-ink/5 p-10 shadow-sm">
+          <div className="w-20 h-20 bg-teal/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <CheckCircle size={40} className="text-teal" />
           </div>
-          <h1 className="font-heading text-3xl font-extrabold text-navy mb-4">
+          <h1 className="font-heading text-3xl font-extrabold text-ink mb-4">
             Order Placed!
           </h1>
           <p className="text-muted mb-2">
             Your order number is{" "}
-            <strong className="text-navy">{orderNumber}</strong>
+            <strong className="text-ink">{orderNumber}</strong>
           </p>
           <p className="text-muted mb-8">
             A confirmation email will be sent shortly. Track your order anytime.
@@ -161,12 +161,12 @@ export default function CheckoutPage() {
     <div className="max-w-5xl mx-auto px-4 py-16">
       <Link
         href="/shop/cart"
-        className="inline-flex items-center gap-1.5 text-sm text-muted hover:text-navy transition-colors mb-8"
+        className="inline-flex items-center gap-1.5 text-sm text-muted hover:text-ink transition-colors mb-8"
       >
         <ArrowLeft size={16} /> Back to Cart
       </Link>
 
-      <h1 className="font-heading text-3xl md:text-4xl font-extrabold text-navy mb-8">
+      <h1 className="font-heading text-3xl md:text-4xl font-extrabold text-ink mb-8">
         Checkout
       </h1>
 
@@ -177,22 +177,22 @@ export default function CheckoutPage() {
             <div
               className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
                 step > i + 1
-                  ? "bg-emerald-accent text-white"
+                  ? "bg-teal text-white"
                   : step === i + 1
-                  ? "bg-[#0891b2] text-white shadow-lg shadow-[#0891b2]/20"
-                  : "bg-gray-100 text-muted"
+                  ? "bg-teal text-white shadow-lg shadow-teal/20"
+                  : "bg-ink/5 text-muted"
               }`}
             >
               {step > i + 1 ? <CheckCircle size={16} /> : i + 1}
             </div>
             <span
               className={`text-sm font-semibold ${
-                step >= i + 1 ? "text-navy" : "text-muted"
+                step >= i + 1 ? "text-ink" : "text-muted"
               }`}
             >
               {label}
             </span>
-            {i === 0 && <div className="w-12 h-px bg-gray-200 mx-2" />}
+            {i === 0 && <div className="w-12 h-px bg-ink/10 mx-2" />}
           </div>
         ))}
       </div>
@@ -201,11 +201,11 @@ export default function CheckoutPage() {
         {/* Form */}
         <form
           onSubmit={handleShippingSubmit}
-          className="lg:col-span-2 bg-white rounded-2xl border border-gray-100 p-8 space-y-5"
+          className="lg:col-span-2 bg-white rounded-2xl border border-ink/5 p-8 space-y-5"
         >
           {step === 1 && (
             <>
-              <h3 className="font-heading text-lg font-bold text-navy mb-4">
+              <h3 className="font-heading text-lg font-bold text-ink mb-4">
                 Shipping Address
               </h3>
 
@@ -221,7 +221,7 @@ export default function CheckoutPage() {
                 ].map((f) => (
                   <div key={f.key} className={f.full ? "md:col-span-2" : ""}>
                     <label className="block text-xs font-semibold text-muted uppercase tracking-wider mb-1.5">
-                      {f.label} <span className="text-danger">*</span>
+                      {f.label} <span className="text-maroon">*</span>
                     </label>
                     <input
                       type={f.type}
@@ -242,7 +242,7 @@ export default function CheckoutPage() {
 
           {step === 2 && (
             <>
-              <h3 className="font-heading text-lg font-bold text-navy mb-4">
+              <h3 className="font-heading text-lg font-bold text-ink mb-4">
                 Payment Method
               </h3>
 
@@ -256,8 +256,8 @@ export default function CheckoutPage() {
                     key={opt.value}
                     className={`flex items-center gap-4 p-4 border-2 rounded-xl cursor-pointer transition-all ${
                       paymentMethod === opt.value
-                        ? "border-[#0891b2] bg-[#0891b2]/5"
-                        : "border-gray-100 hover:border-gray-200"
+                        ? "border-teal bg-teal/5"
+                        : "border-ink/5 hover:border-ink/10"
                     }`}
                   >
                     <input
@@ -266,10 +266,10 @@ export default function CheckoutPage() {
                       value={opt.value}
                       checked={paymentMethod === opt.value}
                       onChange={(e) => setPaymentMethod(e.target.value)}
-                      className="accent-[#0891b2]"
+                      className="accent-teal"
                     />
-                    <opt.icon size={20} className="text-navy" />
-                    <span className="text-sm font-medium text-navy flex-1">
+                    <opt.icon size={20} className="text-ink" />
+                    <span className="text-sm font-medium text-ink flex-1">
                       {opt.label}
                     </span>
                   </label>
@@ -307,8 +307,8 @@ export default function CheckoutPage() {
         </form>
 
         {/* Order Summary Sidebar */}
-        <div className="bg-white rounded-2xl border border-gray-100 p-6 h-fit sticky top-24 space-y-5">
-          <h3 className="font-heading text-lg font-bold text-navy">
+        <div className="bg-white rounded-2xl border border-ink/5 p-6 h-fit sticky top-24 space-y-5">
+          <h3 className="font-heading text-lg font-bold text-ink">
             Order Summary
           </h3>
 
@@ -316,9 +316,9 @@ export default function CheckoutPage() {
             {cart.map((item) => (
               <div
                 key={item.id}
-                className="flex gap-3 py-2 border-b border-gray-50 last:border-0"
+                className="flex gap-3 py-2 border-b border-ink/5 last:border-0"
               >
-                <div className="w-12 h-12 bg-[#0891b2]/5 rounded-lg flex items-center justify-center shrink-0">
+                <div className="w-12 h-12 bg-teal/5 rounded-lg flex items-center justify-center shrink-0">
                   {item.thumbnailUrl ? (
                     <img
                       src={item.thumbnailUrl}
@@ -330,28 +330,28 @@ export default function CheckoutPage() {
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-medium text-navy text-xs truncate">
+                  <p className="font-medium text-ink text-xs truncate">
                     {item.name}
                   </p>
                   <p className="text-xs text-muted">Qty: {item.qty}</p>
                 </div>
-                <p className="font-semibold text-navy text-xs shrink-0">
+                <p className="font-semibold text-ink text-xs shrink-0">
                   ₹{(item.price * item.qty).toLocaleString("en-IN")}
                 </p>
               </div>
             ))}
           </div>
 
-          <div className="space-y-2 text-sm border-t border-gray-100 pt-3">
+          <div className="space-y-2 text-sm border-t border-ink/5 pt-3">
             <div className="flex justify-between">
               <span className="text-muted">Subtotal</span>
-              <span className="font-semibold text-navy">
+              <span className="font-semibold text-ink">
                 ₹{subtotal.toLocaleString("en-IN")}
               </span>
             </div>
             <div className="flex justify-between">
               <span className="text-muted">Tax (18% GST)</span>
-              <span className="font-semibold text-navy">
+              <span className="font-semibold text-ink">
                 ₹{tax.toLocaleString("en-IN")}
               </span>
             </div>
@@ -359,15 +359,15 @@ export default function CheckoutPage() {
               <span className="text-muted">Shipping</span>
               <span className="font-semibold">
                 {shipping === 0 ? (
-                  <span className="text-emerald-accent">Free</span>
+                  <span className="text-teal">Free</span>
                 ) : (
-                  <span className="text-navy">₹{shipping}</span>
+                  <span className="text-ink">₹{shipping}</span>
                 )}
               </span>
             </div>
-            <div className="flex justify-between border-t border-gray-100 pt-2">
-              <span className="font-semibold text-navy">Total</span>
-              <span className="font-heading text-xl font-extrabold text-navy">
+            <div className="flex justify-between border-t border-ink/5 pt-2">
+              <span className="font-semibold text-ink">Total</span>
+              <span className="font-heading text-xl font-extrabold text-ink">
                 ₹{total.toLocaleString("en-IN")}
               </span>
             </div>

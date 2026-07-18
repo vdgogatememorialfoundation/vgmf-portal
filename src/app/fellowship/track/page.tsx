@@ -63,14 +63,14 @@ export default function TrackFellowship() {
     switch (status) {
       case "SELECTED":
       case "FUNDED":
-        return "bg-emerald-accent/10 text-emerald-accent";
+        return "bg-[#166534]/10 text-[#166534]";
       case "REJECTED":
-        return "bg-red-50 text-danger";
+        return "bg-red-50 text-[#991b1b]";
       case "SHORTLISTED":
       case "INTERVIEW_SCHEDULED":
         return "bg-blue-50 text-blue-700";
       default:
-        return "bg-[#0891b2]/10 text-[#0891b2]";
+        return "bg-[#0d6662]/10 text-[#0d6662]";
     }
   };
 
@@ -88,7 +88,7 @@ export default function TrackFellowship() {
       </Link>
 
       <div className="text-center mb-10">
-        <span className="inline-block px-3 py-1 bg-[#0891b2]/10 text-[#0891b2] text-xs font-semibold rounded-full mb-4 tracking-wider uppercase">
+        <span className="inline-block px-3 py-1 bg-[#0d6662]/10 text-[#0d6662] text-xs font-semibold rounded-full mb-4 tracking-wider uppercase">
           Application Status
         </span>
         <h1 className="font-heading text-3xl md:text-4xl font-extrabold text-navy mb-2">
@@ -122,7 +122,7 @@ export default function TrackFellowship() {
           </button>
         </div>
         {error && (
-          <p className="text-danger text-sm mt-3 flex items-center gap-2">
+          <p className="text-[#991b1b] text-sm mt-3 flex items-center gap-2">
             <AlertCircle size={14} />
             {error}
           </p>
@@ -167,9 +167,9 @@ export default function TrackFellowship() {
                     <div
                       className={`w-9 h-9 sm:w-10 sm:h-10 mx-auto rounded-full flex items-center justify-center text-xs font-bold mb-1.5 transition-all ${
                         isActive
-                          ? "bg-[#0891b2] text-white shadow-lg shadow-[#0891b2]/20"
+                          ? "bg-[#0d6662] text-white shadow-lg shadow-[#0d6662]/20"
                           : "bg-gray-100 text-muted"
-                      } ${isCurrent ? "ring-4 ring-offset-2 ring-[#0891b2]/20" : ""}`}
+                      } ${isCurrent ? "ring-4 ring-offset-2 ring-[#0d6662]/20" : ""}`}
                     >
                       {isActive ? (
                         <CheckCircle size={16} />
@@ -192,10 +192,10 @@ export default function TrackFellowship() {
             {/* Rejection Reason */}
             {result.status === "REJECTED" && result.rejectionReason && (
               <div className="bg-red-50 border border-red-200 rounded-xl p-4 mt-4">
-                <p className="text-sm font-semibold text-danger mb-1">
+                <p className="text-sm font-semibold text-[#991b1b] mb-1">
                   Feedback
                 </p>
-                <p className="text-sm text-danger/80">
+                <p className="text-sm text-[#991b1b]/80">
                   {result.rejectionReason}
                 </p>
               </div>

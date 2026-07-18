@@ -123,7 +123,7 @@ export default function ShopPage() {
         <span className="inline-block px-3 py-1 bg-gold/10 text-gold text-xs font-semibold rounded-full mb-4 tracking-wider uppercase">
           Shop
         </span>
-        <h1 className="font-heading text-4xl md:text-5xl font-extrabold text-navy">
+        <h1 className="font-heading text-4xl md:text-5xl font-extrabold text-ink">
           Ayurvedic Books & Resources
         </h1>
         <p className="text-muted mt-3">
@@ -156,7 +156,7 @@ export default function ShopPage() {
           <ShoppingCart size={18} />
           <span className="hidden sm:inline">Cart</span>
           {cartCount > 0 && (
-            <span className="absolute -top-2 -right-2 w-5 h-5 bg-gold text-navy text-xs font-bold rounded-full flex items-center justify-center">
+            <span className="absolute -top-2 -right-2 w-5 h-5 bg-gold text-white text-xs font-bold rounded-full flex items-center justify-center">
               {cartCount}
             </span>
           )}
@@ -169,8 +169,8 @@ export default function ShopPage() {
           onClick={() => setSelectedCategory("all")}
           className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${
             selectedCategory === "all"
-              ? "bg-[#0891b2] text-white shadow-lg shadow-[#0891b2]/20"
-              : "bg-white border border-gray-200 text-ink-soft hover:border-[#0891b2] hover:text-[#0891b2]"
+              ? "bg-teal text-white shadow-lg shadow-teal/20"
+              : "bg-white border border-ink/10 text-ink/60 hover:border-teal hover:text-teal"
           }`}
         >
           All
@@ -181,8 +181,8 @@ export default function ShopPage() {
             onClick={() => setSelectedCategory(cat.id)}
             className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${
               selectedCategory === cat.id
-                ? "bg-[#0891b2] text-white shadow-lg shadow-[#0891b2]/20"
-                : "bg-white border border-gray-200 text-ink-soft hover:border-[#0891b2] hover:text-[#0891b2]"
+                ? "bg-teal text-white shadow-lg shadow-teal/20"
+                : "bg-white border border-ink/10 text-ink/60 hover:border-teal hover:text-teal"
             }`}
           >
             {cat.name}
@@ -193,7 +193,7 @@ export default function ShopPage() {
       {/* Loading */}
       {loading && (
         <div className="flex flex-col items-center justify-center py-20">
-          <Loader2 size={40} className="text-[#0891b2] animate-spin mb-4" />
+          <Loader2 size={40} className="text-teal animate-spin mb-4" />
           <p className="text-muted font-medium">Loading products...</p>
         </div>
       )}
@@ -201,7 +201,7 @@ export default function ShopPage() {
       {/* Error */}
       {error && !loading && (
         <div className="flex flex-col items-center justify-center py-20">
-          <AlertCircle size={40} className="text-danger mb-4" />
+          <AlertCircle size={40} className="text-maroon mb-4" />
           <p className="text-muted font-medium mb-4">{error}</p>
           <button onClick={fetchProducts} className="btn-primary text-sm">
             Try Again
@@ -227,9 +227,9 @@ export default function ShopPage() {
           {filteredProducts.map((product) => (
             <div
               key={product.id}
-              className="card-hover bg-white rounded-2xl border border-gray-100 overflow-hidden"
+              className="card-hover bg-white rounded-2xl border border-ink/5 overflow-hidden"
             >
-              <div className="h-52 bg-gradient-to-br from-navy/5 to-gold/10 flex items-center justify-center overflow-hidden">
+              <div className="h-52 bg-gradient-to-br from-ink/5 to-gold/10 flex items-center justify-center overflow-hidden">
                 {product.thumbnailUrl || product.images?.[0]?.imageUrl ? (
                   <img
                     src={product.thumbnailUrl || product.images[0].imageUrl}
@@ -237,7 +237,7 @@ export default function ShopPage() {
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <Package size={48} className="text-navy/20" />
+                  <Package size={48} className="text-ink/15" />
                 )}
               </div>
               <div className="p-5">
@@ -246,7 +246,7 @@ export default function ShopPage() {
                     {product.category.name}
                   </span>
                 )}
-                <h3 className="font-heading font-bold text-navy mt-1 mb-2 line-clamp-2">
+                <h3 className="font-heading font-bold text-ink mt-1 mb-2 line-clamp-2">
                   {product.name}
                 </h3>
                 {product.description && (
@@ -256,7 +256,7 @@ export default function ShopPage() {
                 )}
                 <div className="flex justify-between items-center">
                   <div className="flex items-baseline gap-2">
-                    <span className="font-heading text-xl font-extrabold text-navy">
+                    <span className="font-heading text-xl font-extrabold text-ink">
                       ₹{product.price.toLocaleString("en-IN")}
                     </span>
                     {product.compareAtPrice &&

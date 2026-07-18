@@ -8,11 +8,11 @@ export const metadata = { title: "Articles & Research" };
 function CategoryFilter({ categories, active }: { categories: string[]; active: string }) {
   return (
     <div className="flex flex-wrap justify-center gap-2">
-      <Link href="/articles" className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${!active || active === "All" ? "bg-[#0891b2] text-white shadow-md shadow-[#0891b2]/20" : "bg-white border border-gray-200 text-ink-soft hover:border-[#0891b2]/30 hover:text-[#0891b2]"}`}>
+      <Link href="/articles" className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${!active || active === "All" ? "bg-[#0d6662] text-white shadow-md shadow-[#0d6662]/20" : "bg-white border border-gray-200 text-ink-soft hover:border-[#0d6662]/30 hover:text-[#0d6662]"}`}>
         All
       </Link>
       {categories.map(cat => (
-        <Link key={cat} href={`/articles?category=${encodeURIComponent(cat)}`} className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${active === cat ? "bg-[#0891b2] text-white shadow-md shadow-[#0891b2]/20" : "bg-white border border-gray-200 text-ink-soft hover:border-[#0891b2]/30 hover:text-[#0891b2]"}`}>
+        <Link key={cat} href={`/articles?category=${encodeURIComponent(cat)}`} className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${active === cat ? "bg-[#0d6662] text-white shadow-md shadow-[#0d6662]/20" : "bg-white border border-gray-200 text-ink-soft hover:border-[#0d6662]/30 hover:text-[#0d6662]"}`}>
           {cat}
         </Link>
       ))}
@@ -43,10 +43,10 @@ export default async function ArticlesPage({ searchParams }: { searchParams: Pro
   return (
     <div>
       {/* HERO */}
-      <section className="relative bg-gradient-to-br from-[#0891b2] via-[#06b6d4] to-[#22d3ee] py-20 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-[#0d6662] via-[#0d6662] to-[#14918b] py-24 overflow-hidden">
         <div className="absolute inset-0">
           <div className="absolute top-20 right-[10%] w-[400px] h-[400px] bg-white/10 rounded-full blur-[120px]" />
-          <div className="absolute bottom-10 left-[5%] w-[300px] h-[300px] bg-gold/10 rounded-full blur-[100px]" />
+          <div className="absolute bottom-10 left-[5%] w-[300px] h-[300px] bg-[#c2761c]/10 rounded-full blur-[100px]" />
         </div>
         <div className="max-w-7xl mx-auto px-6 relative z-10 text-center">
           <span className="inline-flex items-center gap-2 px-4 py-2 bg-white/15 backdrop-blur-sm rounded-full border border-white/20 mb-6">
@@ -54,7 +54,7 @@ export default async function ArticlesPage({ searchParams }: { searchParams: Pro
             <span className="text-white text-xs font-bold tracking-widest uppercase">Knowledge Base</span>
           </span>
           <h1 className="font-heading text-5xl md:text-6xl font-extrabold text-white mb-4">
-            Articles & <span className="text-gold-light">Research</span>
+            Articles & <span className="text-[#d4922a]">Research</span>
           </h1>
           <p className="text-white/70 text-lg max-w-2xl mx-auto mb-8">
             Explore Dr. R.B. Gogate&apos;s contributions to Ayurvedic science across Shalya Tantra, Shalakya Tantra, Viddhakarma, and more.
@@ -70,7 +70,7 @@ export default async function ArticlesPage({ searchParams }: { searchParams: Pro
       </section>
 
       {/* ARTICLES */}
-      <section className="py-16">
+      <section className="py-20">
         <div className="max-w-7xl mx-auto px-6">
           <div className="mb-10">
             <Suspense fallback={null}>
@@ -89,11 +89,11 @@ export default async function ArticlesPage({ searchParams }: { searchParams: Pro
               {filteredArticles.map(article => (
                 <Link key={article.id} href={`/articles/${article.slug}`} className="group bg-white rounded-3xl border border-gray-100 p-7 card-hover block">
                   {article.category && (
-                    <span className="inline-block px-3 py-1 bg-[#0891b2]/10 text-[#0891b2] text-xs font-bold rounded-full mb-4 uppercase tracking-wider">
+                    <span className="inline-block px-3 py-1 bg-[#0d6662]/10 text-[#0d6662] text-xs font-bold rounded-full mb-4 uppercase tracking-wider">
                       {article.category}
                     </span>
                   )}
-                  <h3 className="font-heading text-lg font-extrabold text-navy mb-3 group-hover:text-[#0891b2] transition-colors leading-snug line-clamp-2">
+                  <h3 className="font-heading text-lg font-extrabold text-navy mb-3 group-hover:text-[#0d6662] transition-colors leading-snug line-clamp-2">
                     {article.title}
                   </h3>
                   {article.excerpt && (
@@ -109,7 +109,7 @@ export default async function ArticlesPage({ searchParams }: { searchParams: Pro
                         {new Date(article.publishedAt || article.createdAt).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
                       </span>
                     </div>
-                    <ArrowRight size={16} className="text-navy/30 group-hover:text-[#0891b2] group-hover:translate-x-1 transition-all" />
+                    <ArrowRight size={16} className="text-navy/30 group-hover:text-[#0d6662] group-hover:translate-x-1 transition-all" />
                   </div>
                 </Link>
               ))}

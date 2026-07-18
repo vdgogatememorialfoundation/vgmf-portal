@@ -17,10 +17,10 @@ export default async function AboutPage() {
   return (
     <div>
       {/* HERO */}
-      <section className="relative bg-gradient-to-br from-[#0891b2] via-[#06b6d4] to-[#22d3ee] py-24 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-[#0d6662] via-[#0d6662] to-[#14918b] py-28 overflow-hidden">
         <div className="absolute inset-0">
           <div className="absolute top-20 right-[10%] w-[500px] h-[500px] bg-white/10 rounded-full blur-[120px]" />
-          <div className="absolute bottom-20 left-[5%] w-[400px] h-[400px] bg-gold/10 rounded-full blur-[100px]" />
+          <div className="absolute bottom-20 left-[5%] w-[400px] h-[400px] bg-[#c2761c]/10 rounded-full blur-[100px]" />
           <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)", backgroundSize: "60px 60px" }} />
         </div>
         <div className="max-w-7xl mx-auto px-6 relative z-10 text-center">
@@ -28,7 +28,7 @@ export default async function AboutPage() {
             <span className="text-white text-xs font-bold tracking-widest uppercase">Est. 1972</span>
           </span>
           <h1 className="font-heading text-5xl md:text-7xl font-extrabold text-white leading-[1.1] mb-6">
-            About the <span className="text-gold-light">Foundation</span>
+            About the <span className="text-[#d4922a]">Foundation</span>
           </h1>
           <p className="text-white/70 text-lg leading-relaxed mb-8 max-w-2xl mx-auto">
             {siteContent.about_hero || "Preserving the legacy of Vaidya R.B. Gogate through research, education, and community service rooted in authentic Ayurvedic tradition."}
@@ -43,7 +43,7 @@ export default async function AboutPage() {
       {/* STATS BAR */}
       <section className="relative -mt-10 z-20">
         <div className="max-w-5xl mx-auto px-6">
-          <div className="bg-white rounded-3xl p-8 grid grid-cols-2 md:grid-cols-4 gap-6 shadow-xl shadow-teal/8 border border-gray-100">
+          <div className="bg-white rounded-3xl p-8 grid grid-cols-2 md:grid-cols-4 gap-6 shadow-xl shadow-[#0d6662]/8 border border-gray-100">
             {[
               { n: "1972", l: "Founded", icon: Calendar },
               { n: "50+", l: "Years Legacy", icon: Star },
@@ -51,8 +51,8 @@ export default async function AboutPage() {
               { n: "100+", l: "Vaidyas Trained", icon: GraduationCap },
             ].map((s, i) => (
               <div key={i} className="text-center group">
-                <div className="w-12 h-12 bg-teal/10 rounded-2xl flex items-center justify-center mx-auto mb-3 group-hover:bg-teal/20 transition-colors">
-                  <s.icon size={20} className="text-[#0891b2]" />
+                <div className="w-12 h-12 bg-[#0d6662]/10 rounded-2xl flex items-center justify-center mx-auto mb-3 group-hover:bg-[#0d6662]/20 transition-colors">
+                  <s.icon size={20} className="text-[#0d6662]" />
                 </div>
                 <div className="font-heading text-2xl md:text-3xl font-extrabold text-navy">{s.n}</div>
                 <div className="text-xs text-muted font-medium mt-1 uppercase tracking-wider">{s.l}</div>
@@ -63,7 +63,7 @@ export default async function AboutPage() {
       </section>
 
       {/* FOUNDATION HISTORY */}
-      <section className="py-24">
+      <section className="py-28">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-16 items-start">
             <div className="animate-fade-up">
@@ -86,10 +86,10 @@ export default async function AboutPage() {
             </div>
             <div className="space-y-4">
               {[
-                { icon: Stethoscope, title: "Vd. Mahadev Gogate", desc: "Rajavaidya to the King of Jawhar — the patriarch who began our medical legacy.", color: "from-[#0891b2] to-[#06b6d4]" },
-                { icon: BookOpen, title: "Vd. Vishnu & Trimbak Gogate", desc: "Specialists in Dravyaguna and Panchakarma who expanded Ayurvedic practice.", color: "from-[#0e7490] to-[#0891b2]" },
+                { icon: Stethoscope, title: "Vd. Mahadev Gogate", desc: "Rajavaidya to the King of Jawhar — the patriarch who began our medical legacy.", color: "from-[#0d6662] to-[#14918b]" },
+                { icon: BookOpen, title: "Vd. Vishnu & Trimbak Gogate", desc: "Specialists in Dravyaguna and Panchakarma who expanded Ayurvedic practice.", color: "from-[#0a5250] to-[#0d6662]" },
                 { icon: Star, title: "Vd. R.B. Gogate", desc: "Pioneer in Shalya Tantra, Agnikarma, and Viddhakarma with global recognition.", color: "from-[#b45309] to-[#d97706]" },
-                { icon: Heart, title: "The Next Generation", desc: "Continuing the tradition through VGMF — research, education, and community service.", color: "from-teal to-teal-light" },
+                { icon: Heart, title: "The Next Generation", desc: "Continuing the tradition through VGMF — research, education, and community service.", color: "from-[#0d6662] to-[#14918b]" },
               ].map((item, i) => (
                 <div key={i} className="card-hover bg-white rounded-2xl border border-gray-100 p-6 flex gap-4">
                   <div className={`w-14 h-14 bg-gradient-to-br ${item.color} rounded-2xl flex items-center justify-center text-white shrink-0 shadow-lg`}>
@@ -107,7 +107,7 @@ export default async function AboutPage() {
       </section>
 
       {/* MISSION & VISION */}
-      <section className="py-24 bg-cream-dark">
+      <section className="py-28 bg-cream-dark">
         <div className="max-w-7xl mx-auto px-6">
           <div className="section-heading">
             <span className="badge">Purpose</span>
@@ -116,8 +116,8 @@ export default async function AboutPage() {
           </div>
           <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             <div className="card-hover bg-white rounded-3xl p-10 border border-gray-100 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#0891b2] to-[#06b6d4] opacity-5 rounded-bl-[60px]" />
-              <div className="w-16 h-16 bg-gradient-to-br from-[#0891b2] to-[#06b6d4] rounded-2xl flex items-center justify-center text-white mb-6 shadow-lg">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#0d6662] to-[#14918b] opacity-5 rounded-bl-[60px]" />
+              <div className="w-16 h-16 bg-gradient-to-br from-[#0d6662] to-[#14918b] rounded-2xl flex items-center justify-center text-white mb-6 shadow-lg">
                 <Target size={28} />
               </div>
               <h3 className="font-heading text-2xl font-extrabold text-navy mb-4">Our Mission</h3>
@@ -126,8 +126,8 @@ export default async function AboutPage() {
               </p>
             </div>
             <div className="card-hover bg-white rounded-3xl p-10 border border-gray-100 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-gold to-gold-light opacity-5 rounded-bl-[60px]" />
-              <div className="w-16 h-16 bg-gradient-to-br from-gold to-gold-light rounded-2xl flex items-center justify-center text-white mb-6 shadow-lg">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#c2761c] to-[#d4922a] opacity-5 rounded-bl-[60px]" />
+              <div className="w-16 h-16 bg-gradient-to-br from-[#c2761c] to-[#d4922a] rounded-2xl flex items-center justify-center text-white mb-6 shadow-lg">
                 <Eye size={28} />
               </div>
               <h3 className="font-heading text-2xl font-extrabold text-navy mb-4">Our Vision</h3>
@@ -140,7 +140,7 @@ export default async function AboutPage() {
       </section>
 
       {/* FOUNDER SECTION */}
-      <section className="py-24">
+      <section className="py-28">
         <div className="max-w-7xl mx-auto px-6">
           <div className="section-heading">
             <span className="badge">Founder</span>
@@ -171,7 +171,7 @@ export default async function AboutPage() {
                     "Chief of Cancer Project (Pethe Arogya Kendra, Belgaum)",
                   ].map((role, i) => (
                     <div key={i} className="flex items-start gap-3">
-                      <div className="w-2 h-2 bg-gold rounded-full mt-2 shrink-0" />
+                      <div className="w-2 h-2 bg-[#c2761c] rounded-full mt-2 shrink-0" />
                       <p className="text-sm text-ink-soft">{role}</p>
                     </div>
                   ))}
@@ -179,8 +179,8 @@ export default async function AboutPage() {
               </div>
             </div>
             <div className="space-y-4">
-              <div className="bg-gradient-to-br from-[#0891b2] to-[#06b6d4] rounded-3xl p-8 text-white">
-                <h3 className="font-heading text-lg font-extrabold text-gold mb-4">Books Published</h3>
+              <div className="bg-gradient-to-br from-[#0d6662] to-[#0a5250] rounded-3xl p-8 text-white">
+                <h3 className="font-heading text-lg font-extrabold text-[#d4922a] mb-4">Books Published</h3>
                 <div className="space-y-3">
                   {["AIDS", "Viddha and Agnikarma", "Bhagna and Asthi roga", "Shalya Tantra", "Hasti Ayurved"].map((book, i) => (
                     <div key={i} className="flex items-center gap-3">
@@ -192,7 +192,7 @@ export default async function AboutPage() {
               </div>
               <div className="bg-white rounded-3xl border border-gray-100 p-8 card-hover">
                 <h3 className="font-heading text-lg font-extrabold text-navy mb-4 flex items-center gap-2">
-                  <Award size={20} className="text-gold" /> Awards & Honours
+                  <Award size={20} className="text-[#c2761c]" /> Awards & Honours
                 </h3>
                 <div className="space-y-3">
                   {[
@@ -202,7 +202,7 @@ export default async function AboutPage() {
                     { name: "Legend Shalaki Karyabhushan Puraskar" },
                     { name: "Jivan Gaurav Puraskar", detail: "TAMV, RSM" },
                   ].map((award, i) => (
-                    <div key={i} className="border-l-2 border-gold/30 pl-3">
+                    <div key={i} className="border-l-2 border-[#c2761c]/30 pl-3">
                       <p className="text-sm font-bold text-navy">{award.name}</p>
                       {award.detail && <p className="text-xs text-muted mt-0.5">{award.detail}</p>}
                     </div>
@@ -215,7 +215,7 @@ export default async function AboutPage() {
       </section>
 
       {/* DR. ANAGHA GOGATE */}
-      <section className="py-24 bg-cream-dark">
+      <section className="py-28 bg-cream-dark">
         <div className="max-w-4xl mx-auto px-6">
           <div className="section-heading">
             <span className="badge">In Memoriam</span>
@@ -237,7 +237,7 @@ export default async function AboutPage() {
       </section>
 
       {/* VALUES */}
-      <section className="py-24">
+      <section className="py-28">
         <div className="max-w-7xl mx-auto px-6">
           <div className="section-heading">
             <span className="badge">Principles</span>
@@ -246,10 +246,10 @@ export default async function AboutPage() {
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { icon: BookOpen, title: "Knowledge", desc: "Free and open sharing of Ayurvedic wisdom for practitioners, students, and society.", color: "from-[#0891b2] to-[#06b6d4]" },
-              { icon: Award, title: "Excellence", desc: "Maintaining the highest standards in research, education, and clinical practice.", color: "from-gold to-gold-light" },
-              { icon: Heart, title: "Compassion", desc: "Serving communities through free healthcare programmes and accessible therapy.", color: "from-rose-500 to-rose-400" },
-              { icon: Users, title: "Collaboration", desc: "Bridging traditional Ayurveda with modern evidence through inclusive partnerships.", color: "from-teal to-teal-light" },
+              { icon: BookOpen, title: "Knowledge", desc: "Free and open sharing of Ayurvedic wisdom for practitioners, students, and society.", color: "from-[#0d6662] to-[#14918b]" },
+              { icon: Award, title: "Excellence", desc: "Maintaining the highest standards in research, education, and clinical practice.", color: "from-[#c2761c] to-[#d4922a]" },
+              { icon: Heart, title: "Compassion", desc: "Serving communities through free healthcare programmes and accessible therapy.", color: "from-[#7c1d1d] to-[#993333]" },
+              { icon: Users, title: "Collaboration", desc: "Bridging traditional Ayurveda with modern evidence through inclusive partnerships.", color: "from-[#0d6662] to-[#14918b]" },
             ].map((value, i) => (
               <div key={i} className="card-hover bg-white rounded-3xl border border-gray-100 p-8 text-center group">
                 <div className={`w-16 h-16 bg-gradient-to-br ${value.color} rounded-2xl flex items-center justify-center text-white mx-auto mb-5 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
@@ -264,10 +264,10 @@ export default async function AboutPage() {
       </section>
 
       {/* CONTACT CTA */}
-      <section className="py-24 bg-gradient-to-br from-[#0891b2] via-[#06b6d4] to-[#22d3ee] relative overflow-hidden">
+      <section className="py-28 bg-gradient-to-br from-[#0d6662] via-[#0d6662] to-[#14918b] relative overflow-hidden">
         <div className="absolute inset-0">
           <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-[120px]" />
-          <div className="absolute bottom-0 left-0 w-72 h-72 bg-gold/10 rounded-full blur-[100px]" />
+          <div className="absolute bottom-0 left-0 w-72 h-72 bg-[#c2761c]/10 rounded-full blur-[100px]" />
         </div>
         <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
           <h2 className="font-heading text-4xl md:text-5xl font-extrabold text-white mb-5 leading-tight">

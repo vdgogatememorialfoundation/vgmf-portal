@@ -138,8 +138,8 @@ export default function ApplyPage() {
     return (
       <div className="max-w-2xl mx-auto px-4 py-20 text-center">
         <div className="bg-white rounded-3xl border border-gray-100 p-10 shadow-sm">
-          <div className="w-20 h-20 bg-emerald-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
-            <Check className="text-emerald-accent" size={36} />
+          <div className="w-20 h-20 bg-[#166534]/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <Check className="text-[#166534]" size={36} />
           </div>
           <h1 className="font-heading text-3xl font-extrabold text-navy mb-2">
             Application Submitted!
@@ -147,7 +147,7 @@ export default function ApplyPage() {
           <p className="text-muted mb-6">
             Your fellowship application has been successfully submitted.
           </p>
-          <div className="bg-teal/5 rounded-2xl p-6 mb-6">
+          <div className="bg-[#0d6662]/5 rounded-2xl p-6 mb-6">
             <p className="text-xs text-muted uppercase tracking-wider mb-1">
               Your Tracking Number
             </p>
@@ -196,7 +196,7 @@ export default function ApplyPage() {
             <div
               className={`w-10 h-10 mx-auto rounded-full flex items-center justify-center text-sm font-bold mb-2 transition-all ${
                 step >= s.num
-                  ? "bg-[#0891b2] text-white shadow-lg shadow-[#0891b2]/20"
+                  ? "bg-[#0d6662] text-white shadow-lg shadow-[#0d6662]/20"
                   : "bg-gray-100 text-muted"
               }`}
             >
@@ -217,12 +217,12 @@ export default function ApplyPage() {
       {errors.length > 0 && (
         <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6">
           <div className="flex items-start gap-2">
-            <AlertCircle size={18} className="text-danger mt-0.5 shrink-0" />
+            <AlertCircle size={18} className="text-[#991b1b] mt-0.5 shrink-0" />
             <div>
-              <p className="text-sm font-semibold text-danger mb-1">
+              <p className="text-sm font-semibold text-[#991b1b] mb-1">
                 Please fix the following:
               </p>
-              <ul className="text-sm text-danger/80 list-disc pl-4 space-y-0.5">
+              <ul className="text-sm text-[#991b1b]/80 list-disc pl-4 space-y-0.5">
                 {errors.map((e, i) => (
                   <li key={i}>{e}</li>
                 ))}
@@ -255,7 +255,7 @@ export default function ApplyPage() {
                 <div key={f.key} className={f.full ? "md:col-span-2" : ""}>
                   <label className="block text-xs font-semibold text-muted uppercase tracking-wider mb-1.5">
                     {f.label}{" "}
-                    {f.required && <span className="text-danger">*</span>}
+                    {f.required && <span className="text-[#991b1b]">*</span>}
                   </label>
                   {f.type === "select" ? (
                     <select
@@ -308,7 +308,7 @@ export default function ApplyPage() {
                 <div key={f.key} className={f.full ? "md:col-span-2" : ""}>
                   <label className="block text-xs font-semibold text-muted uppercase tracking-wider mb-1.5">
                     {f.label}{" "}
-                    {f.required && <span className="text-danger">*</span>}
+                    {f.required && <span className="text-[#991b1b]">*</span>}
                   </label>
                   {f.key === "specializations" ? (
                     <textarea
@@ -367,7 +367,7 @@ export default function ApplyPage() {
               <div key={f.key}>
                 <label className="block text-xs font-semibold text-muted uppercase tracking-wider mb-1.5">
                   {f.label}{" "}
-                  {f.required && <span className="text-danger">*</span>}
+                  {f.required && <span className="text-[#991b1b]">*</span>}
                 </label>
                 {f.type === "select" ? (
                   <select
@@ -417,7 +417,7 @@ export default function ApplyPage() {
               />
             </div>
 
-            <div className="bg-teal/5 rounded-2xl p-5 space-y-3 text-sm text-ink-soft">
+            <div className="bg-[#0d6662]/5 rounded-2xl p-5 space-y-3 text-sm text-ink-soft">
               <h3 className="font-heading font-bold text-navy">
                 Important Information
               </h3>
@@ -441,12 +441,12 @@ export default function ApplyPage() {
               </ul>
             </div>
 
-            <label className="flex items-start gap-3 p-4 bg-gold/5 border border-gold/20 rounded-xl cursor-pointer">
+            <label className="flex items-start gap-3 p-4 bg-[#c2761c]/5 border border-[#c2761c]/20 rounded-xl cursor-pointer">
               <input
                 type="checkbox"
                 checked={form.termsAccepted}
                 onChange={(e) => update("termsAccepted", e.target.checked)}
-                className="mt-0.5 accent-[#0891b2]"
+                className="mt-0.5 accent-[#0d6662]"
               />
               <span className="text-sm text-ink-soft">
                 I confirm that all information provided is true and accurate. I

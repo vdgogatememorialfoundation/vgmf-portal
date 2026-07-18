@@ -127,11 +127,11 @@ export default function AutismRegisterPage() {
   if (submitted) {
     return (
       <div className="max-w-2xl mx-auto px-4 py-20 text-center">
-        <div className="bg-white rounded-3xl border border-gray-100 p-10 shadow-sm">
-          <div className="w-20 h-20 bg-emerald-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
-            <CheckCircle size={40} className="text-emerald-accent" />
+        <div className="bg-white rounded-3xl border border-ink/5 p-10 shadow-sm">
+          <div className="w-20 h-20 bg-teal/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <CheckCircle size={40} className="text-teal" />
           </div>
-          <h1 className="font-heading text-3xl font-extrabold text-navy mb-4">
+          <h1 className="font-heading text-3xl font-extrabold text-ink mb-4">
             Pre-Registration Successful!
           </h1>
           <p className="text-muted mb-6 max-w-md mx-auto">
@@ -139,7 +139,7 @@ export default function AutismRegisterPage() {
             team will contact you within 3-5 working days for the initial
             assessment.
           </p>
-          <div className="bg-gold/5 border border-gold/20 rounded-xl p-4 mb-6 text-sm text-navy">
+          <div className="bg-gold/5 border border-gold/20 rounded-xl p-4 mb-6 text-sm text-ink">
             <p className="font-semibold">This programme is completely free.</p>
             <p className="text-muted mt-1">
               No payment is required at any stage.
@@ -162,13 +162,13 @@ export default function AutismRegisterPage() {
     <div className="max-w-3xl mx-auto px-4 py-16">
       <Link
         href="/autism"
-        className="inline-flex items-center gap-1.5 text-sm text-muted hover:text-navy transition-colors mb-8"
+        className="inline-flex items-center gap-1.5 text-sm text-muted hover:text-ink transition-colors mb-8"
       >
         <ArrowLeft size={16} /> Back to Programme
       </Link>
 
       <div className="mb-4">
-        <h1 className="font-heading text-3xl md:text-4xl font-extrabold text-navy">
+        <h1 className="font-heading text-3xl md:text-4xl font-extrabold text-ink">
           Pre-Registration
         </h1>
         <p className="text-muted mt-2">
@@ -176,7 +176,7 @@ export default function AutismRegisterPage() {
         </p>
       </div>
 
-      <div className="flex items-center gap-2 mb-8 p-3 bg-gold/10 border border-gold/20 rounded-xl text-sm text-navy">
+      <div className="flex items-center gap-2 mb-8 p-3 bg-gold/10 border border-gold/20 rounded-xl text-sm text-ink">
         <Heart size={16} className="text-gold shrink-0" />
         <span>
           This programme is <strong>completely free</strong>. No payment is
@@ -193,8 +193,8 @@ export default function AutismRegisterPage() {
               <div
                 className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center shrink-0 transition-all ${
                   step >= s.num
-                    ? "bg-[#0891b2] text-white shadow-lg shadow-[#0891b2]/20"
-                    : "bg-gray-100 text-muted"
+                    ? "bg-teal text-white shadow-lg shadow-teal/20"
+                    : "bg-ink/5 text-muted"
                 }`}
               >
                 {step > s.num ? (
@@ -205,7 +205,7 @@ export default function AutismRegisterPage() {
               </div>
               <span
                 className={`text-xs sm:text-sm font-semibold hidden sm:block ${
-                  step >= s.num ? "text-navy" : "text-muted"
+                  step >= s.num ? "text-ink" : "text-muted"
                 }`}
               >
                 {s.title}
@@ -213,7 +213,7 @@ export default function AutismRegisterPage() {
               {i < SECTIONS.length - 1 && (
                 <div
                   className={`h-0.5 flex-1 rounded-full ${
-                    step > s.num ? "bg-[#0891b2]" : "bg-gray-200"
+                    step > s.num ? "bg-teal" : "bg-ink/10"
                   }`}
                 />
               )}
@@ -223,7 +223,7 @@ export default function AutismRegisterPage() {
       </div>
 
       {/* Form */}
-      <div className="bg-white rounded-2xl border border-gray-100 p-6 md:p-8 shadow-sm">
+      <div className="bg-white rounded-2xl border border-ink/5 p-6 md:p-8 shadow-sm">
         {step === 1 && (
           <div className="space-y-5">
             <div className="flex items-center gap-3 mb-2">
@@ -231,7 +231,7 @@ export default function AutismRegisterPage() {
                 <Heart size={20} className="text-gold" />
               </div>
               <div>
-                <h2 className="font-heading text-lg font-bold text-navy">
+                <h2 className="font-heading text-lg font-bold text-ink">
                   Child Information
                 </h2>
                 <p className="text-xs text-muted">
@@ -242,7 +242,7 @@ export default function AutismRegisterPage() {
 
             <div>
               <label className="block text-xs font-semibold text-muted uppercase tracking-wider mb-1.5">
-                Child&apos;s Full Name <span className="text-danger">*</span>
+                Child&apos;s Full Name <span className="text-maroon">*</span>
               </label>
               <input
                 value={form.childName}
@@ -255,7 +255,7 @@ export default function AutismRegisterPage() {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-semibold text-muted uppercase tracking-wider mb-1.5">
-                  Age <span className="text-danger">*</span>
+                  Age <span className="text-maroon">*</span>
                 </label>
                 <input
                   type="number"
@@ -269,7 +269,7 @@ export default function AutismRegisterPage() {
               </div>
               <div>
                 <label className="block text-xs font-semibold text-muted uppercase tracking-wider mb-1.5">
-                  Gender <span className="text-danger">*</span>
+                  Gender <span className="text-maroon">*</span>
                 </label>
                 <select
                   value={form.childGender}
@@ -293,7 +293,7 @@ export default function AutismRegisterPage() {
                 <User size={20} className="text-gold" />
               </div>
               <div>
-                <h2 className="font-heading text-lg font-bold text-navy">
+                <h2 className="font-heading text-lg font-bold text-ink">
                   Parent / Guardian Information
                 </h2>
                 <p className="text-xs text-muted">
@@ -304,7 +304,7 @@ export default function AutismRegisterPage() {
 
             <div>
               <label className="block text-xs font-semibold text-muted uppercase tracking-wider mb-1.5">
-                Parent / Guardian Name <span className="text-danger">*</span>
+                Parent / Guardian Name <span className="text-maroon">*</span>
               </label>
               <input
                 value={form.parentName}
@@ -316,7 +316,7 @@ export default function AutismRegisterPage() {
             <div className="grid md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-semibold text-muted uppercase tracking-wider mb-1.5">
-                  Phone Number <span className="text-danger">*</span>
+                  Phone Number <span className="text-maroon">*</span>
                 </label>
                 <input
                   type="tel"
@@ -360,7 +360,7 @@ export default function AutismRegisterPage() {
                 <MapPin size={20} className="text-gold" />
               </div>
               <div>
-                <h2 className="font-heading text-lg font-bold text-navy">
+                <h2 className="font-heading text-lg font-bold text-ink">
                   Address
                 </h2>
                 <p className="text-xs text-muted">
@@ -371,7 +371,7 @@ export default function AutismRegisterPage() {
 
             <div>
               <label className="block text-xs font-semibold text-muted uppercase tracking-wider mb-1.5">
-                Full Address <span className="text-danger">*</span>
+                Full Address <span className="text-maroon">*</span>
               </label>
               <textarea
                 rows={2}
@@ -385,7 +385,7 @@ export default function AutismRegisterPage() {
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               <div>
                 <label className="block text-xs font-semibold text-muted uppercase tracking-wider mb-1.5">
-                  City <span className="text-danger">*</span>
+                  City <span className="text-maroon">*</span>
                 </label>
                 <input
                   value={form.city}
@@ -424,7 +424,7 @@ export default function AutismRegisterPage() {
                 <Stethoscope size={20} className="text-gold" />
               </div>
               <div>
-                <h2 className="font-heading text-lg font-bold text-navy">
+                <h2 className="font-heading text-lg font-bold text-ink">
                   Medical Details
                 </h2>
                 <p className="text-xs text-muted">
@@ -435,7 +435,7 @@ export default function AutismRegisterPage() {
 
             <div>
               <label className="block text-xs font-semibold text-muted uppercase tracking-wider mb-1.5">
-                Diagnosis / Condition Details <span className="text-danger">*</span>
+                Diagnosis / Condition Details <span className="text-maroon">*</span>
               </label>
               <textarea
                 rows={4}
@@ -473,11 +473,11 @@ export default function AutismRegisterPage() {
             </div>
 
             {/* Summary */}
-            <div className="bg-teal/5 rounded-xl p-5 space-y-2 text-sm">
-              <h3 className="font-heading font-bold text-navy mb-3">
+            <div className="bg-teal/5 rounded-xl p-5 space-y-2 text-sm border border-teal/10">
+              <h3 className="font-heading font-bold text-ink mb-3">
                 Registration Summary
               </h3>
-              <div className="grid grid-cols-2 gap-2 text-ink-soft">
+              <div className="grid grid-cols-2 gap-2 text-ink/70">
                 <div>
                   <span className="text-muted">Child:</span>{" "}
                   <span className="font-medium">{form.childName}</span>
@@ -507,7 +507,7 @@ export default function AutismRegisterPage() {
         )}
 
         {/* Navigation */}
-        <div className="flex justify-between mt-8 pt-6 border-t border-gray-100">
+        <div className="flex justify-between mt-8 pt-6 border-t border-ink/5">
           {step > 1 ? (
             <button onClick={handlePrev} className="btn-outline">
               <ArrowLeft size={16} /> Previous

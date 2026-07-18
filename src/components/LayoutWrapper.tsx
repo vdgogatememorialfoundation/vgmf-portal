@@ -16,7 +16,7 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen">{children}</main>
+      <main className="min-h-screen bg-[#faf9f6]">{children}</main>
       <Footer />
       <Chatbot />
     </>

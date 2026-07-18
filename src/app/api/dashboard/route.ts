@@ -19,7 +19,11 @@ export async function GET(req: NextRequest) {
       prisma.seminarRegistration.findMany({ where: { userId }, orderBy: { registrationDate: "desc" }, take: 10 }),
       prisma.fellowshipApplication.findMany({ where: { userId }, orderBy: { createdAt: "desc" }, take: 10 }),
       prisma.autismRegistration.findMany({ where: { userId }, orderBy: { registrationDate: "desc" }, take: 10 }),
-      prisma.announcement.findMany({ where: { isActive: true }, orderBy: [{ isPinned: "desc" }, { createdAt: "desc" }], take: 5 }),
+      prisma.announcement.findMany({
+        where: { isActive: true },
+        orderBy: [{ isPinned: "desc" }, { createdAt: "desc" }],
+        take: 3,
+      }),
       prisma.event.findMany({ where: { isPublished: true }, orderBy: { eventDate: "desc" }, take: 5 }),
     ]);
 

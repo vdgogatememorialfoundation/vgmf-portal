@@ -20,7 +20,6 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
   if (!article) notFound();
 
-  // Increment view count (fire and forget)
   prisma.article.update({ where: { slug }, data: { viewCount: { increment: 1 } } }).catch(() => {});
 
   const relatedArticles = await prisma.article.findMany({
@@ -33,7 +32,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   return (
     <div>
       {/* HEADER */}
-      <section className="relative bg-gradient-to-br from-[#0891b2] via-[#06b6d4] to-[#22d3ee] py-16 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-[#0d6662] via-[#0d6662] to-[#14918b] py-20 overflow-hidden">
         <div className="absolute inset-0">
           <div className="absolute top-10 right-[10%] w-[300px] h-[300px] bg-white/10 rounded-full blur-[100px]" />
         </div>
@@ -63,13 +62,13 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
       </section>
 
       {/* CONTENT */}
-      <section className="py-16">
+      <section className="py-20">
         <div className="max-w-4xl mx-auto px-6">
           <div className="grid lg:grid-cols-[1fr_250px] gap-12">
             {/* ARTICLE BODY */}
             <article className="prose prose-lg max-w-none">
               {article.excerpt && (
-                <p className="text-xl text-ink-soft leading-relaxed font-medium border-l-4 border-gold pl-6 mb-8 not-prose">
+                <p className="text-xl text-ink-soft leading-relaxed font-medium border-l-4 border-[#c2761c] pl-6 mb-8 not-prose">
                   {article.excerpt}
                 </p>
               )}
@@ -82,17 +81,17 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                 <h3 className="font-heading text-sm font-extrabold text-navy mb-4 uppercase tracking-wider">Share Article</h3>
                 <div className="flex gap-2">
                   {["Twitter", "LinkedIn", "WhatsApp"].map(platform => (
-                    <button key={platform} className="flex-1 py-2.5 bg-[#0891b2]/5 text-[#0891b2] text-xs font-bold rounded-xl hover:bg-[#0891b2] hover:text-white transition-all duration-200">
+                    <button key={platform} className="flex-1 py-2.5 bg-[#0d6662]/5 text-[#0d6662] text-xs font-bold rounded-xl hover:bg-[#0d6662] hover:text-white transition-all duration-200">
                       {platform[0]}
                     </button>
                   ))}
                 </div>
                 <div className="mt-6 pt-6 border-t border-gray-100">
                   <div className="flex items-center gap-2 mb-3">
-                    <Share2 size={14} className="text-gold" />
+                    <Share2 size={14} className="text-[#c2761c]" />
                     <span className="text-xs font-bold text-ink-soft uppercase tracking-wider">Copy Link</span>
                   </div>
-                  <button onClick={() => { navigator.clipboard.writeText(window.location.href); }} className="w-full py-2.5 text-xs font-bold text-ink-soft bg-cream-dark rounded-xl hover:bg-[#0891b2]/5 transition-colors">
+                  <button onClick={() => { navigator.clipboard.writeText(window.location.href); }} className="w-full py-2.5 text-xs font-bold text-ink-soft bg-cream-dark rounded-xl hover:bg-[#0d6662]/5 transition-colors">
                     Copy URL
                   </button>
                 </div>
@@ -104,7 +103,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
       {/* RELATED ARTICLES */}
       {relatedArticles.length > 0 && (
-        <section className="py-16 bg-cream-dark">
+        <section className="py-20 bg-cream-dark">
           <div className="max-w-7xl mx-auto px-6">
             <div className="section-heading">
               <span className="badge">Related</span>
@@ -114,11 +113,11 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
               {relatedArticles.map(rel => (
                 <Link key={rel.id} href={`/articles/${rel.slug}`} className="group bg-white rounded-2xl border border-gray-100 p-6 card-hover block">
                   {rel.category && (
-                    <span className="inline-block px-3 py-1 bg-[#0891b2]/10 text-[#0891b2] text-xs font-bold rounded-full mb-3 uppercase tracking-wider">{rel.category}</span>
+                    <span className="inline-block px-3 py-1 bg-[#0d6662]/10 text-[#0d6662] text-xs font-bold rounded-full mb-3 uppercase tracking-wider">{rel.category}</span>
                   )}
-                  <h3 className="font-heading text-base font-extrabold text-navy mb-2 group-hover:text-[#0891b2] transition-colors leading-snug line-clamp-2">{rel.title}</h3>
+                  <h3 className="font-heading text-base font-extrabold text-navy mb-2 group-hover:text-[#0d6662] transition-colors leading-snug line-clamp-2">{rel.title}</h3>
                   {rel.excerpt && <p className="text-sm text-ink-soft line-clamp-2 mb-3">{rel.excerpt}</p>}
-                  <span className="inline-flex items-center gap-1 text-sm font-bold text-navy group-hover:text-[#0891b2] transition-colors">
+                  <span className="inline-flex items-center gap-1 text-sm font-bold text-navy group-hover:text-[#0d6662] transition-colors">
                     Read More <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                   </span>
                 </Link>

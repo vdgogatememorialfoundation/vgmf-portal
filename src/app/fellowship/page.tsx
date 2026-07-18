@@ -26,7 +26,7 @@ export default async function FellowshipPage() {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
         <div className="text-center px-4 max-w-md">
-          <FlaskConical size={48} className="text-[#0891b2] mx-auto mb-4" />
+          <FlaskConical size={48} className="text-[#0d6662] mx-auto mb-4" />
           <h2 className="font-heading text-2xl font-bold text-navy mb-2">Medical Practitioners Only</h2>
           <p className="text-sm text-muted mb-6">This fellowship is for registered medical practitioners only.</p>
           <Link href="/login" className="btn-primary">Log In to Continue <ArrowRight size={16} /></Link>
@@ -38,10 +38,10 @@ export default async function FellowshipPage() {
   return (
     <div>
       {/* HERO */}
-      <section className="relative bg-gradient-to-br from-[#0891b2] via-[#06b6d4] to-[#22d3ee] py-24 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-[#0d6662] via-[#0d6662] to-[#14918b] py-28 overflow-hidden">
         <div className="absolute inset-0">
           <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-white/10 rounded-full blur-[150px]" />
-          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gold/10 rounded-full blur-[120px]" />
+          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#c2761c]/10 rounded-full blur-[120px]" />
           <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)", backgroundSize: "60px 60px" }} />
         </div>
         <div className="max-w-7xl mx-auto px-6 relative z-10 text-center">
@@ -51,7 +51,7 @@ export default async function FellowshipPage() {
           </span>
           <h1 className="font-heading text-5xl md:text-7xl font-extrabold text-white leading-[1.1] mb-6">
             Viddhakarma<br />
-            <span className="text-gold-light">Research Fellowship</span>
+            <span className="text-[#d4922a]">Research Fellowship</span>
           </h1>
           <p className="text-white/70 text-lg leading-relaxed mb-10 max-w-2xl mx-auto">
             {event.shortDesc || "Advance evidence-based Ayurvedic research with grants up to ₹75,000 under expert mentorship from leading Shalya Tantra specialists."}
@@ -66,7 +66,7 @@ export default async function FellowshipPage() {
       {/* STATS */}
       <section className="relative -mt-12 z-20">
         <div className="max-w-3xl mx-auto px-6">
-          <div className="bg-white rounded-3xl p-6 grid grid-cols-3 gap-4 shadow-xl shadow-[#0891b2]/8 border border-gray-100">
+          <div className="bg-white rounded-3xl p-6 grid grid-cols-3 gap-4 shadow-xl shadow-[#0d6662]/8 border border-gray-100">
             {[
               { v: "₹75,000", l: "Grant Amount" },
               { v: "12-Digit", l: "Tracking ID" },
@@ -83,7 +83,7 @@ export default async function FellowshipPage() {
 
       {/* ABOUT */}
       {event.description && (
-        <section id="details" className="py-24">
+        <section id="details" className="py-28">
           <div className="max-w-4xl mx-auto px-6">
             <div className="section-heading">
               <span className="badge">About</span>
@@ -97,11 +97,11 @@ export default async function FellowshipPage() {
       )}
 
       {/* ELIGIBILITY & BENEFITS */}
-      <section className="py-24 bg-cream-dark">
+      <section className="py-28 bg-cream-dark">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-8">
             <div className="card-hover bg-white rounded-3xl border border-gray-100 p-8 md:p-10">
-              <div className="w-14 h-14 bg-gradient-to-br from-[#0891b2] to-[#06b6d4] rounded-2xl flex items-center justify-center text-white mb-6 shadow-lg">
+              <div className="w-14 h-14 bg-gradient-to-br from-[#0d6662] to-[#14918b] rounded-2xl flex items-center justify-center text-white mb-6 shadow-lg">
                 <Shield size={24} />
               </div>
               <h3 className="font-heading text-2xl font-extrabold text-navy mb-5">Eligibility</h3>
@@ -113,14 +113,14 @@ export default async function FellowshipPage() {
                   "Researchers in Shalya Tantra or allied disciplines",
                 ].map((item, i) => (
                   <div key={i} className="flex items-start gap-3">
-                    <CheckCircle size={16} className="text-emerald-accent mt-0.5 shrink-0" />
+                    <CheckCircle size={16} className="text-[#166534] mt-0.5 shrink-0" />
                     <p className="text-sm text-ink-soft">{item}</p>
                   </div>
                 ))}
               </div>
             </div>
             <div className="card-hover bg-white rounded-3xl border border-gray-100 p-8 md:p-10">
-              <div className="w-14 h-14 bg-gradient-to-br from-gold to-gold-light rounded-2xl flex items-center justify-center text-white mb-6 shadow-lg">
+              <div className="w-14 h-14 bg-gradient-to-br from-[#c2761c] to-[#d4922a] rounded-2xl flex items-center justify-center text-white mb-6 shadow-lg">
                 <Award size={24} />
               </div>
               <h3 className="font-heading text-2xl font-extrabold text-navy mb-5">Benefits</h3>
@@ -133,7 +133,7 @@ export default async function FellowshipPage() {
                   "Publication support for research findings",
                 ].map((item, i) => (
                   <div key={i} className="flex items-start gap-3">
-                    <CheckCircle size={16} className="text-gold mt-0.5 shrink-0" />
+                    <CheckCircle size={16} className="text-[#c2761c] mt-0.5 shrink-0" />
                     <p className="text-sm text-ink-soft">{item}</p>
                   </div>
                 ))}
@@ -144,7 +144,7 @@ export default async function FellowshipPage() {
       </section>
 
       {/* HIGHLIGHTS */}
-      <section className="py-24">
+      <section className="py-28">
         <div className="max-w-7xl mx-auto px-6">
           <div className="section-heading">
             <span className="badge">Features</span>
@@ -152,9 +152,9 @@ export default async function FellowshipPage() {
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {[
-              { icon: FlaskConical, title: "Research Grants", desc: "Up to ₹75,000 milestone-based funding for Viddhakarma and Agnikarma research.", color: "from-[#0891b2] to-[#06b6d4]" },
-              { icon: Users, title: "Expert Review", desc: "Scoring, remarks, and shortlisting by a panel of distinguished Ayurvedic scholars.", color: "from-[#0e7490] to-[#0891b2]" },
-              { icon: TrendingUp, title: "Smart Tracking", desc: "12-digit application tracking number with real-time status updates on your dashboard.", color: "from-[#0e7490] to-teal" },
+              { icon: FlaskConical, title: "Research Grants", desc: "Up to ₹75,000 milestone-based funding for Viddhakarma and Agnikarma research.", color: "from-[#0d6662] to-[#14918b]" },
+              { icon: Users, title: "Expert Review", desc: "Scoring, remarks, and shortlisting by a panel of distinguished Ayurvedic scholars.", color: "from-[#0a5250] to-[#0d6662]" },
+              { icon: TrendingUp, title: "Smart Tracking", desc: "12-digit application tracking number with real-time status updates on your dashboard.", color: "from-[#0d6662] to-[#14918b]" },
             ].map((c, i) => (
               <div key={i} className="card-hover bg-white rounded-3xl border border-gray-100 p-8 text-center group">
                 <div className={`w-16 h-16 bg-gradient-to-br ${c.color} rounded-2xl flex items-center justify-center text-white mx-auto mb-5 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
@@ -169,10 +169,10 @@ export default async function FellowshipPage() {
       </section>
 
       {/* APPLICATION PROCESS */}
-      <section className="py-24 bg-gradient-to-br from-[#0891b2] via-[#06b6d4] to-[#22d3ee] relative overflow-hidden">
+      <section className="py-28 bg-gradient-to-br from-[#0d6662] via-[#0d6662] to-[#14918b] relative overflow-hidden">
         <div className="absolute inset-0">
           <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-[120px]" />
-          <div className="absolute bottom-0 left-0 w-72 h-72 bg-gold/10 rounded-full blur-[100px]" />
+          <div className="absolute bottom-0 left-0 w-72 h-72 bg-[#c2761c]/10 rounded-full blur-[100px]" />
         </div>
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="text-center mb-16">
@@ -191,7 +191,7 @@ export default async function FellowshipPage() {
               <div key={i} className="bg-white/10 backdrop-blur-sm rounded-3xl p-8 relative group hover:bg-white/15 transition-all duration-300">
                 <div className="font-heading text-6xl font-extrabold text-white/10 absolute top-4 right-6">{step.s}</div>
                 <div className="relative z-10">
-                  <div className="w-14 h-14 bg-gold rounded-2xl flex items-center justify-center text-navy mb-5 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-14 h-14 bg-[#c2761c] rounded-2xl flex items-center justify-center text-navy mb-5 shadow-lg group-hover:scale-110 transition-transform duration-300">
                     <step.icon size={24} />
                   </div>
                   <h3 className="font-heading text-xl font-extrabold text-white mb-3">{step.t}</h3>
@@ -204,7 +204,7 @@ export default async function FellowshipPage() {
       </section>
 
       {/* FAQ */}
-      <section className="py-24">
+      <section className="py-28">
         <div className="max-w-3xl mx-auto px-6">
           <div className="section-heading">
             <span className="badge">FAQ</span>
@@ -221,7 +221,7 @@ export default async function FellowshipPage() {
               <details key={i} className="card-hover bg-white rounded-2xl border border-gray-100 p-6 group">
                 <summary className="font-heading font-bold text-navy cursor-pointer list-none flex justify-between items-center text-base">
                   {faq.q}
-                  <HelpCircle size={20} className="text-gold shrink-0 ml-4" />
+                  <HelpCircle size={20} className="text-[#c2761c] shrink-0 ml-4" />
                 </summary>
                 <p className="text-sm text-ink-soft mt-4 leading-relaxed">{faq.a}</p>
               </details>
@@ -231,10 +231,10 @@ export default async function FellowshipPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-24 bg-gradient-to-br from-[#0891b2] via-[#06b6d4] to-[#22d3ee] relative overflow-hidden">
+      <section className="py-28 bg-gradient-to-br from-[#0d6662] via-[#0d6662] to-[#14918b] relative overflow-hidden">
         <div className="absolute inset-0">
           <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-[120px]" />
-          <div className="absolute bottom-0 left-0 w-72 h-72 bg-gold/10 rounded-full blur-[100px]" />
+          <div className="absolute bottom-0 left-0 w-72 h-72 bg-[#c2761c]/10 rounded-full blur-[100px]" />
         </div>
         <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
           <h2 className="font-heading text-4xl md:text-5xl font-extrabold text-white mb-5 leading-tight">

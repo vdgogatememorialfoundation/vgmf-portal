@@ -12,7 +12,7 @@ export default async function AutismPage() {
       <div className="min-h-[60vh] flex items-center justify-center">
         <div className="text-center px-4 max-w-md">
           <Heart size={48} className="text-muted/30 mx-auto mb-4" />
-          <h2 className="font-heading text-2xl font-bold text-navy mb-2">Coming Soon</h2>
+          <h2 className="font-heading text-2xl font-bold text-ink mb-2">Coming Soon</h2>
           <p className="text-sm text-muted mb-6">The Autism Awareness Programme is not available at this moment. Please check back later.</p>
           <Link href="/" className="btn-primary">Back to Home <ArrowRight size={16} /></Link>
         </div>
@@ -23,7 +23,7 @@ export default async function AutismPage() {
   return (
     <div>
       {/* HERO */}
-      <section className="relative py-24 overflow-hidden bg-gradient-to-br from-rose-400 via-[#0891b2] to-[#06b6d4]">
+      <section className="relative py-24 overflow-hidden bg-gradient-to-br from-rose-400 via-teal to-[#0d6662]">
         <div className="absolute inset-0">
           <div className="absolute top-20 right-[10%] w-[500px] h-[500px] bg-white/10 rounded-full blur-[150px]" />
           <div className="absolute bottom-0 left-[5%] w-[400px] h-[400px] bg-rose-300/20 rounded-full blur-[120px]" />
@@ -50,14 +50,14 @@ export default async function AutismPage() {
       {/* STATS */}
       <section className="relative -mt-12 z-20">
         <div className="max-w-3xl mx-auto px-6">
-          <div className="bg-white rounded-3xl p-6 grid grid-cols-3 gap-4 shadow-xl shadow-rose-500/8 border border-gray-100">
+          <div className="bg-white rounded-3xl p-6 grid grid-cols-3 gap-4 shadow-xl border border-ink/5">
             {[
               { v: "Free", l: "Programme Fee" },
               { v: "Panchakarma", l: "Therapy Used" },
               { v: "All Ages", l: "Eligibility" },
             ].map((s, i) => (
               <div key={i} className="text-center">
-                <div className="font-heading text-xl font-extrabold text-navy">{s.v}</div>
+                <div className="font-heading text-xl font-extrabold text-ink">{s.v}</div>
                 <div className="text-xs text-muted mt-1 uppercase tracking-wider">{s.l}</div>
               </div>
             ))}
@@ -73,21 +73,21 @@ export default async function AutismPage() {
             <h2>About the Programme</h2>
           </div>
           <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            <div className="card-hover bg-white rounded-3xl border border-gray-100 p-8">
+            <div className="card-hover bg-white rounded-3xl border border-ink/5 p-8">
               <div className="w-14 h-14 bg-gradient-to-br from-rose-500 to-rose-400 rounded-2xl flex items-center justify-center text-white mb-5 shadow-lg">
                 <Heart size={24} />
               </div>
-              <h3 className="font-heading text-xl font-extrabold text-navy mb-3">Our Mission</h3>
-              <p className="text-sm text-ink-soft leading-relaxed">
+              <h3 className="font-heading text-xl font-extrabold text-ink mb-3">Our Mission</h3>
+              <p className="text-sm text-ink/70 leading-relaxed">
                 {event.description || "VGMF's Autism Awareness Programme is a community-driven initiative providing free consultation, therapy, and support to families affected by Autism Spectrum Disorder. We integrate Ayurvedic Panchakarma therapies with modern supportive care to improve quality of life for children and their caregivers."}
               </p>
             </div>
-            <div className="card-hover bg-white rounded-3xl border border-gray-100 p-8">
-              <div className="w-14 h-14 bg-gradient-to-br from-[#0891b2] to-[#06b6d4] rounded-2xl flex items-center justify-center text-white mb-5 shadow-lg">
+            <div className="card-hover bg-white rounded-3xl border border-ink/5 p-8">
+              <div className="w-14 h-14 bg-gradient-to-br from-teal to-[#0a5c58] rounded-2xl flex items-center justify-center text-white mb-5 shadow-lg">
                 <Users size={24} />
               </div>
-              <h3 className="font-heading text-xl font-extrabold text-navy mb-3">Who Can Join</h3>
-              <p className="text-sm text-ink-soft leading-relaxed">
+              <h3 className="font-heading text-xl font-extrabold text-ink mb-3">Who Can Join</h3>
+              <p className="text-sm text-ink/70 leading-relaxed">
                 Children and adults diagnosed with or showing signs of ASD. Parents, caregivers, and special educators are also welcome to attend our awareness workshops and training sessions conducted by experienced Ayurvedic physicians.
               </p>
             </div>
@@ -96,7 +96,7 @@ export default async function AutismPage() {
       </section>
 
       {/* SERVICES */}
-      <section className="py-24 bg-cream-dark">
+      <section className="py-24 bg-[#f4f1ec]">
         <div className="max-w-7xl mx-auto px-6">
           <div className="section-heading">
             <span className="badge">Services</span>
@@ -105,19 +105,19 @@ export default async function AutismPage() {
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { icon: Stethoscope, title: "Free Consultation", desc: "Initial Ayurvedic assessment and personalised consultation for each registrant.", color: "from-[#0891b2] to-[#06b6d4]" },
+              { icon: Stethoscope, title: "Free Consultation", desc: "Initial Ayurvedic assessment and personalised consultation for each registrant.", color: "from-teal to-[#0a5c58]" },
               { icon: Brain, title: "Panchakarma Therapy", desc: "Abhyanga, Shirodhara, Nasya, and Basti therapies tailored to individual constitution.", color: "from-rose-500 to-rose-400" },
-              { icon: HandHeart, title: "Family Support", desc: "Counselling, caregiver training, and awareness workshops for affected families.", color: "from-teal to-teal-light" },
-              { icon: BookOpen, title: "Awareness Workshops", desc: "Educational sessions on ASD, early intervention, and Ayurvedic approaches.", color: "from-[#0e7490] to-[#0891b2]" },
-              { icon: ClipboardCheck, title: "Ongoing Monitoring", desc: "Regular follow-ups, progress tracking, and therapy adjustments as needed.", color: "from-gold to-gold-light" },
+              { icon: HandHeart, title: "Family Support", desc: "Counselling, caregiver training, and awareness workshops for affected families.", color: "from-gold to-[#a86217]" },
+              { icon: BookOpen, title: "Awareness Workshops", desc: "Educational sessions on ASD, early intervention, and Ayurvedic approaches.", color: "from-[#0a5c58] to-teal" },
+              { icon: ClipboardCheck, title: "Ongoing Monitoring", desc: "Regular follow-ups, progress tracking, and therapy adjustments as needed.", color: "from-gold to-[#a86217]" },
               { icon: Users, title: "Community Building", desc: "Support groups connecting families, practitioners, and special educators.", color: "from-rose-400 to-pink-400" },
             ].map((service, i) => (
-              <div key={i} className="card-hover bg-white rounded-3xl border border-gray-100 p-8 text-center group">
+              <div key={i} className="card-hover bg-white rounded-3xl border border-ink/5 p-8 text-center group">
                 <div className={`w-16 h-16 bg-gradient-to-br ${service.color} rounded-2xl flex items-center justify-center text-white mx-auto mb-5 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
                   <service.icon size={28} />
                 </div>
-                <h3 className="font-heading text-xl font-extrabold text-navy mb-3">{service.title}</h3>
-                <p className="text-sm text-ink-soft leading-relaxed">{service.desc}</p>
+                <h3 className="font-heading text-xl font-extrabold text-ink mb-3">{service.title}</h3>
+                <p className="text-sm text-ink/70 leading-relaxed">{service.desc}</p>
               </div>
             ))}
           </div>
@@ -138,14 +138,14 @@ export default async function AutismPage() {
               { s: "03", t: "Therapy Plan", d: "Personalised Panchakarma therapy schedule based on individual constitution." },
               { s: "04", t: "Ongoing Support", d: "Regular follow-ups, progress tracking, and caregiver guidance." },
             ].map((step, i) => (
-              <div key={i} className="card-hover bg-white rounded-3xl border border-gray-100 p-8 relative group">
-                <div className="font-heading text-6xl font-extrabold text-navy/5 absolute top-4 right-4">{step.s}</div>
+              <div key={i} className="card-hover bg-white rounded-3xl border border-ink/5 p-8 relative group">
+                <div className="font-heading text-6xl font-extrabold text-ink/5 absolute top-4 right-4">{step.s}</div>
                 <div className="relative z-10">
-                  <div className="w-12 h-12 bg-gradient-to-br from-[#0891b2] to-[#06b6d4] rounded-xl flex items-center justify-center text-white text-sm font-heading font-extrabold mb-4 shadow-md">
+                  <div className="w-12 h-12 bg-gradient-to-br from-teal to-[#0a5c58] rounded-xl flex items-center justify-center text-white text-sm font-heading font-extrabold mb-4 shadow-md">
                     {step.s}
                   </div>
-                  <h3 className="font-heading text-lg font-extrabold text-navy mb-2">{step.t}</h3>
-                  <p className="text-sm text-ink-soft leading-relaxed">{step.d}</p>
+                  <h3 className="font-heading text-lg font-extrabold text-ink mb-2">{step.t}</h3>
+                  <p className="text-sm text-ink/70 leading-relaxed">{step.d}</p>
                 </div>
               </div>
             ))}
@@ -154,7 +154,7 @@ export default async function AutismPage() {
       </section>
 
       {/* FAQ */}
-      <section className="py-24 bg-cream-dark">
+      <section className="py-24 bg-[#f4f1ec]">
         <div className="max-w-3xl mx-auto px-6">
           <div className="section-heading">
             <span className="badge">FAQ</span>
@@ -168,12 +168,12 @@ export default async function AutismPage() {
               { q: "Can adults register for the programme?", a: "Yes, the programme is open to individuals of all ages diagnosed with or showing signs of Autism Spectrum Disorder. Caregivers and family members are also welcome." },
               { q: "How do I track my registration?", a: "After pre-registering, you will receive an e-ticket number. You can use this to track your registration status from your dashboard." },
             ].map((faq, i) => (
-              <details key={i} className="card-hover bg-white rounded-2xl border border-gray-100 p-6 group">
-                <summary className="font-heading font-bold text-navy cursor-pointer list-none flex justify-between items-center text-base">
+              <details key={i} className="card-hover bg-white rounded-2xl border border-ink/5 p-6 group">
+                <summary className="font-heading font-bold text-ink cursor-pointer list-none flex justify-between items-center text-base">
                   {faq.q}
                   <HelpCircle size={20} className="text-gold shrink-0 ml-4" />
                 </summary>
-                <p className="text-sm text-ink-soft mt-4 leading-relaxed">{faq.a}</p>
+                <p className="text-sm text-ink/70 mt-4 leading-relaxed">{faq.a}</p>
               </details>
             ))}
           </div>
@@ -181,7 +181,7 @@ export default async function AutismPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-24 relative overflow-hidden bg-gradient-to-br from-rose-400 via-[#0891b2] to-[#06b6d4]">
+      <section className="py-24 relative overflow-hidden bg-gradient-to-br from-rose-400 via-teal to-[#0d6662]">
         <div className="absolute inset-0">
           <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-[120px]" />
           <div className="absolute bottom-0 left-0 w-72 h-72 bg-rose-300/10 rounded-full blur-[100px]" />

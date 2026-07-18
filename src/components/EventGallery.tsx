@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Play, Calendar, MapPin, ExternalLink, ChevronLeft, ChevronRight, Award, Users, BookOpen } from "lucide-react";
+import { Play, Calendar, MapPin, ExternalLink, Award, Users, BookOpen } from "lucide-react";
 
 const pastEvents = [
   {
@@ -11,7 +11,7 @@ const pastEvents = [
     location: "Pune, Maharashtra",
     description: "Two-day national seminar featuring live demonstrations of Agnikarma and Viddhakarma techniques, research paper presentations, and expert panels with over 200+ delegates.",
     youtubeUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    thumbnailColor: "from-teal to-teal-light",
+    thumbnailColor: "from-[#0d6662] to-[#14918b]",
     highlights: ["200+ Delegates", "15 Expert Speakers", "Live Demos"],
     icon: Award,
   },
@@ -23,7 +23,7 @@ const pastEvents = [
     location: "Pune, Maharashtra",
     description: "Annual fellowship awards ceremony recognizing outstanding research in Viddhakarma. Five researchers received grants for their projects in traditional Ayurvedic therapies.",
     youtubeUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    thumbnailColor: "from-gold to-amber-500",
+    thumbnailColor: "from-[#c2761c] to-[#d4922a]",
     highlights: ["5 Fellows Awarded", "₹3.75L Grants", "Research Showcase"],
     icon: BookOpen,
   },
@@ -35,7 +35,7 @@ const pastEvents = [
     location: "Pune, Maharashtra",
     description: "Free community programme providing autism screening, therapy sessions, and family counseling. Over 85 families participated and received personalized care plans.",
     youtubeUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    thumbnailColor: "from-rose-400 to-rose-500",
+    thumbnailColor: "from-[#7c1d1d] to-[#991b1b]",
     highlights: ["85+ Families", "Free Screening", "Therapy Sessions"],
     icon: Users,
   },
@@ -47,14 +47,13 @@ const pastEvents = [
     location: "Pune, Maharashtra",
     description: "Hands-on workshop for Ayurvedic practitioners on traditional Shalaka preparation and application techniques for Agnikarma and Viddhakarma procedures.",
     youtubeUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    thumbnailColor: "from-navy to-navy-light",
+    thumbnailColor: "from-[#1a1a2e] to-[#2d2d44]",
     highlights: ["50+ Practitioners", "Hands-on Training", "Certificate Course"],
     icon: Award,
   },
 ];
 
 export default function EventGallery() {
-  const [activeEvent, setActiveEvent] = useState(0);
   const [showVideo, setShowVideo] = useState<number | null>(null);
 
   return (
@@ -68,8 +67,8 @@ export default function EventGallery() {
 
         {/* Event Cards Grid */}
         <div className="grid md:grid-cols-2 gap-6 mb-8">
-          {pastEvents.map((event, i) => (
-            <div key={event.id} className="bg-slate-50 rounded-2xl border border-slate-100 overflow-hidden card-hover group">
+          {pastEvents.map((event) => (
+            <div key={event.id} className="bg-[#faf9f6] rounded-2xl border border-gray-100 overflow-hidden card-hover group shadow-sm">
               {/* Thumbnail / Video Embed */}
               {showVideo === event.id ? (
                 <div className="relative w-full aspect-video bg-black">
@@ -93,7 +92,7 @@ export default function EventGallery() {
                     <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
                       <Play size={28} className="text-white ml-1" fill="white" />
                     </div>
-                    <p className="text-white/80 text-xs font-bold uppercase tracking-wider">{event.year} Event</p>
+                    <p className="text-white/80 text-xs font-bold uppercase tracking-wider font-heading">{event.year} Event</p>
                   </div>
                 </div>
               )}
@@ -105,31 +104,31 @@ export default function EventGallery() {
                     <event.icon size={16} />
                   </div>
                   <div>
-                    <h3 className="font-heading text-base font-extrabold text-navy leading-tight">{event.title}</h3>
-                    <div className="flex items-center gap-2 text-[10px] text-muted">
+                    <h3 className="font-heading text-base font-extrabold text-[#1a1a2e] leading-tight">{event.title}</h3>
+                    <div className="flex items-center gap-2 text-[10px] text-[#7c7c8a]">
                       <Calendar size={10} /> {event.date}
-                      <span>·</span>
+                      <span>&middot;</span>
                       <MapPin size={10} /> {event.location}
                     </div>
                   </div>
                 </div>
-                <p className="text-sm text-ink-soft leading-relaxed mb-3">{event.description}</p>
+                <p className="text-sm text-[#7c7c8a] leading-relaxed mb-3 font-body">{event.description}</p>
 
                 {/* Highlights */}
                 <div className="flex flex-wrap gap-2 mb-4">
                   {event.highlights.map((h, j) => (
-                    <span key={j} className="px-2 py-0.5 bg-teal/10 text-teal text-[10px] font-bold rounded-full">{h}</span>
+                    <span key={j} className="px-2 py-0.5 bg-[#0d6662]/10 text-[#0d6662] text-[10px] font-bold rounded-full">{h}</span>
                   ))}
                 </div>
 
                 {/* Actions */}
                 <div className="flex gap-2">
                   <button onClick={() => setShowVideo(event.id)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 bg-red-50 text-red-600 text-xs font-bold rounded-lg hover:bg-red-100 transition-colors">
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-[#7c1d1d]/5 text-[#7c1d1d] text-xs font-bold rounded-lg hover:bg-[#7c1d1d]/10 transition-colors">
                     <Play size={12} fill="currentColor" /> Watch Video
                   </button>
                   <a href={event.youtubeUrl.replace("/embed/", "/watch?v=")} target="_blank" rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 text-ink-soft text-xs font-bold rounded-lg hover:bg-slate-200 transition-colors">
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 text-[#7c7c8a] text-xs font-bold rounded-lg hover:bg-gray-200 transition-colors">
                     <ExternalLink size={12} /> YouTube
                   </a>
                 </div>
@@ -141,7 +140,7 @@ export default function EventGallery() {
         {/* YouTube Channel Link */}
         <div className="text-center">
           <a href="https://www.youtube.com/@VGMFOfficial" target="_blank" rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-red-500 text-white font-bold rounded-xl hover:bg-red-600 transition-colors shadow-lg shadow-red-500/20">
+            className="inline-flex items-center gap-2 px-6 py-3 bg-[#c2761c] text-white font-bold rounded-xl hover:bg-[#a86216] transition-colors shadow-lg shadow-[#c2761c]/20">
             <Play size={18} fill="white" />
             Visit Our YouTube Channel
             <ExternalLink size={14} />

@@ -15,7 +15,7 @@ const categories = [
   { id: "STUDENT", label: "Student", desc: "Ayurveda Students", icon: GraduationCap, color: "bg-gold/10 text-gold border-gold/20" },
   { id: "RESEARCHER", label: "Researcher", desc: "Research Scholars", icon: FlaskConical, color: "bg-maroon/10 text-maroon border-maroon/20" },
   { id: "PATIENT", label: "Patient", desc: "Seeking Treatment", icon: Heart, color: "bg-rose-50 text-rose-600 border-rose-200" },
-  { id: "GENERAL", label: "General", desc: "General Public", icon: Users, color: "bg-indigo-50 text-indigo-600 border-indigo-200" },
+  { id: "GENERAL", label: "General", desc: "General Public", icon: Users, color: "bg-blue-50 text-blue-600 border-blue-200" },
   { id: "INSTITUTION", label: "Institution", desc: "Organizations", icon: Building2, color: "bg-purple-50 text-purple-600 border-purple-200" },
 ];
 
@@ -92,13 +92,13 @@ export default function SignupPage() {
     `w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
       step > s ? "bg-teal text-white" :
       step === s ? "bg-teal text-white shadow-md shadow-teal/30" :
-      "bg-gray-200 text-ink/40"
+      "bg-ink/10 text-ink/40"
     }`;
 
   return (
     <div className="min-h-screen flex">
       {/* LEFT: Teal gradient panel */}
-      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-gradient-to-br from-teal via-cyan-500 to-teal-light">
+      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-gradient-to-br from-teal via-[#0a5c58] to-teal">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-20 left-20 w-72 h-72 bg-white rounded-full blur-3xl" />
           <div className="absolute bottom-20 right-20 w-96 h-96 bg-gold rounded-full blur-3xl" />
@@ -157,21 +157,21 @@ export default function SignupPage() {
               </div>
               <span className="text-sm font-medium hidden sm:inline">Category</span>
             </div>
-            <div className={`flex-1 h-0.5 transition-colors ${step >= 2 ? "bg-teal" : "bg-gray-200"}`} />
+            <div className={`flex-1 h-0.5 transition-colors ${step >= 2 ? "bg-teal" : "bg-ink/10"}`} />
             <div className={stepClass(2)}>
               <div className={dotClass(2)}>
                 {step > 2 ? <CheckCircle2 size={16} /> : "2"}
               </div>
               <span className="text-sm font-medium hidden sm:inline">Info</span>
             </div>
-            <div className={`flex-1 h-0.5 transition-colors ${step >= 3 ? "bg-teal" : "bg-gray-200"}`} />
+            <div className={`flex-1 h-0.5 transition-colors ${step >= 3 ? "bg-teal" : "bg-ink/10"}`} />
             <div className={stepClass(3)}>
               <div className={dotClass(3)}>
                 {step > 3 ? <CheckCircle2 size={16} /> : "3"}
               </div>
               <span className="text-sm font-medium hidden sm:inline">OTP</span>
             </div>
-            <div className={`flex-1 h-0.5 transition-colors ${step >= 4 ? "bg-teal" : "bg-gray-200"}`} />
+            <div className={`flex-1 h-0.5 transition-colors ${step >= 4 ? "bg-teal" : "bg-ink/10"}`} />
             <div className={stepClass(4)}>
               <div className={dotClass(4)}>4</div>
               <span className="text-sm font-medium hidden sm:inline">Password</span>
@@ -181,7 +181,7 @@ export default function SignupPage() {
           {/* Step 1: Category */}
           {step === 1 && (
             <div>
-              <p className="text-sm text-ink-soft mb-5">Choose the category that best describes you:</p>
+              <p className="text-sm text-ink/60 mb-5">Choose the category that best describes you:</p>
               <div className="grid grid-cols-2 gap-3 mb-6">
                 {categories.map((cat) => {
                   const selected = category === cat.id;
@@ -193,14 +193,14 @@ export default function SignupPage() {
                       className={`relative group text-left p-4 rounded-2xl border-2 transition-all duration-200 ${
                         selected
                           ? "border-teal bg-teal/5 shadow-md shadow-teal/10"
-                          : "border-gray-200 bg-white hover:border-gray-300 hover:shadow-sm"
+                          : "border-ink/10 bg-white hover:border-ink/20 hover:shadow-sm"
                       }`}
                     >
-                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 transition-transform ${selected ? cat.color + " scale-110" : "bg-gray-100 text-ink-soft"}`}>
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 transition-transform ${selected ? cat.color + " scale-110" : "bg-ink/5 text-ink/40"}`}>
                         <cat.icon size={20} />
                       </div>
                       <p className="font-heading text-sm font-extrabold text-ink">{cat.label}</p>
-                      <p className="text-[10px] text-ink-soft mt-0.5 leading-tight">{cat.desc}</p>
+                      <p className="text-[10px] text-ink/50 mt-0.5 leading-tight">{cat.desc}</p>
                     </button>
                   );
                 })}
@@ -219,31 +219,31 @@ export default function SignupPage() {
           {step === 2 && (
             <form onSubmit={handleSendOtp} className="space-y-5">
               <div>
-                <label className="block text-xs font-semibold text-ink/60 uppercase tracking-wider mb-1.5">Full Name</label>
+                <label className="block text-xs font-semibold text-ink/50 uppercase tracking-wider mb-1.5">Full Name</label>
                 <div className="relative">
-                  <User size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink/40" />
+                  <User size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink/30" />
                   <input type="text" value={form.name} onChange={(e) => updateForm("name", e.target.value)} required className="input-field pl-11" placeholder="Your full name" />
                 </div>
               </div>
               <div>
-                <label className="block text-xs font-semibold text-ink/60 uppercase tracking-wider mb-1.5">Email Address</label>
+                <label className="block text-xs font-semibold text-ink/50 uppercase tracking-wider mb-1.5">Email Address</label>
                 <div className="relative">
-                  <Mail size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink/40" />
+                  <Mail size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink/30" />
                   <input type="email" value={form.email} onChange={(e) => updateForm("email", e.target.value)} required className="input-field pl-11" placeholder="you@example.com" />
                 </div>
               </div>
               <div>
-                <label className="block text-xs font-semibold text-ink/60 uppercase tracking-wider mb-1.5">Phone (optional)</label>
+                <label className="block text-xs font-semibold text-ink/50 uppercase tracking-wider mb-1.5">Phone (optional)</label>
                 <div className="relative">
-                  <Phone size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink/40" />
+                  <Phone size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink/30" />
                   <input type="tel" value={form.phone} onChange={(e) => updateForm("phone", e.target.value)} className="input-field pl-11" placeholder="+91 98765 43210" />
                 </div>
               </div>
               <button type="submit" disabled={loading} className="btn-primary w-full justify-center py-3 text-base disabled:opacity-50 disabled:cursor-not-allowed">
                 {loading ? <><Loader2 size={18} className="animate-spin" /> Sending OTP...</> : <><span>Send Verification Code</span> <ArrowRight size={18} /></>}
               </button>
-              <button type="button" onClick={() => setStep(1)} className="w-full text-center text-sm text-ink/60 hover:text-teal font-medium transition-colors">
-                ← Back to category selection
+              <button type="button" onClick={() => setStep(1)} className="w-full text-center text-sm text-ink/50 hover:text-teal font-medium transition-colors">
+                &larr; Back to category selection
               </button>
             </form>
           )}
@@ -251,19 +251,19 @@ export default function SignupPage() {
           {/* Step 3: OTP */}
           {step === 3 && (
             <div className="space-y-5">
-              <div className="bg-teal/5 rounded-xl p-4 text-center">
-                <p className="text-sm text-ink/60">Verification code sent to</p>
+              <div className="bg-teal/5 rounded-xl p-4 text-center border border-teal/10">
+                <p className="text-sm text-ink/50">Verification code sent to</p>
                 <p className="text-sm font-semibold text-teal">{form.email}</p>
               </div>
               <div>
-                <label className="block text-xs font-semibold text-ink/60 uppercase tracking-wider mb-1.5">Verification Code</label>
+                <label className="block text-xs font-semibold text-ink/50 uppercase tracking-wider mb-1.5">Verification Code</label>
                 <input type="text" value={otp} onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))} required maxLength={6} className="input-field text-center tracking-[10px] font-bold text-xl" placeholder="000000" />
               </div>
               <button type="button" onClick={() => { setStep(4); }} disabled={otp.length !== 6} className="btn-primary w-full justify-center py-3 text-base disabled:opacity-50 disabled:cursor-not-allowed">
                 Verify & Set Password <ArrowRight size={18} />
               </button>
-              <button type="button" onClick={() => { setStep(2); setOtp(""); }} className="w-full text-center text-sm text-ink/60 hover:text-teal font-medium transition-colors">
-                ← Change email
+              <button type="button" onClick={() => { setStep(2); setOtp(""); }} className="w-full text-center text-sm text-ink/50 hover:text-teal font-medium transition-colors">
+                &larr; Change email
               </button>
             </div>
           )}
@@ -271,37 +271,37 @@ export default function SignupPage() {
           {/* Step 4: Password */}
           {step === 4 && (
             <div className="space-y-5">
-              <div className="bg-teal/5 rounded-xl p-4 text-center">
-                <p className="text-sm text-ink/60">Welcome, <span className="font-semibold text-ink">{form.name}</span></p>
-                <p className="text-xs text-ink/50">Setting up your {categories.find(c => c.id === category)?.label} account</p>
+              <div className="bg-teal/5 rounded-xl p-4 text-center border border-teal/10">
+                <p className="text-sm text-ink/50">Welcome, <span className="font-semibold text-ink">{form.name}</span></p>
+                <p className="text-xs text-ink/40">Setting up your {categories.find(c => c.id === category)?.label} account</p>
               </div>
               <div>
-                <label className="block text-xs font-semibold text-ink/60 uppercase tracking-wider mb-1.5">Password</label>
+                <label className="block text-xs font-semibold text-ink/50 uppercase tracking-wider mb-1.5">Password</label>
                 <div className="relative">
-                  <Lock size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink/40" />
+                  <Lock size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink/30" />
                   <input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} required className="input-field pl-11 pr-12" placeholder="Minimum 6 characters" />
-                  <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-ink/60 hover:text-ink transition-colors">
+                  <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-ink/40 hover:text-ink transition-colors">
                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                   </button>
                 </div>
               </div>
               <div>
-                <label className="block text-xs font-semibold text-ink/60 uppercase tracking-wider mb-1.5">Confirm Password</label>
+                <label className="block text-xs font-semibold text-ink/50 uppercase tracking-wider mb-1.5">Confirm Password</label>
                 <div className="relative">
-                  <Lock size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink/40" />
+                  <Lock size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink/30" />
                   <input type="password" value={confirm} onChange={(e) => setConfirm(e.target.value)} required className="input-field pl-11" placeholder="Re-enter password" />
                 </div>
               </div>
               <button type="button" onClick={handleVerify} disabled={loading} className="btn-primary w-full justify-center py-3 text-base disabled:opacity-50 disabled:cursor-not-allowed">
                 {loading ? <><Loader2 size={18} className="animate-spin" /> Creating Account...</> : <><CheckCircle2 size={18} /> Create Account</>}
               </button>
-              <button type="button" onClick={() => { setStep(3); }} className="w-full text-center text-sm text-ink/60 hover:text-teal font-medium transition-colors">
-                ← Back to OTP
+              <button type="button" onClick={() => { setStep(3); }} className="w-full text-center text-sm text-ink/50 hover:text-teal font-medium transition-colors">
+                &larr; Back to OTP
               </button>
             </div>
           )}
 
-          <p className="mt-6 text-center text-sm text-ink/60">
+          <p className="mt-6 text-center text-sm text-ink/50">
             Already have an account?{" "}
             <Link href="/login" className="text-teal font-semibold hover:underline">
               Sign In

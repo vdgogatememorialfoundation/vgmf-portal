@@ -23,8 +23,8 @@ interface OrderData {
 
 const STATUS_STEPS = [
   { key: "PENDING", label: "Order Placed", icon: Clock, color: "bg-gray-400" },
-  { key: "CONFIRMED", label: "Confirmed", icon: CheckCircle, color: "bg-blue-500" },
-  { key: "PROCESSING", label: "Processing", icon: Package, color: "bg-purple-500" },
+  { key: "CONFIRMED", label: "Confirmed", icon: CheckCircle, color: "bg-teal" },
+  { key: "PROCESSING", label: "Processing", icon: Package, color: "bg-gold" },
   { key: "SHIPPED", label: "Shipped", icon: Truck, color: "bg-orange-500" },
   { key: "DELIVERED", label: "Delivered", icon: CheckCircle, color: "bg-green-500" },
 ];
@@ -104,7 +104,7 @@ export default function TrackingPage() {
         <span className="inline-block px-3 py-1 bg-gold/10 text-gold text-xs font-semibold rounded-full mb-4 tracking-wider uppercase">
           Order Tracking
         </span>
-        <h1 className="font-heading text-4xl font-extrabold text-navy mb-2">
+        <h1 className="font-heading text-4xl font-extrabold text-ink mb-2">
           Track Your Order
         </h1>
         <p className="text-muted">
@@ -113,7 +113,7 @@ export default function TrackingPage() {
       </div>
 
       {/* Search Form */}
-      <form onSubmit={handleTrack} className="bg-white rounded-2xl border border-gray-100 p-6 mb-8 shadow-sm">
+      <form onSubmit={handleTrack} className="bg-white rounded-2xl border border-ink/5 p-6 mb-8 shadow-sm">
         <div className="flex gap-3">
           <input
             type="text"
@@ -136,7 +136,7 @@ export default function TrackingPage() {
           </button>
         </div>
         {error && (
-          <p className="text-danger text-sm mt-3 flex items-center gap-2">
+          <p className="text-maroon text-sm mt-3 flex items-center gap-2">
             <AlertCircle size={14} />
             {error}
           </p>
@@ -147,26 +147,26 @@ export default function TrackingPage() {
       {order && (
         <div className="space-y-6 animate-fade-up">
           {/* Order Header */}
-          <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+          <div className="bg-white rounded-2xl border border-ink/5 p-6 shadow-sm">
             <div className="flex flex-col sm:flex-row justify-between items-start gap-4 mb-4">
               <div>
                 <p className="text-xs text-muted uppercase tracking-wider mb-1">
                   Order Number
                 </p>
-                <p className="font-heading text-2xl font-bold text-navy">
+                <p className="font-heading text-2xl font-bold text-ink">
                   {order.orderNumber}
                 </p>
               </div>
               <span
                 className={`px-4 py-1.5 rounded-lg text-sm font-semibold ${
                   order.status === "DELIVERED"
-                    ? "bg-emerald-accent/10 text-emerald-accent"
+                    ? "bg-teal/10 text-teal"
                     : order.status === "SHIPPED"
                     ? "bg-orange-50 text-orange-700"
                     : order.status === "PROCESSING"
-                    ? "bg-purple-50 text-purple-700"
+                    ? "bg-gold/10 text-gold"
                     : order.status === "CANCELLED"
-                    ? "bg-red-50 text-danger"
+                    ? "bg-red-50 text-maroon"
                     : "bg-blue-50 text-blue-700"
                 }`}
               >
@@ -176,7 +176,7 @@ export default function TrackingPage() {
 
             {/* Estimated Delivery */}
             {order.status !== "DELIVERED" && order.estimatedDelivery && (
-              <div className="bg-gradient-to-r from-[#0891b2] to-[#06b6d4] text-white rounded-xl p-5 mb-5">
+              <div className="bg-gradient-to-r from-teal to-[#0a5c58] text-white rounded-xl p-5 mb-5">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center">
                     <Calendar size={24} className="text-gold" />
@@ -206,7 +206,7 @@ export default function TrackingPage() {
 
             {/* Status Timeline */}
             <div className="mt-6">
-              <h3 className="font-heading text-lg font-bold text-navy mb-5">
+              <h3 className="font-heading text-lg font-bold text-ink mb-5">
                 Order Progress
               </h3>
               <div className="relative">
@@ -220,18 +220,18 @@ export default function TrackingPage() {
                       <div className="flex flex-col items-center">
                         <div
                           className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
-                            isCompleted ? step.color : "bg-gray-200"
-                          } ${isCurrent ? "ring-4 ring-offset-2 ring-navy/20" : ""}`}
+                            isCompleted ? step.color : "bg-ink/10"
+                          } ${isCurrent ? "ring-4 ring-offset-2 ring-teal/20" : ""}`}
                         >
                           <step.icon
                             size={20}
-                            className={isCompleted ? "text-white" : "text-gray-400"}
+                            className={isCompleted ? "text-white" : "text-muted"}
                           />
                         </div>
                         {index < STATUS_STEPS.length - 1 && (
                           <div
                             className={`w-0.5 h-12 ${
-                              isCompleted ? "bg-emerald-accent" : "bg-gray-200"
+                              isCompleted ? "bg-teal" : "bg-ink/10"
                             }`}
                           />
                         )}
@@ -240,14 +240,14 @@ export default function TrackingPage() {
                       <div className="flex-1 pb-2">
                         <p
                           className={`font-semibold text-sm ${
-                            isCompleted ? "text-navy" : "text-gray-400"
+                            isCompleted ? "text-ink" : "text-muted"
                           }`}
                         >
                           {step.label}
                         </p>
                         {isCurrent && order.events[0] && (
-                          <div className="mt-2 bg-cream rounded-xl p-3 border border-gray-100">
-                            <p className="text-sm text-ink-soft">
+                          <div className="mt-2 bg-[#f4f1ec] rounded-xl p-3 border border-ink/5">
+                            <p className="text-sm text-ink/70">
                               {order.events[0].description}
                             </p>
                             <div className="flex items-center gap-2 mt-2 text-xs text-muted">
@@ -273,8 +273,8 @@ export default function TrackingPage() {
           {/* Order Details Grid */}
           <div className="grid md:grid-cols-2 gap-6">
             {/* Customer Info */}
-            <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-              <h3 className="font-heading text-lg font-bold text-navy mb-4">
+            <div className="bg-white rounded-2xl border border-ink/5 p-6 shadow-sm">
+              <h3 className="font-heading text-lg font-bold text-ink mb-4">
                 Customer Details
               </h3>
               <div className="space-y-3">
@@ -288,13 +288,13 @@ export default function TrackingPage() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Phone size={16} className="text-muted" />
-                  <p className="text-sm text-ink-soft">
+                  <p className="text-sm text-ink/70">
                     {order.customerPhone}
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
                   <Mail size={16} className="text-muted" />
-                  <p className="text-sm text-ink-soft">
+                  <p className="text-sm text-ink/70">
                     {order.customerEmail}
                   </p>
                 </div>
@@ -302,13 +302,13 @@ export default function TrackingPage() {
             </div>
 
             {/* Shipping Address */}
-            <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-              <h3 className="font-heading text-lg font-bold text-navy mb-4">
+            <div className="bg-white rounded-2xl border border-ink/5 p-6 shadow-sm">
+              <h3 className="font-heading text-lg font-bold text-ink mb-4">
                 Shipping Address
               </h3>
               <div className="flex items-start gap-2">
                 <MapPin size={16} className="text-muted mt-1 shrink-0" />
-                <p className="text-sm text-ink-soft leading-relaxed">
+                <p className="text-sm text-ink/70 leading-relaxed">
                   {order.shippingAddress || "No address provided"}
                 </p>
               </div>
@@ -316,15 +316,15 @@ export default function TrackingPage() {
           </div>
 
           {/* Order Items */}
-          <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-            <h3 className="font-heading text-lg font-bold text-navy mb-4">
+          <div className="bg-white rounded-2xl border border-ink/5 p-6 shadow-sm">
+            <h3 className="font-heading text-lg font-bold text-ink mb-4">
               Order Items
             </h3>
             <div className="space-y-3">
               {order.items.map((item, index) => (
                 <div
                   key={index}
-                  className="flex justify-between items-center py-3 border-b border-gray-50 last:border-0"
+                  className="flex justify-between items-center py-3 border-b border-ink/5 last:border-0"
                 >
                   <div>
                     <p className="font-semibold text-ink">{item.name}</p>
@@ -332,7 +332,7 @@ export default function TrackingPage() {
                       Qty: {item.quantity} &times; ₹{item.price.toLocaleString("en-IN")}
                     </p>
                   </div>
-                  <p className="font-semibold text-navy">
+                  <p className="font-semibold text-ink">
                     ₹{(item.price * item.quantity).toLocaleString("en-IN")}
                   </p>
                 </div>
@@ -342,17 +342,17 @@ export default function TrackingPage() {
 
           {/* Tracking History */}
           {order.events.length > 0 && (
-            <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-              <h3 className="font-heading text-lg font-bold text-navy mb-4">
+            <div className="bg-white rounded-2xl border border-ink/5 p-6 shadow-sm">
+              <h3 className="font-heading text-lg font-bold text-ink mb-4">
                 Tracking History
               </h3>
               <div className="space-y-4">
                 {order.events.map((event, index) => (
                   <div
                     key={index}
-                    className="flex gap-3 pb-4 border-b border-gray-50 last:border-0"
+                    className="flex gap-3 pb-4 border-b border-ink/5 last:border-0"
                   >
-                    <div className="w-2.5 h-2.5 rounded-full bg-[#0891b2] mt-1.5 shrink-0" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-teal mt-1.5 shrink-0" />
                     <div className="flex-1">
                       <p className="font-semibold text-ink text-sm">
                         {event.description}
