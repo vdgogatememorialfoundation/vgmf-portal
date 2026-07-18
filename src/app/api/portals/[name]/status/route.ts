@@ -1,12 +1,13 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 export async function GET(
-  request: Request,
-  { params }: { params: { name: string } }
+  request: NextRequest,
+  { params }: { params: Promise<{ name: string }> }
 ) {
   try {
-    const portalName = params.name.toLowerCase();
+    const { name } = await params;
+    const portalName = name.toLowerCase();
     
     const portal = await prisma.portalLink.findUnique({
       where: { portalName },
