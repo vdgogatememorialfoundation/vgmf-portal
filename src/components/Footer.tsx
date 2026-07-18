@@ -32,9 +32,9 @@ export default function Footer() {
           <div>
             <h4 className="font-heading text-xs font-extrabold text-[#1a1a2e] mb-4 uppercase tracking-wider">Programmes</h4>
             <div className="space-y-1.5">
-              <Link href="/dashboard" className="block text-xs text-[#7c7c8a] hover:text-[#0d6662] transition-colors">Research Fellowship</Link>
-              <Link href="/dashboard" className="block text-xs text-[#7c7c8a] hover:text-[#0d6662] transition-colors">National Seminar</Link>
-              <Link href="/dashboard" className="block text-xs text-[#7c7c8a] hover:text-[#0d6662] transition-colors">Autism Programme</Link>
+              <Link href="/fellowship" className="block text-xs text-[#7c7c8a] hover:text-[#0d6662] transition-colors">Research Fellowship</Link>
+              <Link href="/seminar" className="block text-xs text-[#7c7c8a] hover:text-[#0d6662] transition-colors">National Seminar</Link>
+              <Link href="/autism" className="block text-xs text-[#7c7c8a] hover:text-[#0d6662] transition-colors">Autism Programme</Link>
             </div>
           </div>
 

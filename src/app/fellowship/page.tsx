@@ -57,7 +57,7 @@ export default async function FellowshipPage() {
             {event.shortDesc || "Advance evidence-based Ayurvedic research with grants up to ₹75,000 under expert mentorship from leading Shalya Tantra specialists."}
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Link href="/fellowship/apply" className="btn-gold text-lg !py-4 !px-10">Apply Now <ArrowRight size={20} /></Link>
+            <Link href="/dashboard" className="btn-gold text-lg !py-4 !px-10">Register in Dashboard <ArrowRight size={20} /></Link>
             <Link href="#details" className="btn-outline !border-white/30 !text-white hover:!bg-white/10 hover:!border-white/50 text-lg !py-4 !px-10">Learn More</Link>
           </div>
         </div>
@@ -243,7 +243,7 @@ export default async function FellowshipPage() {
           <p className="text-white/70 text-lg mb-10 max-w-2xl mx-auto">
             Apply now and contribute to evidence-based Ayurveda research under expert mentorship.
           </p>
-          <Link href="/fellowship/apply" className="btn-gold text-lg !py-4 !px-10">Apply Now <ArrowRight size={20} /></Link>
+           <Link href="/dashboard" className="btn-gold text-lg !py-4 !px-10">Register in Dashboard <ArrowRight size={20} /></Link>
         </div>
       </section>
     </div>

@@ -69,6 +69,25 @@ export async function PUT(
     if (data.restrictToDoctors !== undefined) updateData.restrictToDoctors = data.restrictToDoctors;
 
     const item = await prisma.event.update({ where: { id }, data: updateData });
+
+    if (data.isPublished === true) {
+      const existingAnnouncement = await prisma.announcement.findFirst({
+        where: { title: `New ${item.eventType}: ${item.title}` },
+      });
+      if (!existingAnnouncement) {
+        await prisma.announcement.create({
+          data: {
+            title: `New ${item.eventType}: ${item.title}`,
+            summary: item.shortDesc || `Registration is now open for ${item.title}`,
+            content: item.description || `A new ${item.eventType.toLowerCase()} event has been announced.`,
+            isPinned: true,
+            isActive: true,
+            linkUrl: `/${item.eventType.toLowerCase()}`,
+          },
+        });
+      }
+    }
+
     return NextResponse.json(item);
   } catch (err) {
     return NextResponse.json({ error: "Server error" }, { status: 500 });

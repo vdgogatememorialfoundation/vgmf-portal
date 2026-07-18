@@ -72,7 +72,7 @@ export default async function SeminarPage() {
               </span>
             )}
           </div>
-          <Link href="/seminar/register" className="btn-gold text-lg !py-4 !px-10">Register Now <ArrowRight size={20} /></Link>
+          <Link href="/dashboard" className="btn-gold text-lg !py-4 !px-10">Register in Dashboard <ArrowRight size={20} /></Link>
         </div>
       </section>
 
@@ -213,7 +213,7 @@ export default async function SeminarPage() {
           <p className="text-white/60 text-lg mb-10 max-w-2xl mx-auto">
             Join 500+ Ayurvedic professionals at the premier Agnikarma & Viddhakarma conference.
           </p>
-          <Link href="/seminar/register" className="btn-gold text-lg !py-4 !px-10">Register Now <ArrowRight size={20} /></Link>
+          <Link href="/dashboard" className="btn-gold text-lg !py-4 !px-10">Register in Dashboard <ArrowRight size={20} /></Link>
         </div>
       </section>
     </div>

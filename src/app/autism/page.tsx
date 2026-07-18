@@ -41,7 +41,7 @@ export default async function AutismPage() {
             {event.shortDesc || "Free awareness, therapy, and support integrating Ayurvedic Panchakarma approaches with compassionate community care."}
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Link href="/autism/register" className="btn-gold text-lg !py-4 !px-10">Pre-Register Now <ArrowRight size={20} /></Link>
+            <Link href="/dashboard" className="btn-gold text-lg !py-4 !px-10">Register in Dashboard <ArrowRight size={20} /></Link>
             <Link href="#about" className="btn-outline !border-white/30 !text-white hover:!bg-white/10 hover:!border-white/50 text-lg !py-4 !px-10">Learn More</Link>
           </div>
         </div>
@@ -194,7 +194,7 @@ export default async function AutismPage() {
           <p className="text-white/60 text-lg mb-10 max-w-2xl mx-auto">
             Free Ayurvedic support for families affected by Autism Spectrum Disorder. Every child deserves compassionate care.
           </p>
-          <Link href="/autism/register" className="btn-gold text-lg !py-4 !px-10">Pre-Register Now <ArrowRight size={20} /></Link>
+           <Link href="/dashboard" className="btn-gold text-lg !py-4 !px-10">Register in Dashboard <ArrowRight size={20} /></Link>
         </div>
       </section>
     </div>

@@ -96,6 +96,26 @@ export async function POST(req: NextRequest) {
         restrictToDoctors: data.restrictToDoctors ?? false,
       },
     });
+
+    if (item.isPublished) {
+      const eventTypeLower = (item.eventType || "event").toLowerCase();
+      const existingAnnouncement = await prisma.announcement.findFirst({
+        where: { title: `New ${item.eventType}: ${item.title}` },
+      });
+      if (!existingAnnouncement) {
+        await prisma.announcement.create({
+          data: {
+            title: `New ${item.eventType}: ${item.title}`,
+            summary: item.shortDesc || `A new ${item.eventType} event has been published.`,
+            content: item.description || null,
+            isPinned: true,
+            isActive: true,
+            linkUrl: `/${eventTypeLower}`,
+          },
+        });
+      }
+    }
+
     return NextResponse.json(item, { status: 201 });
   } catch (err) {
     return NextResponse.json({ error: "Server error" }, { status: 500 });

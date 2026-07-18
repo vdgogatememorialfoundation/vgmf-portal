@@ -7,6 +7,9 @@ import { Menu, X, Phone, ChevronDown, User, LogOut, Shield, Settings } from "luc
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About" },
+  { href: "/fellowship", label: "Fellowship" },
+  { href: "/seminar", label: "Seminar" },
+  { href: "/autism", label: "Autism" },
   { href: "/shop", label: "Shop" },
   { href: "/articles", label: "Articles" },
   { href: "/contact", label: "Contact" },
@@ -14,7 +17,7 @@ const navLinks = [
 
 const announcements = [
   "Applications Open for VGMF Research Fellowship 2026",
-  "National Seminar on Agnikarma & Viddhakarma - Register Now",
+  "National Seminar on Agnikarma & Viddhakarma",
   "Free Autism Awareness Programme for Families",
   "Contact: +91 93737 92952",
 ];
