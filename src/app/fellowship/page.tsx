@@ -160,7 +160,7 @@ export default async function FellowshipPage() {
                 <div className={`w-16 h-16 bg-gradient-to-br ${c.color} rounded-2xl flex items-center justify-center text-white mx-auto mb-5 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
                   <c.icon size={28} />
                 </div>
-                <h3 className="font-heading text-xl font-extrabold text-navy mb-3">{c.t || c.title}</h3>
+                <h3 className="font-heading text-xl font-extrabold text-navy mb-3">{c.title}</h3>
                 <p className="text-sm text-ink-soft leading-relaxed">{c.desc}</p>
               </div>
             ))}
