@@ -49,6 +49,8 @@ model User {
   competitionEntries CompetitionEntry[]
   scanLogs          ScanLog[]
   chatSessions      ChatSession[]
+  siteReviews       SiteReview[]
+  auditLogs         AuditLog[]
 }
 
 model Account {
@@ -526,6 +528,7 @@ model Event {
   eventProducts     EventProduct[]
   eventSales        EventSale[]
   eventNotices      EventNotice[]
+  identityVerifications IdentityVerification[]
 }
 
 model EventNotice {
