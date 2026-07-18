@@ -9,7 +9,7 @@ const RESEND_COOLDOWN = 60 * 1000;
 
 export async function POST(req: NextRequest) {
   try {
-    const { action, email, name, phone, password, otp, category } = await req.json();
+    const { action, email, name, phone, password, otp } = await req.json();
 
     if (action === "send-otp" || action === "resend-otp") {
       if (!email) return NextResponse.json({ error: "Email required" }, { status: 400 });
@@ -65,7 +65,7 @@ export async function POST(req: NextRequest) {
           phone,
           password: hashed,
           role: "USER",
-          category: category || "GENERAL",
+          category: "GENERAL",
           emailVerified: new Date(),
         },
       });
@@ -75,7 +75,7 @@ export async function POST(req: NextRequest) {
         subject: "Welcome to VGMF Portal",
         htmlBody: `<div style="font-family:Arial,sans-serif;max-width:500px;margin:0 auto;padding:20px">
           <h2 style="color:#0891b2">Welcome to VGMF, ${name || "User"}!</h2>
-          <p>Your account has been created successfully as a <strong>${category || "General"}</strong> member.</p>
+          <p>Your account has been created successfully.</p>
           <p>You can now register for seminars, apply for fellowships, and access our programmes.</p>
           <a href="${process.env.NEXTAUTH_URL || "https://staging.vaidyagogate.org"}/login" style="display:inline-block;padding:12px 24px;background:#0891b2;color:white;border-radius:8px;text-decoration:none;margin-top:16px">Sign In</a>
         </div>`,

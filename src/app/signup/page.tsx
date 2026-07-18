@@ -1,27 +1,16 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   ArrowLeft, Mail, Lock, User, Eye, EyeOff, Loader2,
-  CheckCircle2, ArrowRight, Stethoscope, GraduationCap,
-  FlaskConical, Heart, Users, Building2, Phone, RotateCcw,
+  CheckCircle2, ArrowRight, Phone, RotateCcw,
 } from "lucide-react";
 import toast from "react-hot-toast";
 
-const categories = [
-  { id: "DOCTOR", label: "Doctor", desc: "Ayurvedic Practitioner", icon: Stethoscope, color: "bg-teal/10 text-teal border-teal/20" },
-  { id: "STUDENT", label: "Student", desc: "Ayurveda Students", icon: GraduationCap, color: "bg-gold/10 text-gold border-gold/20" },
-  { id: "RESEARCHER", label: "Researcher", desc: "Research Scholars", icon: FlaskConical, color: "bg-maroon/10 text-maroon border-maroon/20" },
-  { id: "PATIENT", label: "Patient", desc: "Seeking Treatment", icon: Heart, color: "bg-rose-50 text-rose-600 border-rose-200" },
-  { id: "GENERAL", label: "General", desc: "General Public", icon: Users, color: "bg-blue-50 text-blue-600 border-blue-200" },
-  { id: "INSTITUTION", label: "Institution", desc: "Organizations", icon: Building2, color: "bg-purple-50 text-purple-600 border-purple-200" },
-];
-
 export default function SignupPage() {
-  const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
-  const [category, setCategory] = useState("");
+  const [step, setStep] = useState<1 | 2 | 3>(1);
   const [form, setForm] = useState({ name: "", email: "", phone: "" });
   const [otp, setOtp] = useState("");
   const [password, setPassword] = useState("");
@@ -46,11 +35,6 @@ export default function SignupPage() {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleCategorySelect = () => {
-    if (!category) { toast.error("Please select a category"); return; }
-    setStep(2);
-  };
-
   const handleSendOtp = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.name || !form.email) { toast.error("Please fill in all fields"); return; }
@@ -65,7 +49,7 @@ export default function SignupPage() {
       if (!res.ok) { toast.error(data.error || "Failed to send OTP"); }
       else {
         toast.success("OTP sent to your email");
-        setStep(3);
+        setStep(2);
         setResendCooldown(60);
       }
     } catch { toast.error("Something went wrong. Please try again."); }
@@ -107,7 +91,6 @@ export default function SignupPage() {
           phone: form.phone || undefined,
           password,
           otp,
-          category,
         }),
       });
       const data = await res.json();
@@ -196,68 +179,24 @@ export default function SignupPage() {
               <div className={dotClass(1)}>
                 {step > 1 ? <CheckCircle2 size={16} /> : "1"}
               </div>
-              <span className="text-sm font-medium hidden sm:inline">Category</span>
+              <span className="text-sm font-medium hidden sm:inline">Info</span>
             </div>
             <div className={`flex-1 h-0.5 transition-colors ${step >= 2 ? "bg-teal" : "bg-ink/10"}`} />
             <div className={stepClass(2)}>
               <div className={dotClass(2)}>
                 {step > 2 ? <CheckCircle2 size={16} /> : "2"}
               </div>
-              <span className="text-sm font-medium hidden sm:inline">Info</span>
+              <span className="text-sm font-medium hidden sm:inline">OTP</span>
             </div>
             <div className={`flex-1 h-0.5 transition-colors ${step >= 3 ? "bg-teal" : "bg-ink/10"}`} />
             <div className={stepClass(3)}>
-              <div className={dotClass(3)}>
-                {step > 3 ? <CheckCircle2 size={16} /> : "3"}
-              </div>
-              <span className="text-sm font-medium hidden sm:inline">OTP</span>
-            </div>
-            <div className={`flex-1 h-0.5 transition-colors ${step >= 4 ? "bg-teal" : "bg-ink/10"}`} />
-            <div className={stepClass(4)}>
-              <div className={dotClass(4)}>4</div>
+              <div className={dotClass(3)}>3</div>
               <span className="text-sm font-medium hidden sm:inline">Password</span>
             </div>
           </div>
 
-          {/* Step 1: Category */}
+          {/* Step 1: Basic Info */}
           {step === 1 && (
-            <div>
-              <p className="text-sm text-ink/60 mb-5">Choose the category that best describes you:</p>
-              <div className="grid grid-cols-2 gap-3 mb-6">
-                {categories.map((cat) => {
-                  const selected = category === cat.id;
-                  return (
-                    <button
-                      key={cat.id}
-                      type="button"
-                      onClick={() => setCategory(cat.id)}
-                      className={`relative group text-left p-4 rounded-2xl border-2 transition-all duration-200 ${
-                        selected
-                          ? "border-teal bg-teal/5 shadow-md shadow-teal/10"
-                          : "border-ink/10 bg-white hover:border-ink/20 hover:shadow-sm"
-                      }`}
-                    >
-                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 transition-transform ${selected ? cat.color + " scale-110" : "bg-ink/5 text-ink/40"}`}>
-                        <cat.icon size={20} />
-                      </div>
-                      <p className="font-heading text-sm font-extrabold text-ink">{cat.label}</p>
-                      <p className="text-[10px] text-ink/50 mt-0.5 leading-tight">{cat.desc}</p>
-                    </button>
-                  );
-                })}
-              </div>
-              <button
-                type="button"
-                onClick={handleCategorySelect}
-                className="btn-primary w-full justify-center py-3 text-base"
-              >
-                Continue <ArrowRight size={18} />
-              </button>
-            </div>
-          )}
-
-          {/* Step 2: Basic Info */}
-          {step === 2 && (
             <form onSubmit={handleSendOtp} className="space-y-5">
               <div>
                 <label className="block text-xs font-semibold text-ink/50 uppercase tracking-wider mb-1.5">Full Name</label>
@@ -283,14 +222,11 @@ export default function SignupPage() {
               <button type="submit" disabled={loading} className="btn-primary w-full justify-center py-3 text-base disabled:opacity-50 disabled:cursor-not-allowed">
                 {loading ? <><Loader2 size={18} className="animate-spin" /> Sending OTP...</> : <><span>Send Verification Code</span> <ArrowRight size={18} /></>}
               </button>
-              <button type="button" onClick={() => setStep(1)} className="w-full text-center text-sm text-ink/50 hover:text-teal font-medium transition-colors">
-                &larr; Back to category selection
-              </button>
             </form>
           )}
 
-          {/* Step 3: OTP */}
-          {step === 3 && (
+          {/* Step 2: OTP */}
+          {step === 2 && (
             <div className="space-y-5">
               <div className="bg-teal/5 rounded-xl p-4 text-center border border-teal/10">
                 <p className="text-sm text-ink/50">Verification code sent to</p>
@@ -300,7 +236,7 @@ export default function SignupPage() {
                 <label className="block text-xs font-semibold text-ink/50 uppercase tracking-wider mb-1.5">Verification Code</label>
                 <input type="text" value={otp} onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))} required maxLength={6} className="input-field text-center tracking-[10px] font-bold text-xl" placeholder="000000" />
               </div>
-              <button type="button" onClick={() => { setStep(4); }} disabled={otp.length !== 6} className="btn-primary w-full justify-center py-3 text-base disabled:opacity-50 disabled:cursor-not-allowed">
+              <button type="button" onClick={() => { setStep(3); }} disabled={otp.length !== 6} className="btn-primary w-full justify-center py-3 text-base disabled:opacity-50 disabled:cursor-not-allowed">
                 Verify & Set Password <ArrowRight size={18} />
               </button>
               <div className="flex items-center justify-center gap-4">
@@ -313,19 +249,18 @@ export default function SignupPage() {
                   <RotateCcw size={14} className={loading ? "animate-spin" : ""} />
                   {resendCooldown > 0 ? `Resend in ${formatTime(resendCooldown)}` : "Resend OTP"}
                 </button>
-                <button type="button" onClick={() => { setStep(2); setOtp(""); setResendCooldown(0); }} className="text-sm text-ink/50 hover:text-teal font-medium transition-colors">
+                <button type="button" onClick={() => { setStep(1); setOtp(""); setResendCooldown(0); }} className="text-sm text-ink/50 hover:text-teal font-medium transition-colors">
                   Change email
                 </button>
               </div>
             </div>
           )}
 
-          {/* Step 4: Password */}
-          {step === 4 && (
+          {/* Step 3: Password */}
+          {step === 3 && (
             <div className="space-y-5">
               <div className="bg-teal/5 rounded-xl p-4 text-center border border-teal/10">
                 <p className="text-sm text-ink/50">Welcome, <span className="font-semibold text-ink">{form.name}</span></p>
-                <p className="text-xs text-ink/40">Setting up your {categories.find(c => c.id === category)?.label} account</p>
               </div>
               <div>
                 <label className="block text-xs font-semibold text-ink/50 uppercase tracking-wider mb-1.5">Password</label>
@@ -347,7 +282,7 @@ export default function SignupPage() {
               <button type="button" onClick={handleVerify} disabled={loading} className="btn-primary w-full justify-center py-3 text-base disabled:opacity-50 disabled:cursor-not-allowed">
                 {loading ? <><Loader2 size={18} className="animate-spin" /> Creating Account...</> : <><CheckCircle2 size={18} /> Create Account</>}
               </button>
-              <button type="button" onClick={() => { setStep(3); }} className="w-full text-center text-sm text-ink/50 hover:text-teal font-medium transition-colors">
+              <button type="button" onClick={() => { setStep(2); }} className="w-full text-center text-sm text-ink/50 hover:text-teal font-medium transition-colors">
                 &larr; Back to OTP
               </button>
             </div>
