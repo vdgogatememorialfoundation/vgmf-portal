@@ -7,9 +7,6 @@ import { Menu, X, Phone, ChevronDown, User, LogOut, Shield, Settings } from "luc
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About" },
-  { href: "/fellowship", label: "Fellowship" },
-  { href: "/seminar", label: "Seminar" },
-  { href: "/autism", label: "Autism" },
   { href: "/shop", label: "Shop" },
   { href: "/articles", label: "Articles" },
   { href: "/contact", label: "Contact" },

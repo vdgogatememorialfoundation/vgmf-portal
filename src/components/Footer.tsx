@@ -22,7 +22,7 @@ export default function Footer() {
           <div>
             <h4 className="font-heading text-xs font-extrabold text-[#1a1a2e] mb-4 uppercase tracking-wider">Quick Links</h4>
             <div className="grid grid-cols-2 gap-y-1.5 gap-x-3">
-              {["Home", "About", "Fellowship", "Seminar", "Autism", "Shop", "Articles", "Contact"].map(l => (
+              {["Home", "About", "Shop", "Articles", "Contact"].map(l => (
                 <Link key={l} href={l === "Home" ? "/" : `/${l.toLowerCase()}`} className="text-xs text-[#7c7c8a] hover:text-[#0d6662] transition-colors py-0.5">{l}</Link>
               ))}
             </div>
@@ -32,9 +32,9 @@ export default function Footer() {
           <div>
             <h4 className="font-heading text-xs font-extrabold text-[#1a1a2e] mb-4 uppercase tracking-wider">Programmes</h4>
             <div className="space-y-1.5">
-              {["Research Fellowship", "National Seminar", "Autism Programme"].map(l => (
-                <Link key={l} href={`/${l.split(" ")[0].toLowerCase()}`} className="block text-xs text-[#7c7c8a] hover:text-[#0d6662] transition-colors">{l}</Link>
-              ))}
+              <Link href="/dashboard" className="block text-xs text-[#7c7c8a] hover:text-[#0d6662] transition-colors">Research Fellowship</Link>
+              <Link href="/dashboard" className="block text-xs text-[#7c7c8a] hover:text-[#0d6662] transition-colors">National Seminar</Link>
+              <Link href="/dashboard" className="block text-xs text-[#7c7c8a] hover:text-[#0d6662] transition-colors">Autism Programme</Link>
             </div>
           </div>
 

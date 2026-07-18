@@ -153,7 +153,7 @@ function DashboardContent({ user, data, category }: { user: any; data: any; cate
                   <p className="text-sm font-bold text-[#1a1a2e] truncate">{e.title}</p>
                   <p className="text-xs text-[#7c7c8a]">{e.city ? `${e.city} · ` : ""}{new Date(e.eventDate).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}</p>
                 </div>
-                <Link href={`/seminar`} className="text-xs font-bold text-[#0d6662] hover:underline shrink-0">View</Link>
+                <Link href="/dashboard" className="text-xs font-bold text-[#0d6662] hover:underline shrink-0">View</Link>
               </div>
             ))}
           </div>
@@ -189,14 +189,14 @@ function DashboardContent({ user, data, category }: { user: any; data: any; cate
         ) : (
           <div>
             <p className="text-sm text-[#7c7c8a] mb-3">Apply for the Viddhakarma Research Fellowship (grants up to ₹75,000).</p>
-            <Link href="/fellowship/apply" className="btn-primary !py-2 !px-4 text-sm">Apply Now <ArrowRight size={14} /></Link>
+            <Link href="/dashboard" className="btn-primary !py-2 !px-4 text-sm">Apply Now <ArrowRight size={14} /></Link>
           </div>
         )}
       </div>
 
       <div className="grid grid-cols-2 gap-3">
-        <QuickAction href="/seminar" label="Register for Seminar" icon={GraduationCap} color="bg-[#0d6662]/10 text-[#0d6662]" />
-        <QuickAction href="/fellowship/apply" label="Apply for Fellowship" icon={FlaskConical} color="bg-[#c2761c]/10 text-[#c2761c]" />
+        <QuickAction href="/dashboard" label="Register for Seminar" icon={GraduationCap} color="bg-[#0d6662]/10 text-[#0d6662]" />
+        <QuickAction href="/dashboard" label="Apply for Fellowship" icon={FlaskConical} color="bg-[#c2761c]/10 text-[#c2761c]" />
         <QuickAction href="/articles" label="Read Research" icon={BookOpen} color="bg-[#7c1d1d]/10 text-[#7c1d1d]" />
         <QuickAction href="/contact" label="Contact Support" icon={User} color="bg-[#1a1a2e]/10 text-[#1a1a2e]" />
       </div>
@@ -214,7 +214,7 @@ function DashboardContent({ user, data, category }: { user: any; data: any; cate
         <p className="text-sm text-[#7c7c8a] mb-4">Access study materials, research papers, and educational content curated for Ayurveda students.</p>
         <div className="grid grid-cols-2 gap-3">
           <Link href="/articles" className="flex items-center gap-2 p-3 bg-[#faf9f6] rounded-xl text-sm font-bold text-[#1a1a2e] hover:text-[#0d6662] transition-colors"><FileText size={16} /> Articles</Link>
-          <Link href="/seminar" className="flex items-center gap-2 p-3 bg-[#faf9f6] rounded-xl text-sm font-bold text-[#1a1a2e] hover:text-[#0d6662] transition-colors"><GraduationCap size={16} /> Seminars</Link>
+          <Link href="/dashboard" className="flex items-center gap-2 p-3 bg-[#faf9f6] rounded-xl text-sm font-bold text-[#1a1a2e] hover:text-[#0d6662] transition-colors"><GraduationCap size={16} /> Seminars</Link>
         </div>
       </div>
 
@@ -239,7 +239,7 @@ function DashboardContent({ user, data, category }: { user: any; data: any; cate
         )}
       </div>
 
-      <QuickAction href="/fellowship" label="Explore Fellowship Opportunities" icon={Award} color="bg-[#c2761c]/10 text-[#c2761c]" />
+      <QuickAction href="/dashboard" label="Explore Fellowship Opportunities" icon={Award} color="bg-[#c2761c]/10 text-[#c2761c]" />
 
       <NoticesSection announcements={data?.announcements} />
     </div>
@@ -267,7 +267,7 @@ function DashboardContent({ user, data, category }: { user: any; data: any; cate
         ) : (
           <div>
             <p className="text-sm text-[#7c7c8a] mb-3">Submit your research proposal for the Viddhakarma Research Fellowship.</p>
-            <Link href="/fellowship/apply" className="btn-primary !py-2 !px-4 text-sm">Apply for Fellowship <ArrowRight size={14} /></Link>
+            <Link href="/dashboard" className="btn-primary !py-2 !px-4 text-sm">Apply for Fellowship <ArrowRight size={14} /></Link>
           </div>
         )}
       </div>
@@ -280,7 +280,7 @@ function DashboardContent({ user, data, category }: { user: any; data: any; cate
         <Link href="/articles" className="btn-outline !py-2 !px-4 text-sm">Browse Papers <ArrowRight size={14} /></Link>
       </div>
 
-      <QuickAction href="/seminar" label="Academic Events & Conferences" icon={GraduationCap} color="bg-[#0d6662]/10 text-[#0d6662]" />
+      <QuickAction href="/dashboard" label="Academic Events & Conferences" icon={GraduationCap} color="bg-[#0d6662]/10 text-[#0d6662]" />
 
       <NoticesSection announcements={data?.announcements} />
     </div>
@@ -308,7 +308,7 @@ function DashboardContent({ user, data, category }: { user: any; data: any; cate
         ) : (
           <p className="text-sm text-[#7c7c8a] mb-3">Free awareness, therapy, and community support for families.</p>
         )}
-        <Link href="/autism/register" className="btn-primary !py-2 !px-4 text-sm mt-3 inline-flex">Register for Programme <ArrowRight size={14} /></Link>
+        <Link href="/dashboard" className="btn-primary !py-2 !px-4 text-sm mt-3 inline-flex">Register for Programme <ArrowRight size={14} /></Link>
       </div>
 
       <div className="bg-white rounded-2xl border border-[#1a1a2e]/5 p-6">
@@ -320,7 +320,7 @@ function DashboardContent({ user, data, category }: { user: any; data: any; cate
       </div>
 
       <div className="grid grid-cols-2 gap-3">
-        <QuickAction href="/autism" label="Learn About Programme" icon={Heart} color="bg-[#7c1d1d]/10 text-[#7c1d1d]" />
+        <QuickAction href="/dashboard" label="Learn About Programme" icon={Heart} color="bg-[#7c1d1d]/10 text-[#7c1d1d]" />
         <QuickAction href="/contact" label="Book Appointment" icon={Calendar} color="bg-[#0d6662]/10 text-[#0d6662]" />
       </div>
 
@@ -335,15 +335,15 @@ function DashboardContent({ user, data, category }: { user: any; data: any; cate
           <Globe size={18} className="text-[#0d6662]" /> Our Programmes
         </h3>
         <div className="grid sm:grid-cols-2 gap-3">
-          <Link href="/seminar" className="flex items-center gap-3 p-4 bg-[#faf9f6] rounded-xl card-hover group">
+          <Link href="/dashboard" className="flex items-center gap-3 p-4 bg-[#faf9f6] rounded-xl card-hover group">
             <div className="w-10 h-10 bg-[#0d6662]/10 rounded-xl flex items-center justify-center"><GraduationCap size={18} className="text-[#0d6662]" /></div>
             <div><p className="text-sm font-bold text-[#1a1a2e]">Seminars</p><p className="text-[10px] text-[#7c7c8a]">Register for events</p></div>
           </Link>
-          <Link href="/fellowship" className="flex items-center gap-3 p-4 bg-[#faf9f6] rounded-xl card-hover group">
+          <Link href="/dashboard" className="flex items-center gap-3 p-4 bg-[#faf9f6] rounded-xl card-hover group">
             <div className="w-10 h-10 bg-[#c2761c]/10 rounded-xl flex items-center justify-center"><FlaskConical size={18} className="text-[#c2761c]" /></div>
             <div><p className="text-sm font-bold text-[#1a1a2e]">Fellowship</p><p className="text-[10px] text-[#7c7c8a]">Apply for research</p></div>
           </Link>
-          <Link href="/autism" className="flex items-center gap-3 p-4 bg-[#faf9f6] rounded-xl card-hover group">
+          <Link href="/dashboard" className="flex items-center gap-3 p-4 bg-[#faf9f6] rounded-xl card-hover group">
             <div className="w-10 h-10 bg-[#7c1d1d]/10 rounded-xl flex items-center justify-center"><Heart size={18} className="text-[#7c1d1d]" /></div>
             <div><p className="text-sm font-bold text-[#1a1a2e]">Autism Programme</p><p className="text-[10px] text-[#7c7c8a]">Community support</p></div>
           </Link>
@@ -368,7 +368,7 @@ function DashboardContent({ user, data, category }: { user: any; data: any; cate
         </h3>
         <p className="text-sm text-[#7c7c8a] mb-4">Register multiple students or practitioners for our programmes. Explore partnership opportunities with VGMF.</p>
         <div className="grid grid-cols-2 gap-3">
-          <Link href="/seminar" className="flex items-center gap-2 p-3 bg-[#faf9f6] rounded-xl text-sm font-bold text-[#1a1a2e] hover:text-[#0d6662] transition-colors"><GraduationCap size={16} /> Bulk Seminar</Link>
+          <Link href="/dashboard" className="flex items-center gap-2 p-3 bg-[#faf9f6] rounded-xl text-sm font-bold text-[#1a1a2e] hover:text-[#0d6662] transition-colors"><GraduationCap size={16} /> Bulk Seminar</Link>
           <Link href="/contact" className="flex items-center gap-2 p-3 bg-[#faf9f6] rounded-xl text-sm font-bold text-[#1a1a2e] hover:text-[#0d6662] transition-colors"><Building2 size={16} /> Partnership</Link>
         </div>
       </div>
@@ -430,7 +430,7 @@ function DashboardContent({ user, data, category }: { user: any; data: any; cate
         </div>
         <div className="flex items-center gap-3">
           <Link href="/shop" className="btn-outline !py-2 !px-4 text-sm">Shop <ArrowRight size={14} /></Link>
-          <Link href="/fellowship" className="btn-primary !py-2 !px-4 text-sm">Fellowship</Link>
+          <Link href="/dashboard" className="btn-primary !py-2 !px-4 text-sm">Fellowship</Link>
         </div>
       </div>
 
@@ -533,7 +533,7 @@ function DashboardContent({ user, data, category }: { user: any; data: any; cate
               <div className="p-10 text-center">
                 <Ticket size={32} className="text-[#7c7c8a]/30 mx-auto mb-3" />
                 <p className="text-sm text-[#7c7c8a] font-medium">No seminar registrations</p>
-                <Link href="/seminar" className="text-sm font-bold text-[#1a1a2e] mt-2 inline-block hover:text-[#0d6662] transition-colors">View Seminars →</Link>
+                <Link href="/dashboard" className="text-sm font-bold text-[#1a1a2e] mt-2 inline-block hover:text-[#0d6662] transition-colors">View Seminars →</Link>
               </div>
             ) : (
               <div className="overflow-x-auto">
@@ -568,7 +568,7 @@ function DashboardContent({ user, data, category }: { user: any; data: any; cate
               <div className="p-10 text-center">
                 <FlaskConical size={32} className="text-[#7c7c8a]/30 mx-auto mb-3" />
                 <p className="text-sm text-[#7c7c8a] font-medium">No fellowship applications</p>
-                <Link href="/fellowship" className="text-sm font-bold text-[#1a1a2e] mt-2 inline-block hover:text-[#0d6662] transition-colors">Apply for Fellowship →</Link>
+                <Link href="/dashboard" className="text-sm font-bold text-[#1a1a2e] mt-2 inline-block hover:text-[#0d6662] transition-colors">Apply for Fellowship →</Link>
               </div>
             ) : (
               <div className="overflow-x-auto">
@@ -605,7 +605,7 @@ function DashboardContent({ user, data, category }: { user: any; data: any; cate
               <div className="p-10 text-center">
                 <Heart size={32} className="text-[#7c7c8a]/30 mx-auto mb-3" />
                 <p className="text-sm text-[#7c7c8a] font-medium">No autism registrations</p>
-                <Link href="/autism" className="text-sm font-bold text-[#1a1a2e] mt-2 inline-block hover:text-[#0d6662] transition-colors">View Programme →</Link>
+                <Link href="/dashboard" className="text-sm font-bold text-[#1a1a2e] mt-2 inline-block hover:text-[#0d6662] transition-colors">View Programme →</Link>
               </div>
             ) : (
               <div className="overflow-x-auto">

@@ -15,11 +15,11 @@ const serveCategories = [
   },
   {
     icon: BookOpen, title: "Researchers", desc: "Apply for the Viddhakarma Research Fellowship and publish your findings with expert mentorship.",
-    color: "bg-[#7c1d1d]/10 text-[#7c1d1d]", href: "/fellowship",
+    color: "bg-[#7c1d1d]/10 text-[#7c1d1d]", href: "/signup",
   },
   {
     icon: Heart, title: "Patients & Families", desc: "Access autism care, health resources, and community support programmes at no cost.",
-    color: "bg-[#7c1d1d]/10 text-[#7c1d1d]", href: "/autism",
+    color: "bg-[#7c1d1d]/10 text-[#7c1d1d]", href: "/signup",
   },
 ];
 
@@ -90,9 +90,9 @@ export default async function Home() {
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {[
-              { icon: FlaskConical, title: "Research Fellowship", desc: "Grants up to ₹75,000 for Viddhakarma research under expert mentorship", href: "/fellowship", color: "bg-[#0d6662]/10 text-[#0d6662]", accent: "#0d6662" },
-              { icon: Presentation, title: "National Seminar", desc: "Annual conference on Agnikarma & Viddhakarma with live demonstrations", href: "/seminar", color: "bg-[#c2761c]/10 text-[#c2761c]", accent: "#c2761c" },
-              { icon: Heart, title: "Autism Programme", desc: "Free awareness, therapy, and community support for families", href: "/autism", color: "bg-[#7c1d1d]/10 text-[#7c1d1d]", accent: "#7c1d1d" },
+              { icon: FlaskConical, title: "Research Fellowship", desc: "Grants up to ₹75,000 for Viddhakarma research under expert mentorship", href: "/dashboard", color: "bg-[#0d6662]/10 text-[#0d6662]", accent: "#0d6662" },
+              { icon: Presentation, title: "National Seminar", desc: "Annual conference on Agnikarma & Viddhakarma with live demonstrations", href: "/dashboard", color: "bg-[#c2761c]/10 text-[#c2761c]", accent: "#c2761c" },
+              { icon: Heart, title: "Autism Programme", desc: "Free awareness, therapy, and community support for families", href: "/dashboard", color: "bg-[#7c1d1d]/10 text-[#7c1d1d]", accent: "#7c1d1d" },
             ].map((item, i) => (
               <Link key={i} href={item.href} className="group bg-white rounded-2xl border border-[#1a1a2e]/5 p-7 card-hover">
                 <div className={`w-13 h-13 ${item.color} rounded-2xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform`}>
@@ -235,8 +235,8 @@ export default async function Home() {
           <p className="text-white/80 text-base mb-8 max-w-xl mx-auto">
             Apply for the Viddhakarma Research Fellowship and contribute to evidence-based Ayurveda.
           </p>
-          <Link href="/fellowship" className="btn-gold !text-base !py-3">
-            Apply Now <ArrowRight size={18} />
+          <Link href="/signup" className="btn-gold !text-base !py-3">
+            Get Started <ArrowRight size={18} />
           </Link>
         </div>
       </section>

@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
-import { Search, ShoppingCart, Truck, Package, Loader2, AlertCircle } from "lucide-react";
+import { Search, ShoppingCart, Package, Loader2, AlertCircle } from "lucide-react";
 import toast from "react-hot-toast";
 
 interface ProductImage {
@@ -131,7 +131,7 @@ export default function ShopPage() {
         </p>
       </div>
 
-      {/* Search + Track + Cart */}
+      {/* Search + Cart */}
       <div className="flex flex-col sm:flex-row gap-4 mb-10 max-w-3xl mx-auto">
         <div className="flex-1 relative">
           <Search className="absolute left-3 top-3.5 text-muted" size={20} />
@@ -143,12 +143,6 @@ export default function ShopPage() {
             className="input-field !pl-10"
           />
         </div>
-        <Link
-          href="/shop/track"
-          className="btn-outline !py-3"
-        >
-          <Truck size={18} /> Track Order
-        </Link>
         <Link
           href="/shop/cart"
           className="btn-primary !py-3 relative"
