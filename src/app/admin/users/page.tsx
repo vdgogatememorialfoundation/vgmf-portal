@@ -57,6 +57,7 @@ interface UserDetail extends UserItem {
   pincode?: string;
   dob?: string;
   gender?: string;
+  emailVerified?: string | null;
   updatedAt?: string;
   orders?: Array<{ id: string; orderNumber: string; status: string; totalAmount: number; createdAt: string }>;
   seminarRegs?: Array<{ id: string; ticketNumber: string; isVerified: boolean; isCancelled: boolean; paymentStatus: string; registrationDate: string }>;
