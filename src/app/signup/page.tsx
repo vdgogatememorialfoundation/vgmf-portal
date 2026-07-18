@@ -296,7 +296,7 @@ export default function SignupPage() {
                   <input type="password" value={confirm} onChange={(e) => setConfirm(e.target.value)} required className="input-field has-icon" placeholder="Re-enter password" />
                 </div>
               </div>
-              <button type="button" onClick={handleVerify} disabled={loading} className="btn-primary w-full justify-center py-3 text-base disabled:opacity-50 disabled:cursor-not-allowed">
+              <button type="button" onClick={handleCreateAccount} disabled={loading} className="btn-primary w-full justify-center py-3 text-base disabled:opacity-50 disabled:cursor-not-allowed">
                 {loading ? <><Loader2 size={18} className="animate-spin" /> Creating Account...</> : <><CheckCircle2 size={18} /> Create Account</>}
               </button>
               <button type="button" onClick={() => { setStep(2); }} className="w-full text-center text-sm text-ink/50 hover:text-teal font-medium transition-colors">
